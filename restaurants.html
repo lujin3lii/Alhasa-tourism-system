@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurants - Al Ahsa</title>
+    
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+    
+    <header class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 7%;">
+        <div class="logo">
+            <span style="font-size: 28px;">🪷</span>
+        </div>
+        <nav style="display: flex; gap: 20px;">
+            <a href="my-account.html" style="text-decoration: none; color: inherit;">My account</a>
+            <a href="About.html" style="text-decoration: none; color: inherit;">About us</a>
+            <a href="explore-al-ahsa.html" style="text-decoration: none; color: inherit;">Explore Al-Ahsa</a>
+            
+            <!-- رابط رحلة مخصصة (لم تجهز الصفحة بعد ) -->
+            <!-- <a href="customized-trip.html" style="text-decoration: none; color: inherit;">Customized trip in Al Ahsa</a> -->
+            <a href="#" style="text-decoration: none; color: inherit;">Customized trip in Al Ahsa</a>
+        </nav>
+    </header>
+
+    
+    <section class="home-section restaurants-section">
+        <div class="home-hero" style="display: flex; align-items: center; justify-content: space-between; gap: 30px; text-align: left; margin-bottom: 40px;">
+            <div style="flex: 1;">
+                <h1 class="page-title" style="font-size: 40px; margin-bottom: 15px;">Restaurants</h1>
+            </div>
+            <div style="flex: 1;">
+            <img src="images/respic.jpg" alt="Restaurants Header" style="width: 100%; border-radius: var(--card-radius); object-fit: cover; max-height: 280px;">
+        </div>
+
+    </div>
+            
+        </div>
+
+        
+        <div class="restaurants-grid">
+            
+            <div class="about-card" style="max-width: 100%; padding: 20px;">
+                <img src="images/BlackCorner.jpg" alt="Black Corner" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Black Corner</h2>
+                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">Burger restaurant offers beef and chicken burgers with a variety of fast meals</p>
+                
+                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
+                <!-- <a href="black-corner-details.html" class="details-btn">View Details</a> -->
+                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+            </div>
+
+            
+            <div class="about-card" style="max-width: 100%; padding: 20px;">
+                <img src="images/Shekhdar.jpg" alt="Shekhdar" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Shekhdar</h2>
+                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">A family restaurant that offers a variety of foods in a comfortable atmosphere</p>
+                
+                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
+                <!-- <a href="shekhdar-details.html" class="details-btn">View Details</a> -->
+                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+            </div>
+
+            
+            <div class="about-card" style="max-width: 100%; padding: 20px;">
+                <img src="images/Pastagusto.jpg" alt="Pasta gusto" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">Pasta gusto</h2>
+                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">It offers coffee, other drinks, and a variety of desserts</p>
+                
+                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
+                <!-- <a href="pasta-gusto-details.html" class="details-btn">View Details</a> -->
+                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+            </div>
+        </div>
+    </section>
+
+    
+    <button class="chat-button" onclick="openAI()" aria-label="AI Assistant"></button>
+
+   
+    <script src="script.js"></script>
+</body>
+</html>
