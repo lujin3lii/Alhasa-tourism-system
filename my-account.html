@@ -1,1 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Al-Ahsa Vision Hub</title>
 
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+    <nav class="sidebar" id="sidebar">
+        <a href="index.html">Home</a>
+        <a href="login.html">Tourist Login</a>
+        <a href="signup.html">Tourist Sign Up</a>
+        <a href="explore-al-ahsa.html">Explore Al Ahsa</a>
+        <a href="places.html">Tourist & Entertainment Places</a>
+        <a href="restaurants.html">Restaurants</a>
+        <a href="cafes.html">Cafes</a>
+        <a href="markets.html">Shopping Markets</a>
+        <a href="settings.html">Settings</a>
+    
+        <a href="About.html">About Us</a>
+    </nav>
+
+    <main class="account-page">
+        <h1>My Account</h1>
+        <p>Manage your profile and travel information.</p>
+
+        <section class="account-profile">
+            <h2>Personal Information</h2>
+
+            <p>
+                <strong>Name:</strong>
+                <span id="user-name">Tourist Name</span>
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                <span id="user-email">tourist@example.com</span>
+            </p>
+
+            <button type="button" onclick="showEditForm()">
+                Edit Information
+            </button>
+
+            <form id="edit-form" hidden>
+                <label for="name">Name:</label>
+                <input type="text" id="name" value="Tourist Name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email"
+                       value="tourist@example.com" required>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </section>
+
+        <section class="account-section">
+            <h2>Favorite Places</h2>
+            <p>View the places you would like to visit.</p>
+            <a href="places.html">Explore Places</a>
+        </section>
+
+        <section class="account-section">
+            <h2>My Trips</h2>
+            <p>View and manage your travel plans.</p>
+            <a href="index.html">Plan a Trip</a>
+        </section>
+
+        <section class="account-section">
+            <h2>Travel Preferences</h2>
+            <p>Choose the activities and experiences you enjoy.</p>
+            <a href="explore-al-ahsa.html">Explore Al Ahsa</a>
+        </section>
+
+        <section class="account-section">
+            <h2>Password &amp; Security</h2>
+            <p>Manage your account settings and security.</p>
+            <a href="settings.html">Open Settings</a>
+        </section>
+    </main>
+
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="AI Assistant">
+    </button>
+
+    <script src="script.js"></script>
+
+    <script>
+        function showEditForm() {
+            document.getElementById("edit-form").hidden = false;
+        }
+
+        document.getElementById("edit-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            document.getElementById("user-name").textContent =
+                document.getElementById("name").value;
+
+            document.getElementById("user-email").textContent =
+                document.getElementById("email").value;
+
+            this.hidden = true;
+        });
+    </script>
+
+</body>
+</html>

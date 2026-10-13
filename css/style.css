@@ -607,3 +607,218 @@ h3 {
         width: 190px;
     }
 }
+.settings-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 100px 30px 50px;
+}
+
+.settings-page > h1 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 36px;
+    text-align: center;
+}
+
+.settings-page > p {
+    margin-bottom: 35px;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.settings-page .settings-section {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px 0;
+    padding: 28px 30px;
+    background-color: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow);
+}
+
+.settings-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-size: 22px;
+}
+
+.settings-section p {
+    margin: 12px 0;
+    color: var(--muted-color);
+}
+
+.settings-section label {
+    color: var(--text-color);
+}
+
+.settings-section select {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--button-radius);
+    background-color: var(--light-color);
+    color: var(--text-color);
+}
+
+.settings-section input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin-right: 8px;
+    accent-color: var(--secondary-color);
+    vertical-align: middle;
+}
+
+.settings-section a {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.settings-section a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.settings-page > button:not(.chat-button) {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 28px;
+    border: none;
+    border-radius: var(--button-radius);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    cursor: pointer;
+}
+
+.settings-page > button:not(.chat-button):hover {
+    background-color: var(--secondary-color);
+}
+
+.account-page {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 100px 30px 50px;
+}
+
+.account-page > h1 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 36px;
+    text-align: center;
+}
+
+.account-page > p {
+    margin-bottom: 35px;
+    color: var(--muted-color);
+    text-align: center;
+}
+
+.account-page .account-profile,
+.account-page .account-section {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px 0;
+    padding: 28px 30px;
+    background-color: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow);
+}
+
+.account-profile h2,
+.account-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-size: 22px;
+}
+
+.account-profile p,
+.account-section p {
+    margin: 12px 0;
+    color: var(--muted-color);
+}
+
+.account-profile strong {
+    color: var(--text-color);
+}
+
+.account-profile button,
+.account-profile form button {
+    margin-top: 18px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: var(--button-radius);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    cursor: pointer;
+}
+
+.account-profile button:hover,
+.account-profile form button:hover {
+    background-color: var(--secondary-color);
+}
+
+.account-profile form {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.account-profile form label {
+    display: block;
+    margin: 15px 0 7px;
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.account-profile form input {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--button-radius);
+    background-color: var(--light-color);
+    color: var(--text-color);
+}
+
+.account-profile form input:focus {
+    outline: 2px solid var(--secondary-color);
+}
+
+.account-section a {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.account-section a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .settings-page,
+    .account-page {
+        padding: 90px 18px 35px;
+    }
+
+    .settings-page > h1,
+    .account-page > h1 {
+        font-size: 30px;
+    }
+
+    .settings-page .settings-section,
+    .account-page .account-profile,
+    .account-page .account-section {
+        padding: 22px 18px;
+    }
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | Al-Ahsa Vision Hub</title>
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Menu Button -->
+    <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+    <!-- Shared Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <a href="index.html">Home</a>
+        <a href="login.html">Tourist Login</a>
+        <a href="signup.html">Tourist Sign Up</a>
+        <a href="explore-al-ahsa.html">Explore Al Ahsa</a>
+        <a href="places.html">Tourist &amp; Entertainment Places</a>
+        <a href="restaurants.html">Restaurants</a>
+        <a href="cafes.html">Cafes</a>
+        <a href="markets.html">Shopping Markets</a>
+        <a href="settings.html">Settings</a>
+       
+        <a href="About.html">About Us</a>
+    </nav>
+
+    <!-- Settings Content -->
+    <main class="settings-page">
+
+        <h1>Settings</h1>
+        <p>Manage your account and preferences.</p>
+
+        <section class="settings-section">
+            <h2>Account</h2>
+            <p>Manage your personal account information.</p>
+            <a href="my-account.html">My Account</a>
+        </section>
+
+        <section class="settings-section">
+            <h2>Language</h2>
+            <label for="language">Choose your language:</label>
+
+            <select id="language">
+                <option value="en">English</option>
+                <option value="ar">Arabic</option>
+            </select>
+        </section>
+
+        <section class="settings-section">
+            <h2>Notifications</h2>
+
+            <label>
+                <input type="checkbox" id="notifications" checked>
+                Enable notifications
+            </label>
+        </section>
+
+        <section class="settings-section">
+            <h2>Appearance</h2>
+            <label for="appearance">Choose appearance:</label>
+
+            <select id="appearance">
+                <option value="light">Light Mode</option>
+                <option value="dark">Dark Mode</option>
+            </select>
+        </section>
+
+        <section class="settings-section">
+            <h2>Privacy &amp; Security</h2>
+            <p>Manage your privacy and security preferences.</p>
+        </section>
+
+        <section class="settings-section">
+            <h2>Help &amp; Support</h2>
+            <p>Get help with using Al-Ahsa Vision Hub.</p>
+            <a href="About.html">Contact Us</a>
+        </section>
+
+        <!-- Log Out Button -->
+        <section class="settings-section">
+            <h2>Log Out</h2>
+            <p>Log out and return to the Welcome page.</p>
+
+            <button type="button" onclick="logout()">
+                Log Out
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Shared AI Assistant Button -->
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="AI Assistant">
+    </button>
+
+    <!-- Shared JavaScript -->
+    <script src="script.js"></script>
+
+    <script>
+        // Log out and return to Welcome page
+        function logout() {
+            window.location.href = "Welcome.html";
+        }
+
+        // Appearance selection
+        document.getElementById("appearance").addEventListener("change", function () {
+            document.body.classList.toggle(
+                "dark-mode",
+                this.value === "dark"
+            );
+        });
+    </script>
+
+</body>
+</html>
