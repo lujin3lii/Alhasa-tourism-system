@@ -453,3 +453,157 @@ h3 {
 .chat-button:hover {
     transform: scale(1.1) rotate(12deg);
 }
+/* Welcome, Login and Sign Up Pages */
+
+.auth-page {
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #edf5f1, #d9eeee, #f7f8f5);
+    font-family: Arial, sans-serif;
+    color: #26383b;
+}
+
+.welcome-card,
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 35px;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 35px rgba(7, 91, 112, 0.12);
+}
+
+.welcome-card {
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+
+.project-logo {
+    display: block;
+    width: 220px;
+    max-width: 80%;
+    height: auto;
+    margin: 0 auto 25px;
+    object-fit: contain;
+}
+
+.small-logo {
+    display: block;
+    width: 125px;
+    max-width: 65%;
+    height: auto;
+    margin: 0 auto 18px;
+    object-fit: contain;
+}
+
+.welcome-card h1,
+.auth-card h1 {
+    margin: 12px 0;
+    color: #075b70;
+    font-size: 27px;
+}
+
+.welcome-card > p {
+    margin: 12px 0 30px;
+    color: #687779;
+}
+
+.auth-subtitle {
+    margin-bottom: 25px;
+    color: #687779;
+    font-size: 14px;
+}
+
+.auth-card form {
+    text-align: left;
+}
+
+.auth-card label {
+    display: block;
+    margin: 16px 0 7px;
+    color: #315e58;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.auth-card input {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #e3e9e7;
+    border-radius: 9px;
+    background: #f8faf9;
+    color: #26383b;
+    font-size: 15px;
+}
+
+.auth-card input:focus {
+    outline: 2px solid #087f83;
+}
+
+.auth-button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #087f83;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.auth-button:hover {
+    background: #075b70;
+}
+
+.auth-switch {
+    margin-top: 24px;
+    color: #526b6b;
+    font-size: 14px;
+}
+
+.auth-switch a,
+.back-link {
+    color: #087f83;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-switch a:hover,
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .welcome-card,
+    .auth-card {
+        padding: 25px 20px;
+        border-radius: 18px;
+    }
+
+    .welcome-card h1,
+    .auth-card h1 {
+        font-size: 23px;
+    }
+
+    .project-logo {
+        width: 190px;
+    }
+}

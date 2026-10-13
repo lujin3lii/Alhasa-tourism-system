@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Al-Ahsa Vision Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
 
+    <main class="auth-card">
+
+        <img src="images/logo.png"
+             alt="Project Logo"
+             class="small-logo">
+
+        <h1>Welcome Back</h1>
+        <p class="auth-subtitle">Continue your journey in Al-Ahsa</p>
+
+        <form action="index.html" method="get">
+
+            <label for="email">Email</label>
+            <input type="email"
+                   id="email"
+                   placeholder="Enter your email"
+                   required>
+
+            <label for="password">Password</label>
+            <input type="password"
+                   id="password"
+                   placeholder="Enter your password"
+                   required>
+
+            <button type="submit" class="auth-button">
+                Login
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="signup.html">Create Account</a>
+        </p>
+
+        <a href="welcome.html" class="back-link">
+            Back to Welcome Page
+        </a>
+
+    </main>
+
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="AI Assistant">
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
