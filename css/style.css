@@ -1569,3 +1569,1043 @@ body:has(.sidebar.open) .sidebar-backdrop {
         width: min(275px, 85vw);
     }
 }
+/* =========================================
+   AL-AHSA VISION HUB - SHARED SITE THEME
+   Applies to all pages
+========================================= */
+:root {
+    --primary-color: #075b45;
+    --secondary-color: #08775a;
+    --accent-color: #8ab7a0;
+    --light-color: #f5f8f4;
+    --white-color: #ffffff;
+    --text-color: #263b32;
+    --muted-color: #68796e;
+    --border-color: #dfe8e1;
+    --card-radius: 18px;
+    --button-radius: 10px;
+    --shadow: 0 8px 25px rgba(19, 63, 42, 0.08);
+    --page-background:
+        radial-gradient(
+            ellipse at 100% 10%,
+            rgba(7, 91, 69, 0.10),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f5f8f4 48%,
+            #e0ece3 100%
+        );
+}
+/* Shared background */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 25px;
+}
+body {
+    color: var(--text-color);
+    background: var(--page-background);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+body:not(.home-page) {
+    background:
+        radial-gradient(
+            ellipse at 100% 10%,
+            rgba(7, 91, 69, 0.10),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f5f8f4 48%,
+            #e0ece3 100%
+        );
+}
+/* Shared headings */
+.page-title,
+.settings-page > h1,
+.account-page > h1 {
+    color: #075b45;
+}
+.section-title,
+.card h3,
+.place-card h3,
+.restaurant-card h3,
+.cafe-card h3,
+.market-card h3 {
+    color: #214b38;
+}
+.card,
+.place-card,
+.restaurant-card,
+.cafe-card,
+.market-card,
+.account-card,
+.settings-card,
+.form-container {
+    border-color: #dfe8e1;
+    box-shadow: 0 8px 25px rgba(19, 63, 42, 0.08);
+}
+/* Shared buttons */
+.btn,
+.primary-btn,
+.settings-page > button:not(.chat-button),
+.account-profile button,
+.account-profile form button {
+    background: #075b45;
+    color: #ffffff;
+    border-radius: 10px;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+.btn:hover,
+.primary-btn:hover,
+.settings-page > button:not(.chat-button):hover,
+.account-profile button:hover,
+.account-profile form button:hover {
+    background: #08775a;
+    transform: translateY(-1px);
+}
+.secondary-btn {
+    border-color: #075b45;
+    color: #075b45;
+    border-radius: 10px;
+}
+.secondary-btn:hover {
+    background: #e7f0e9;
+}
+/* Shared sidebar */
+.menu-button {
+    z-index: 1601;
+    border: 1px solid #dce7df;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #075b45;
+    box-shadow: 0 4px 15px rgba(7, 55, 39, 0.10);
+}
+.menu-button:hover {
+    background: #e7f0e9;
+}
+.sidebar {
+    z-index: 1600;
+    background: linear-gradient(
+        160deg,
+        #ffffff 0%,
+        #f5f8f4 65%,
+        #e4eee6 100%
+    );
+    border-right: 1px solid #dfe8e1;
+    box-shadow: 8px 0 30px rgba(15, 55, 37, 0.12);
+    transform: translateX(-110%);
+    visibility: hidden;
+    transition:
+        transform 0.3s ease,
+        visibility 0.3s ease;
+}
+.sidebar.open {
+    transform: translateX(0);
+    visibility: visible;
+}
+.sidebar-brand h2 {
+    color: #075b45;
+}
+.sidebar-brand h2 span {
+    color: #47775e;
+}
+.sidebar-links a,
+.sidebar > a {
+    color: #355348;
+    border-radius: 10px;
+}
+.sidebar-links a:hover,
+.sidebar-links a.active,
+.sidebar > a:hover,
+.sidebar > a.active {
+    color: #075b45;
+    background: #e7f0e9;
+}
+.sidebar-backdrop {
+    z-index: 1590;
+}
+body:has(.sidebar.open) .sidebar-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+/* Shared top bar
+   Add these elements to each page's HTML
+   for the top bar to appear.
+*/
+.home-topbar {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px clamp(20px, 5vw, 60px) 14px 80px;
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom: 1px solid rgba(7, 91, 69, 0.10);
+}
+.home-location {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #075b45;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.location-dot {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #75a989;
+}
+.home-account-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.home-login {
+    color: #075b45;
+    font-size: 13px;
+    font-weight: 600;
+}
+.home-signup {
+    padding: 11px 15px;
+    border-radius: 9px;
+    background: #075b45;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+}
+.home-signup:hover {
+    background: #08775a;
+}
+.home-small-logo img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+/* Shared floating assistant button */
+.chat-button {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: linear-gradient(
+        145deg,
+        #075b45,
+        #6da786,
+        #d8e9d9
+    );
+    box-shadow: 0 7px 24px rgba(7, 65, 45, 0.25);
+    cursor: pointer;
+    transition: transform 0.25s ease;
+}
+.chat-button::before {
+    content: "✿";
+    color: #ffffff;
+    font-size: 32px;
+    line-height: 1;
+}
+.chat-button:hover {
+    transform: scale(1.08) rotate(8deg);
+}
+/* Login and signup pages */
+.auth-page {
+    background:
+        radial-gradient(
+            ellipse at 100% 10%,
+            rgba(7, 91, 69, 0.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f5f8f4 55%,
+            #e0ece3
+        );
+    color: var(--text-color);
+}
+.welcome-card,
+.auth-card {
+    border: 1px solid #e0e9e1;
+    box-shadow: 0 10px 35px rgba(7, 65, 45, 0.10);
+}
+.welcome-card h1,
+.auth-card h1 {
+    color: #075b45;
+}
+.auth-card label {
+    color: #315e48;
+}
+.auth-card input:focus {
+    border-color: #08775a;
+    outline-color: #08775a;
+}
+.auth-button {
+    background: #075b45;
+}
+.auth-button:hover {
+    background: #08775a;
+}
+.auth-switch a,
+.back-link {
+    color: #075b45;
+}
+/* About page */
+.about-section {
+    background:
+        radial-gradient(
+            ellipse at 100% 10%,
+            rgba(7, 91, 69, 0.10),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f5f8f4 48%,
+            #e0ece3
+        );
+}
+.about-section h1 {
+    color: #075b45;
+}
+.about-card {
+    border: 1px solid #dfe8e1;
+    box-shadow: 0 8px 25px rgba(19, 63, 42, 0.08);
+}
+/* Forms and fields */
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.account-profile form input:focus {
+    border-color: #08775a;
+    outline-color: #8ab7a0;
+}
+/* Settings and account */
+.settings-page .settings-section,
+.account-page .account-profile,
+.account-page .account-section {
+    background: rgba(255, 255, 255, 0.94);
+    border-color: #dfe8e1;
+}
+.settings-section h2,
+.account-profile h2,
+.account-section h2 {
+    color: #075b45;
+}
+.settings-section a,
+.account-section a {
+    color: #075b45;
+}
+.settings-section input[type="checkbox"] {
+    accent-color: #075b45;
+}
+/* Other page content */
+.places-section,
+.restaurants-section,
+.cafes-section,
+.markets-section,
+.home-section {
+    background: transparent;
+}
+@media (max-width: 768px) {
+    .home-topbar {
+        padding: 12px 12px 12px 70px;
+        gap: 10px;
+    }
+    .home-location {
+        max-width: 120px;
+        font-size: 9px;
+        letter-spacing: 0.5px;
+    }
+    .home-account-links {
+        gap: 9px;
+    }
+    .home-login {
+        font-size: 11px;
+    }
+    .home-signup {
+        padding: 9px;
+        font-size: 10px;
+    }
+    .home-small-logo img {
+        width: 33px;
+        height: 33px;
+    }
+}
+@media (max-width: 600px) {
+    .chat-button {
+        right: 15px;
+        bottom: 15px;
+        width: 53px;
+        height: 53px;
+    }
+    .chat-button::before {
+        font-size: 29px;
+    }
+}
+/* =====================================
+   LOGO SIZE - AL-AHSA VISION HUB
+===================================== */
+
+/* Logo in the sidebar */
+.sidebar-header img,
+.sidebar-logo img,
+.sidebar .logo img {
+    width: 150px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Small logo in the home top bar */
+.home-small-logo img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+}
+
+/* =====================================
+   AI ASSISTANT BUTTON
+===================================== */
+
+.chat-button {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #075b45, #8ab7a0);
+    color: white;
+    box-shadow: 0 5px 18px rgba(7, 91, 69, 0.25);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.chat-button::before {
+    content: "✿";
+    font-size: 34px;
+    line-height: 1;
+    color: white;
+}
+
+.chat-button:hover {
+    transform: scale(1.07);
+    box-shadow: 0 7px 22px rgba(7, 91, 69, 0.32);
+}
+
+/* =====================================
+   AI CHAT WINDOW
+===================================== */
+
+.ai-chat-window {
+    position: fixed;
+    right: 25px;
+    bottom: 98px;
+    width: 350px;
+    max-width: calc(100vw - 30px);
+    height: 460px;
+    max-height: calc(100dvh - 125px);
+    background: #ffffff;
+    border: 1px solid #dfe8e1;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(38, 59, 50, 0.18);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+    font-family: Arial, sans-serif;
+}
+
+.ai-chat-window.open {
+    display: flex;
+}
+
+/* Chat header */
+.ai-chat-header {
+    background: linear-gradient(135deg, #075b45, #08775a);
+    color: #ffffff;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.ai-chat-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ai-chat-heading h3 {
+    font-size: 16px;
+    margin: 0;
+    color: #ffffff;
+}
+
+.ai-chat-heading p {
+    font-size: 12px;
+    margin: 0;
+    color: #e5f3eb;
+}
+
+.ai-chat-close {
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+/* Messages area */
+.ai-chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f7f9f6;
+}
+
+.ai-message {
+    max-width: 88%;
+    padding: 11px 13px;
+    border-radius: 13px;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.ai-message.bot {
+    align-self: flex-start;
+    background: #ffffff;
+    border: 1px solid #e3eae4;
+    color: #263b32;
+    border-bottom-left-radius: 4px;
+}
+
+.ai-message.user {
+    align-self: flex-end;
+    background: #08775a;
+    color: #ffffff;
+    border-bottom-right-radius: 4px;
+}
+
+/* Suggested questions */
+.ai-chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 10px 12px;
+    background: #ffffff;
+}
+
+.ai-chat-suggestions button {
+    border: 1px solid #b8d2c1;
+    background: #f5f8f4;
+    color: #075b45;
+    padding: 7px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.ai-chat-suggestions button:hover {
+    background: #e5f0e7;
+}
+
+/* Message input */
+.ai-chat-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #ffffff;
+    border-top: 1px solid #e3eae4;
+}
+
+.ai-chat-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #dfe8e1;
+    border-radius: 20px;
+    outline: none;
+    font-size: 13px;
+    background: #ffffff;
+    color: #263b32;
+}
+
+.ai-chat-form input:focus {
+    border-color: #08775a;
+}
+
+.ai-chat-form button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background: #075b45;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.ai-chat-form button:hover {
+    background: #08775a;
+}
+
+/* Mobile layout */
+@media (max-width: 480px) {
+    .chat-button {
+        right: 16px;
+        bottom: 18px;
+        width: 55px;
+        height: 55px;
+    }
+
+    .ai-chat-window {
+        right: 10px;
+        bottom: 83px;
+        width: calc(100vw - 20px);
+        height: 440px;
+        max-height: calc(100dvh - 105px);
+    }
+}
+/* =====================================
+   ABOUT US PAGE - LAYOUT FIX
+===================================== */
+
+body.about-page {
+    background: #f5f8f4;
+    color: #263b32;
+}
+
+/* Main page layout */
+.about-page .about-main {
+    width: auto;
+    max-width: 1400px;
+    min-width: 0;
+    padding: 30px 35px;
+    margin-right: 0;
+}
+
+/* Top bar */
+.about-page .home-topbar {
+    width: 100%;
+    margin-bottom: 28px;
+}
+
+/* Main title card */
+.about-page .about-hero {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 28px;
+    padding: 42px 30px;
+    text-align: center;
+    background: linear-gradient(135deg, #e5f0e7, #fdfefd);
+    border: 1px solid #dfe8e1;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(38, 59, 50, 0.06);
+}
+
+.about-page .about-label {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #08775a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.about-page .about-hero h1 {
+    margin-bottom: 14px;
+    color: #075b45;
+    font-size: clamp(27px, 4vw, 40px);
+    line-height: 1.3;
+}
+
+.about-page .about-hero p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #68796e;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* Who We Are card */
+.about-page .about-content-section {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 35px;
+}
+
+.about-page .about-intro-card {
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #e2eae3;
+    border-radius: 18px;
+    box-shadow: 0 6px 22px rgba(38, 59, 50, 0.05);
+}
+
+.about-page .about-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+    color: #075b45;
+    background: #e8f2e9;
+    border-radius: 14px;
+    font-size: 25px;
+}
+
+.about-page .about-intro-card h2 {
+    margin-bottom: 14px;
+    color: #075b45;
+    font-size: 25px;
+}
+
+.about-page .about-intro-card p {
+    color: #68796e;
+    font-size: 15px;
+    line-height: 2;
+    overflow-wrap: anywhere;
+}
+
+/* Section spacing and headings */
+.about-page .about-section-block {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 38px;
+}
+
+.about-page .about-section-heading {
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.about-page .about-section-heading > span {
+    display: block;
+    margin-bottom: 8px;
+    color: #08775a;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.about-page .about-section-heading h2 {
+    margin-bottom: 10px;
+    color: #075b45;
+    font-size: 28px;
+    line-height: 1.4;
+}
+
+.about-page .about-section-heading p {
+    color: #68796e;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Vision and Mission */
+.about-page .about-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.about-page .about-info-card {
+    min-width: 0;
+    padding: 27px;
+    background: #ffffff;
+    border: 1px solid #e2eae3;
+    border-radius: 18px;
+    box-shadow: 0 6px 22px rgba(38, 59, 50, 0.05);
+}
+
+.about-page .about-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 15px;
+    color: #075b45;
+    background: #e8f2e9;
+    border-radius: 13px;
+    font-size: 22px;
+}
+
+.about-page .about-info-card h3 {
+    margin-bottom: 12px;
+    color: #075b45;
+    font-size: 21px;
+}
+
+.about-page .about-info-card p {
+    color: #68796e;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+/* Objectives cards */
+.about-page .about-objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.about-page .about-objective-card {
+    min-width: 0;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e2eae3;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(38, 59, 50, 0.04);
+}
+
+.about-page .objective-number {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #08775a;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.about-page .about-objective-card h3 {
+    margin-bottom: 10px;
+    color: #075b45;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.about-page .about-objective-card p {
+    color: #68796e;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Platform features section */
+.about-page .about-features-section {
+    max-width: 1100px;
+    padding: 30px;
+    background: #eaf2e9;
+    border: 1px solid #dfe8e1;
+    border-radius: 22px;
+}
+
+.about-page .about-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.about-page .about-feature {
+    min-width: 0;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e2eae3;
+    border-radius: 15px;
+}
+
+.about-page .about-feature > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+    color: #075b45;
+    background: #e8f2e9;
+    border-radius: 12px;
+    font-size: 21px;
+}
+
+.about-page .about-feature h3 {
+    margin-bottom: 9px;
+    color: #075b45;
+    font-size: 17px;
+}
+
+.about-page .about-feature p {
+    color: #68796e;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Closing card */
+.about-page .about-closing {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 25px;
+    padding: 38px 25px;
+    text-align: center;
+    color: #ffffff;
+    background: linear-gradient(135deg, #075b45, #08775a);
+    border-radius: 20px;
+}
+
+.about-page .about-closing h2 {
+    margin-bottom: 12px;
+    color: #ffffff;
+    font-size: 26px;
+    line-height: 1.4;
+}
+
+.about-page .about-closing p {
+    margin-bottom: 22px;
+    color: #edf5ef;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.about-page .about-explore-button {
+    display: inline-block;
+    padding: 12px 25px;
+    color: #075b45;
+    background: #ffffff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.about-page .about-explore-button:hover {
+    background: #e8f2e9;
+    transform: translateY(-2px);
+}
+/* ===== SHARED FULL WIDTH FOOTER FIX ===== */
+
+.site-footer {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin: 50px 0 0;
+    padding: 40px max(25px, calc((100vw - 1200px) / 2)) 0;
+    background: linear-gradient(135deg, #064b3b, #075b45);
+    border: none;
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #ffffff;
+}
+
+.site-footer-main {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.site-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+}
+
+/* Home page compatibility */
+.home-page {
+    overflow-x: clip;
+}
+
+.home-page .home-main {
+    width: auto;
+    max-width: none;
+    overflow: visible;
+}
+
+.home-page .site-footer {
+    width: 100%;
+    max-width: none;
+    margin: 50px 0 0;
+    padding: 40px max(25px, calc((100vw - 1200px) / 2)) 0;
+    border: none;
+    border-radius: 0;
+}
+
+.home-page .site-footer-main {
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+}
+
+.home-page .site-footer-bottom {
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+    .site-footer,
+    .home-page .site-footer {
+        padding: 30px 20px 0;
+    }
+
+    .site-footer-main,
+    .home-page .site-footer-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 25px 20px;
+    }
+
+    .site-footer-brand {
+        grid-column: 1 / -1;
+    }
+
+    .site-footer-bottom,
+    .home-page .site-footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 450px) {
+    .site-footer-main,
+    .home-page .site-footer-main {
+        grid-template-columns: 1fr;
+    }
+
+    .site-footer-brand {
+        grid-column: auto;
+    }
+}
