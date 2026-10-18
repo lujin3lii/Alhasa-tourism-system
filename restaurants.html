@@ -3,173 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurants - Al Ahsa</title>
-    
-    
+    <title>Restaurants | Al-Ahsa Vision Hub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-
-<div class="sidebar-backdrop" onclick="toggleMenu()"></div>
-
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <a href="index.html">
-            <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
-        </a>
-        <h2>Al-Ahsa <span>Vision Hub</span></h2>
-        <p>Discover the beauty of Al-Ahsa</p>
-    </div>
-
-    <div class="sidebar-links">
-        <a href="index.html"><span>⌂</span> Home</a>
-        <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
-        <a href="places.html"><span>⌘</span> Tourist Places</a>
-        <a href="restaurants.html"><span>♨</span> Restaurants</a>
-        <a href="cafes.html"><span>☕</span> Cafes</a>
-        <a href="markets.html"><span>♧</span> Markets</a>
-        <a href="settings.html"><span>⚙</span> Settings</a>
-        <a href="my-account.html"><span>♙</span> My Account</a>
-        <a href="About.html"><span>ⓘ</span> About Us</a>
-    </div>
-
-    <div class="sidebar-decoration">
-        <span>🌴</span>
-        <p>THE HEART OF AL-AHSA</p>
-    </div>
-</nav>
-
-<main class="home-main">
-    <header class="home-topbar">
-        <div class="home-location">
-            <span class="location-dot"></span>
-            DISCOVER AL-AHSA, SAUDI ARABIA
-        </div>
-
-        <div class="home-account-links">
-            <a href="login.html" class="home-login">Log In</a>
-            <a href="signup.html" class="home-signup">Sign Up</a>
-            <a href="index.html" class="home-small-logo">
-                <img src="images/logo.png" alt="Logo">
+    <!-- Menu Button -->
+    <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
+        ☰
+    </button>
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
             </a>
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Discover the beauty of Al-Ahsa</p>
         </div>
-    </header>
-
-</main>
-
-<button class="chat-button"
-        onclick="openAI()"
-        aria-label="Open assistant"
-        title="Assistant"></button>
-
-    
-    <section class="home-section restaurants-section">
-        <div class="home-hero" style="display: flex; align-items: center; justify-content: space-between; gap: 30px; text-align: left; margin-bottom: 40px;">
-            <div style="flex: 1;">
-                <h1 class="page-title" style="font-size: 40px; margin-bottom: 15px;">Restaurants</h1>
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="places.html"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.html" class="active"><span>♨</span> Restaurants</a>
+            <a href="cafes.html"><span>☕</span> Cafes</a>
+            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="my-account.html"><span>♙</span> My Account</a>
+            <a href="About.html"><span>ⓘ</span> About Us</a>
+        </div>
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="home-main">
+        <!-- Top Bar -->
+        <header class="home-topbar">
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
-            <div style="flex: 1;">
-            <img src="images/respic.jpg" alt="Restaurants Header" style="width: 100%; border-radius: var(--card-radius); object-fit: cover; max-height: 280px;">
-        </div>
-
-    </div>
-            
-        </div>
-
-        
-        <div class="restaurants-grid">
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/BlackCorner.jpg" alt="Black Corner" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Black Corner</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">Burger restaurant offers beef and chicken burgers with a variety of fast meals</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="black-corner-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
-            </div>
-
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/Shekhdar.jpg" alt="Shekhdar" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Shekhdar</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">A family restaurant that offers a variety of foods in a comfortable atmosphere</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="shekhdar-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
-            </div>
-
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/Pastagusto.jpg" alt="Pasta gusto" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Pasta gusto</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">It offers coffee, other drinks, and a variety of desserts</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="pasta-gusto-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
-            </div>
-        </div>
-    </section>
-
-<button
-    class="chat-button"
-    onclick="openAI()"
-    aria-label="Open AI Assistant"
-    title="AI Assistant">
-</button>
-
-   
- <script src="script.js"></script>
- <!-- Al-Ahsa Vision Hub Footer -->
-<footer class="site-footer">
-    <div class="site-footer-main">
-
-        <div class="site-footer-brand">
-            <h3>Al-Ahsa Vision Hub</h3>
-            <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
-        </div>
-
-        <div class="site-footer-links">
-            <h4>Explore Al-Ahsa</h4>
-            <p>Discover places, restaurants, cafés, and seasonal events.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Our Vision</h4>
-            <p>Making your journey through Al-Ahsa memorable.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Contact Us</h4>
-            <p>05123546798</p>
-
-            <p>
-                <a href="https://www.instagram.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ◎ Instagram
+            <div class="home-account-links">
+                <a href="login.html" class="home-login">Log In</a>
+                <a href="signup.html" class="home-signup">Sign Up</a>
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
                 </a>
-            </p>
-
-            <p>
-                <a href="https://x.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    𝕏 X (Twitter)
-                </a>
-            </p>
+            </div>
+        </header>
+        <!-- Restaurants Section -->
+        <section class="home-section restaurants-section">
+            <!-- Split Image and Green Banner -->
+            <div style="
+                display: flex;
+                align-items: stretch;
+                min-height: 300px;
+                margin-bottom: 40px;
+                overflow: hidden;
+                border-radius: 18px;
+                background: #075b3b;
+                box-shadow: 0 8px 24px rgba(25, 55, 40, 0.12);
+            ">
+                <!-- Green Text Side -->
+                <div style="
+                    flex: 1;
+                    min-width: 0;
+                    padding: 35px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                    text-align: left;
+                    color: #ffffff;
+                ">
+                    <span style="
+                        color: #d7eadc;
+                        font-size: 12px;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        margin-bottom: 14px;
+                    ">
+                        TASTE THE FLAVORS OF AL-AHSA
+                    </span>
+                    <h1 style="
+                        color: #ffffff;
+                        font-size: clamp(30px, 4vw, 46px);
+                        font-weight: 700;
+                        line-height: 1.2;
+                        margin: 0 0 16px;
+                    ">
+                        Restaurants
+                    </h1>
+                    <p style="
+                        color: #ffffff;
+                        font-size: 16px;
+                        line-height: 1.8;
+                        max-width: 380px;
+                        margin: 0;
+                    ">
+                        Discover local dining spots and enjoy a variety
+                        of flavors during your visit to Al-Ahsa.
+                    </p>
+                </div>
+                <!-- Image Side with Gradient Blend -->
+                <div style="
+                    flex: 1.1;
+                    min-width: 0;
+                    min-height: 300px;
+                    background-image:
+                        linear-gradient(
+                            to right,
+                            #075b3b 0%,
+                            rgba(7, 91, 59, 0.72) 12%,
+                            rgba(7, 91, 59, 0.15) 42%,
+                            rgba(7, 91, 59, 0) 65%
+                        ),
+                        url('images/respic.jpg');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                ">
+                </div>
+            </div>
+            <!-- Restaurants Grid -->
+            <div class="restaurants-grid">
+                <!-- Black Corner -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/BlackCorner.jpg"
+                         alt="Black Corner restaurant"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Black Corner
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A burger restaurant offering beef and chicken burgers
+                        along with a variety of fast meals.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+                <!-- Shekhdar -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/Shekhdar.jpg"
+                         alt="Shekhdar restaurant"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Shekhdar
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A family restaurant offering a variety of foods
+                        in a comfortable atmosphere.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+                <!-- Pasta Gusto -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/Pastagusto.jpg"
+                         alt="Pasta Gusto"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Pasta Gusto
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A place to enjoy coffee, other drinks and
+                        a variety of desserts.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- AI Assistant Button -->
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
+    </button>
+    <script src="script.js"></script>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
         </div>
-
-    </div>
-
-    <div class="site-footer-bottom">
-        <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
-        <p>Explore Al-Ahsa, experience its beauty.</p>
-    </div>
-</footer>
+        <div class="site-footer-bottom">
+            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
+        </div>
+    </footer>
 </body>
 </html>

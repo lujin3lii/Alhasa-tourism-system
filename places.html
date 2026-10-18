@@ -3,177 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tourist & Entertainment Places - Al Ahsa</title>
-    
-    
+    <title>Tourist & Entertainment Places | Al-Ahsa Vision Hub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
-    ☰
-</button>
-<div class="sidebar-backdrop" onclick="toggleMenu()"></div>
-
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <a href="index.html">
-            <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
-        </a>
-        <h2>Al-Ahsa <span>Vision Hub</span></h2>
-        <p>Discover the beauty of Al-Ahsa</p>
-    </div>
-
-    <div class="sidebar-links">
-        <a href="index.html"><span>⌂</span> Home</a>
-        <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
-        <a href="places.html"><span>⌘</span> Tourist Places</a>
-        <a href="restaurants.html"><span>♨</span> Restaurants</a>
-        <a href="cafes.html"><span>☕</span> Cafes</a>
-        <a href="markets.html"><span>♧</span> Markets</a>
-        <a href="settings.html"><span>⚙</span> Settings</a>
-        <a href="my-account.html"><span>♙</span> My Account</a>
-        <a href="About.html"><span>ⓘ</span> About Us</a>
-    </div>
-
-    <div class="sidebar-decoration">
-        <span>🌴</span>
-        <p>THE HEART OF AL-AHSA</p>
-    </div>
-</nav>
-
-<main class="home-main">
-    <header class="home-topbar">
-        <div class="home-location">
-            <span class="location-dot"></span>
-            DISCOVER AL-AHSA, SAUDI ARABIA
-        </div>
-
-        <div class="home-account-links">
-            <a href="login.html" class="home-login">Log In</a>
-            <a href="signup.html" class="home-signup">Sign Up</a>
-            <a href="index.html" class="home-small-logo">
-                <img src="images/logo.png" alt="Logo">
+    <!-- Menu Button -->
+    <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
+        ☰
+    </button>
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
             </a>
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Discover the beauty of Al-Ahsa</p>
         </div>
-    </header>
-
-</main>
-
-<button class="chat-button"
-        onclick="openAI()"
-        aria-label="Open assistant"
-        title="Assistant"></button>
-
-
-    
-    <section class="home-section places-section">
-        <div class="home-hero" style="display: flex; align-items: center; justify-content: space-between; gap: 30px; text-align: left; margin-bottom: 40px;">
-            <div style="flex: 1;">
-                <h1 class="page-title" style="font-size: 40px; margin-bottom: 15px;">Tourist Entertainment Places</h1>
-            </div>
-            <div style="flex: 1;">
-            <img src="images/Touristpic.jpg" alt="Tourist Places Header" style="width: 100%; border-radius: var(--card-radius); object-fit: cover; max-height: 280px;">
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="places.html" class="active"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.html"><span>♨</span> Restaurants</a>
+            <a href="cafes.html"><span>☕</span> Cafes</a>
+            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="my-account.html"><span>♙</span> My Account</a>
+            <a href="About.html"><span>ⓘ</span> About Us</a>
         </div>
-
-    </div>
-
-            
-    
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
         </div>
-
-        
-        <div class="places-grid">
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/Al-MashqarPark.jpg" alt="Al-Mashqar Park" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Al-Mashqar Park</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">A family park with green spaces, seating areas, and games</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="mashqar-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+    </nav>
+    <!-- Main Content -->
+    <main class="home-main">
+        <!-- Top Bar -->
+        <header class="home-topbar">
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
-
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/MountQara.jpg" alt="Mount Qara" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Mount Qara</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">A mountain in Al-Ahsa famous for its cold caves</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="mount-qara-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+            <div class="home-account-links">
+                <a href="login.html" class="home-login">Log In</a>
+                <a href="signup.html" class="home-signup">Sign Up</a>
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
             </div>
-
-            
-            <div class="about-card" style="max-width: 100%; padding: 20px;">
-                <img src="images/IbrahimPalace.jpg" alt="Ibrahim Palace" style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
-                <h2 style="font-size: 24px; margin-bottom: 10px;">Ibrahim Palace</h2>
-                <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">An old historical palace that was a fortress and an administrative headquarters</p>
-                
-                <!-- زر عرض التفاصيل (لم تجهز الصفحة بعد) -->
-                <!-- <a href="ibrahim-palace-details.html" class="details-btn">View Details</a> -->
-                <button style="background-color: #075b70; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">View Details</button>
+        </header>
+        <!-- Tourist Places Section -->
+        <section class="home-section places-section">
+            <!-- Split Green Banner and Image -->
+            <div style="
+                display: flex;
+                align-items: stretch;
+                min-height: 300px;
+                margin-bottom: 40px;
+                overflow: hidden;
+                border-radius: 18px;
+                background: #075b3b;
+                box-shadow: 0 8px 24px rgba(25, 55, 40, 0.12);
+            ">
+                <!-- Green Text Side -->
+                <div style="
+                    flex: 1;
+                    min-width: 0;
+                    padding: 35px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                    text-align: left;
+                    color: #ffffff;
+                ">
+                    <span style="
+                        color: #d7eadc;
+                        font-size: 12px;
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        margin-bottom: 14px;
+                    ">
+                        EXPLORE THE HERITAGE OF AL-AHSA
+                    </span>
+                    <h1 style="
+                        color: #ffffff;
+                        font-size: clamp(28px, 3.5vw, 42px);
+                        font-weight: 700;
+                        line-height: 1.25;
+                        margin: 0 0 16px;
+                    ">
+                        Tourist Entertainment Places
+                    </h1>
+                    <p style="
+                        color: #ffffff;
+                        font-size: 16px;
+                        line-height: 1.8;
+                        max-width: 380px;
+                        margin: 0;
+                    ">
+                        Discover the beautiful parks, remarkable mountains,
+                        and historic landmarks of Al-Ahsa.
+                    </p>
+                </div>
+                <!-- Image Side with Gradient Blend -->
+                <div style="
+                    flex: 1.1;
+                    min-width: 0;
+                    min-height: 300px;
+                    background-image:
+                        linear-gradient(
+                            to right,
+                            #075b3b 0%,
+                            rgba(7, 91, 59, 0.72) 12%,
+                            rgba(7, 91, 59, 0.15) 42%,
+                            rgba(7, 91, 59, 0) 65%
+                        ),
+                        url('images/Touristpic.jpg');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                ">
+                </div>
             </div>
-        </div>
-    </section>
-
-    
-    <button class="chat-button" onclick="openAI()" aria-label="AI Assistant"></button>
-
-    
+            <!-- Tourist Places Grid -->
+            <div class="places-grid">
+                <!-- Al-Mashqar Park -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/Al-MashqarPark.jpg"
+                         alt="Al-Mashqar Park"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Al-Mashqar Park
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A family park with green spaces, seating areas, and games.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+                <!-- Mount Qara -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/MountQara.jpg"
+                         alt="Mount Qara"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Mount Qara
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A mountain in Al-Ahsa famous for its cool caves.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+                <!-- Ibrahim Palace -->
+                <div class="about-card" style="max-width: 100%; padding: 20px;">
+                    <img src="images/IbrahimPalace.jpg"
+                         alt="Ibrahim Palace"
+                         style="width: 100%; height: 180px; border-radius: 12px; object-fit: cover; margin-bottom: 15px;">
+                    <h2 style="font-size: 24px; margin-bottom: 10px;">
+                        Ibrahim Palace
+                    </h2>
+                    <p style="font-size: 17px; line-height: 1.6; margin-bottom: 20px;">
+                        A historic palace that served as a fortress
+                        and an administrative headquarters.
+                    </p>
+                    <button type="button"
+                        style="
+                            background-color: #075b3b;
+                            color: #ffffff;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 15px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                        View Details
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- AI Assistant Button -->
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
+    </button>
     <script src="script.js"></script>
- <!-- Al-Ahsa Vision Hub Footer -->
-<footer class="site-footer">
-    <div class="site-footer-main">
-
-        <div class="site-footer-brand">
-            <h3>Al-Ahsa Vision Hub</h3>
-            <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
         </div>
-
-        <div class="site-footer-links">
-            <h4>Explore Al-Ahsa</h4>
-            <p>Discover places, restaurants, cafés, and seasonal events.</p>
+        <div class="site-footer-bottom">
+            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
-
-        <div class="site-footer-contact">
-            <h4>Our Vision</h4>
-            <p>Making your journey through Al-Ahsa memorable.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Contact Us</h4>
-            <p>05123546798</p>
-
-            <p>
-                <a href="https://www.instagram.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ◎ Instagram
-                </a>
-            </p>
-
-            <p>
-                <a href="https://x.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    𝕏 X (Twitter)
-                </a>
-            </p>
-        </div>
-
-    </div>
-
-    <div class="site-footer-bottom">
-        <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
-        <p>Explore Al-Ahsa, experience its beauty.</p>
-    </div>
-</footer>
-</body>
-</html>
-
-
+    </footer>
 </body>
 </html>
