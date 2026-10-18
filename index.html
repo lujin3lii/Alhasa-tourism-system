@@ -6,28 +6,21 @@
     <title>Home | Al-Ahsa Vision Hub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body class="home-page">
-
     <!-- Menu Button -->
     <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
         ☰
     </button>
-
     <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
-
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-
         <div class="sidebar-brand">
             <a href="index.html">
                 <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
             </a>
-
             <h2>Al-Ahsa <span>Vision Hub</span></h2>
             <p>Discover the beauty of Al-Ahsa</p>
         </div>
-
         <div class="sidebar-links">
             <a href="index.html" class="active"><span>⌂</span> Home</a>
             <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
@@ -39,413 +32,268 @@
             <a href="my-account.html"><span>♙</span> My Account</a>
             <a href="About.html"><span>ⓘ</span> About Us</a>
         </div>
-
         <div class="sidebar-decoration">
             <span>🌴</span>
             <p>THE HEART OF AL-AHSA</p>
         </div>
-
     </nav>
-
     <!-- Main Content -->
     <main class="home-main">
-
         <!-- Top Bar -->
         <header class="home-topbar">
-
             <div class="home-location">
                 <span class="location-dot"></span>
                 DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
-
             <div class="home-account-links">
                 <a href="login.html" class="home-login">Log In</a>
                 <a href="signup.html" class="home-signup">Sign Up</a>
-
                 <a href="index.html" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
             </div>
-
         </header>
-
-        <!-- Hero Section -->
-        <section class="home-hero">
-
+        <!-- Video Hero -->
+        <section class="home-hero home-video-hero">
+            <video class="home-hero-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline
+                   preload="metadata"
+                   aria-label="Scenic views of Al-Ahsa">
+                <source src="videos/home.mp4" type="video/mp4">
+                Your browser does not support HTML video.
+            </video>
             <div class="home-hero-overlay">
                 <span class="home-eyebrow">YOUR JOURNEY STARTS HERE</span>
-
-                <h1>Discover the Beauty of Al-Ahsa</h1>
-
+                <h1>Discover the Beauty of <span>Al-Ahsa</span></h1>
                 <p>
-                    Explore heritage landmarks, peaceful natural landscapes,
-                    local restaurants, charming cafes and unique experiences
-                    across Al-Ahsa — all in one place.
+                    Explore heritage landmarks, peaceful natural landscapes
+                    and authentic local experiences across Al-Ahsa — all in one place.
                 </p>
-
                 <div class="home-hero-actions">
                     <a href="explore-al-ahsa.html" class="home-btn home-btn-primary">
                         Explore Al-Ahsa →
                     </a>
-
                     <a href="#trip-planner" class="home-btn home-btn-outline">
                         Plan Your Trip
                     </a>
                 </div>
-
                 <div class="home-hero-caption">
                     Heritage, nature and authentic local experiences.
                 </div>
             </div>
-
-            <div class="hero-palm-decoration" aria-hidden="true">🌴</div>
-
         </section>
-
         <!-- Introduction -->
         <section class="home-intro section-pad">
-
             <div class="home-intro-text">
                 <span class="home-eyebrow">A PLACE TO REMEMBER</span>
-
                 <h2>Experience the Soul of Al-Ahsa</h2>
-
                 <p>
                     From historic palaces and remarkable caves to lush palm
                     oases and traditional markets, Al-Ahsa offers experiences
                     that bring together history, culture and nature.
                 </p>
-
                 <p>
                     Use Al-Ahsa Vision Hub to discover places, explore local
                     businesses and plan a trip that matches your interests.
                 </p>
-
                 <div class="home-highlights">
-
                     <div>
                         <span class="home-highlight-icon">🏛️</span>
                         <strong>Rich Heritage</strong>
                         <small>Discover historic landmarks</small>
                     </div>
-
                     <div>
                         <span class="home-highlight-icon">🌴</span>
                         <strong>Natural Beauty</strong>
                         <small>Explore the palm oasis</small>
                     </div>
-
                     <div>
                         <span class="home-highlight-icon">📍</span>
                         <strong>Local Experiences</strong>
                         <small>Find places worth visiting</small>
                     </div>
-
                 </div>
-
                 <a href="About.html" class="home-text-link">
                     Learn More About Us →
                 </a>
             </div>
-
             <div class="home-intro-image">
                 <img src="images/MountQara.jpg" alt="Mount Qara in Al-Ahsa">
-
                 <div class="home-image-caption">
                     <span>Discover the Wonders of Al-Ahsa</span>
                     <a href="places.html" aria-label="Explore tourist places">→</a>
                 </div>
             </div>
-
         </section>
-
-        <!-- Categories -->
-        <section class="home-categories section-pad">
-
+        <!-- Explore Al-Ahsa -->
+        <section class="home-categories section-pad home-explore-section">
             <div class="home-section-heading">
                 <div>
                     <span class="home-eyebrow">EXPLORE YOUR WAY</span>
-                    <h2>Discover Something Special</h2>
-                    <p>Find places and experiences for your next visit.</p>
-                </div>
-
-                <a href="explore-al-ahsa.html" class="home-text-link">
-                    Explore All →
-                </a>
-            </div>
-
-            <div class="home-category-grid">
-
-                <a href="places.html" class="home-category-card">
-                    <img src="images/IbrahimPalace.jpg" alt="Ibrahim Palace in Al-Ahsa">
-
-                    <div class="home-category-content">
-                        <span class="home-category-number">01 / HERITAGE</span>
-                        <h3>Tourist Places</h3>
-
-                        <p>
-                            Visit historic palaces, cultural landmarks and
-                            beautiful natural attractions.
-                        </p>
-
-                        <span class="home-card-arrow">Discover Places →</span>
-                    </div>
-                </a>
-
-                <a href="restaurants.html" class="home-category-card">
-                    <img src="images/BlackCorner.jpg" alt="Black Corner restaurant">
-
-                    <div class="home-category-content">
-                        <span class="home-category-number">02 / DINING</span>
-                        <h3>Restaurants</h3>
-
-                        <p>
-                            Discover restaurants and local dining spots
-                            for different tastes and occasions.
-                        </p>
-
-                        <span class="home-card-arrow">Find Restaurants →</span>
-                    </div>
-                </a>
-
-                <a href="cafes.html" class="home-category-card">
-                    <img src="images/Al-MashqarPark.jpg" alt="A scenic place in Al-Ahsa">
-
-                    <div class="home-category-content">
-                        <span class="home-category-number">03 / RELAX</span>
-                        <h3>Cafes</h3>
-
-                        <p>
-                            Find places to enjoy coffee, meet friends
-                            and take a relaxing break.
-                        </p>
-
-                        <span class="home-card-arrow">Explore Cafes →</span>
-                    </div>
-                </a>
-
-                <a href="markets.html" class="home-category-card">
-                    <img src="images/IbrahimPalace.jpg" alt="Historic architecture in Al-Ahsa">
-
-                    <div class="home-category-content">
-                        <span class="home-category-number">04 / CULTURE</span>
-                        <h3>Markets</h3>
-
-                        <p>
-                            Explore traditional markets, local products,
-                            crafts and distinctive souvenirs.
-                        </p>
-
-                        <span class="home-card-arrow">Visit Markets →</span>
-                    </div>
-                </a>
-
-            </div>
-        </section>
-
-        <!-- Seasons -->
-        <section class="home-seasons section-pad">
-
-            <div class="home-section-heading">
-                <div>
-                    <span class="home-eyebrow">EXPERIENCE THE SEASONS</span>
-                    <h2>What's Happening in Al-Ahsa?</h2>
-
+                    <h2>Discover Al-Ahsa</h2>
                     <p>
-                        Discover seasonal experiences and local highlights.
+                        Everything you need to explore Al-Ahsa is gathered
+                        in one place. Discover tourist attractions, restaurants,
+                        cafes, local markets and seasonal events through our
+                        Explore Al-Ahsa page.
                     </p>
                 </div>
             </div>
-
-            <div class="home-season-feature">
-
-                <img src="images/Al-MashqarPark.jpg" alt="Outdoor scenery in Al-Ahsa">
-
-                <div class="home-season-feature-content">
-                    <span class="home-season-tag">SEASONAL DISCOVERY</span>
-
-                    <h3>Make Every Visit Special</h3>
-
+            <div class="home-explore-feature">
+                <div class="home-explore-details">
+                    <span class="home-explore-label">YOUR GUIDE TO AL-AHSA</span>
+                    <h3>Explore More, Experience More</h3>
                     <p>
-                        Explore seasonal activities, local events and
-                        experiences across Al-Ahsa. Check event dates
-                        before planning your visit.
+                        Whether you are looking for cultural landmarks,
+                        somewhere to eat, a cozy cafe, local shopping
+                        or seasonal activities, start your journey here.
                     </p>
-
-                    <a href="explore-al-ahsa.html" class="home-btn home-btn-primary">
-                        Explore Experiences →
+                    <div class="home-explore-tags">
+                        <span>Tourist Places</span>
+                        <span>Restaurants</span>
+                        <span>Cafes</span>
+                        <span>Markets</span>
+                        <span>Seasonal Events</span>
+                    </div>
+                    <a href="explore-al-ahsa.html"
+                       class="home-btn home-btn-primary home-explore-button">
+                        Explore Al-Ahsa →
                     </a>
-
-                    <p class="home-data-note">
-                        Event schedules may change. Please verify dates
-                        and availability before visiting.
-                    </p>
                 </div>
-
+                <div class="home-explore-visual">
+                    <img src="images/al-hasa.jpeg"
+                         alt="Ibrahim Palace, a historic landmark in Al-Ahsa">
+                    <div class="home-explore-image-caption">
+                        Discover the heritage of Al-Ahsa
+                    </div>
+                </div>
             </div>
         </section>
-
         <!-- Accessibility -->
         <section class="home-accessibility">
-
             <div class="accessibility-icon">♿</div>
-
             <div class="accessibility-text">
                 <span class="home-eyebrow">A MORE COMFORTABLE VISIT</span>
                 <h2>Accessibility Services</h2>
-
                 <p>
                     Find helpful accessibility information, including
                     accessible entrances and parking where details are available.
                 </p>
             </div>
-
             <a href="settings.html" class="home-btn home-btn-primary">
                 View Accessibility →
             </a>
-
         </section>
-
         <!-- Trip Planner -->
         <section class="home-trip section-pad" id="trip-planner">
-
             <div class="home-trip-image">
-                <img src="images/Al-MashqarPark.jpg" alt="A green outdoor destination in Al-Ahsa">
+                <img src="images/Al-MashqarPark.jpg"
+                     alt="A green outdoor destination in Al-Ahsa">
             </div>
-
             <div class="home-trip-content">
                 <span class="home-eyebrow">YOUR TRIP, YOUR WAY</span>
-
                 <h2>Plan a Trip That Fits You</h2>
-
                 <p>
                     Create a more personalized visit by exploring destinations
                     that match your interests, available time and budget.
                 </p>
-
                 <div class="home-trip-features">
-
                     <div>
                         <strong>01</strong>
                         <span>Choose the places you want to discover.</span>
                     </div>
-
                     <div>
                         <strong>02</strong>
                         <span>Explore options for your trip duration and budget.</span>
                     </div>
-
                     <div>
                         <strong>03</strong>
                         <span>Review your plan and useful destination links.</span>
                     </div>
-
                 </div>
-
-                <a href="explore-al-ahsa.html" class="home-btn home-btn-primary">
-                    Start Exploring →
+                <a href="itinerary.html" class="home-btn home-btn-primary">
+                    Plan Your Trip →
                 </a>
             </div>
-
         </section>
-
         <!-- Business Owners -->
         <section class="home-business">
-
             <div class="home-business-overlay">
                 <span class="home-eyebrow">GROW WITH AL-AHSA</span>
-
                 <h2>Are You a Local Business Owner?</h2>
-
                 <p>
                     Help visitors discover local restaurants, cafes, shops
                     and experiences. Connect with the tourism community
                     and make your business easier to find.
                 </p>
-
                 <a href="signup.html" class="home-btn home-btn-light">
                     Join Our Community →
                 </a>
             </div>
-
         </section>
-
         <!-- About Strip -->
         <section class="home-about-strip section-pad">
-
             <div>
                 <span class="home-eyebrow">ABOUT AL-AHSA VISION HUB</span>
-
                 <h2>Everything You Need to Explore</h2>
-
                 <p>
                     Our project brings tourism information together in one
                     convenient place, helping visitors discover Al-Ahsa
                     and plan their experiences more easily.
                 </p>
             </div>
-
             <a href="About.html" class="home-btn home-btn-primary">
                 About Us →
             </a>
-
         </section>
-
     </main>
-
     <!-- AI Assistant Button -->
     <button class="chat-button"
             onclick="openAI()"
             aria-label="Open assistant"
             title="Assistant"></button>
-
     <script src="script.js"></script>
- <!-- Al-Ahsa Vision Hub Footer -->
-<footer class="site-footer">
-    <div class="site-footer-main">
-
-        <div class="site-footer-brand">
-            <h3>Al-Ahsa Vision Hub</h3>
-            <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
         </div>
-
-        <div class="site-footer-links">
-            <h4>Explore Al-Ahsa</h4>
-            <p>Discover places, restaurants, cafés, and seasonal events.</p>
+        <div class="site-footer-bottom">
+            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
-
-        <div class="site-footer-contact">
-            <h4>Our Vision</h4>
-            <p>Making your journey through Al-Ahsa memorable.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Contact Us</h4>
-            <p>05123546798</p>
-
-            <p>
-                <a href="https://www.instagram.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ◎ Instagram
-                </a>
-            </p>
-
-            <p>
-                <a href="https://x.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    𝕏 X (Twitter)
-                </a>
-            </p>
-        </div>
-
-    </div>
-
-    <div class="site-footer-bottom">
-        <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
-        <p>Explore Al-Ahsa, experience its beauty.</p>
-    </div>
-</footer>
+    </footer>
 </body>
 </html>
