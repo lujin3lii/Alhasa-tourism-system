@@ -1,198 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account | Al-Ahsa Vision Hub</title>
-
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-  <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-
-<div class="sidebar-backdrop" onclick="toggleMenu()"></div>
-
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <a href="index.html">
-            <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
-        </a>
-        <h2>Al-Ahsa <span>Vision Hub</span></h2>
-        <p>Discover the beauty of Al-Ahsa</p>
-    </div>
-
-    <div class="sidebar-links">
-        <a href="index.html"><span>⌂</span> Home</a>
-        <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
-        <a href="places.html"><span>⌘</span> Tourist Places</a>
-        <a href="restaurants.html"><span>♨</span> Restaurants</a>
-        <a href="cafes.html"><span>☕</span> Cafes</a>
-        <a href="markets.html"><span>♧</span> Markets</a>
-        <a href="settings.html"><span>⚙</span> Settings</a>
-        <a href="my-account.html"><span>♙</span> My Account</a>
-        <a href="About.html"><span>ⓘ</span> About Us</a>
-    </div>
-
-    <div class="sidebar-decoration">
-        <span>🌴</span>
-        <p>THE HEART OF AL-AHSA</p>
-    </div>
-</nav>
-
-<main class="home-main">
-    <header class="home-topbar">
-        <div class="home-location">
-            <span class="location-dot"></span>
-            DISCOVER AL-AHSA, SAUDI ARABIA
-        </div>
-
-        <div class="home-account-links">
-            <a href="login.html" class="home-login">Log In</a>
-            <a href="signup.html" class="home-signup">Sign Up</a>
-            <a href="index.html" class="home-small-logo">
-                <img src="images/logo.png" alt="Logo">
+    <!-- Menu Button -->
+    <button class="menu-button"
+            onclick="toggleMenu()"
+            aria-label="Open menu">
+        ☰
+    </button>
+    <!-- Sidebar Background -->
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png"
+                     alt="Al-Ahsa Vision Hub"
+                     class="sidebar-logo">
             </a>
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Discover the beauty of Al-Ahsa</p>
         </div>
-    </header>
-
-</main>
-
-<button class="chat-button"
-        onclick="openAI()"
-        aria-label="Open assistant"
-        title="Assistant"></button>
-
-    <main class="account-page">
-        <h1>My Account</h1>
-        <p>Manage your profile and travel information.</p>
-
-        <section class="account-profile">
-            <h2>Personal Information</h2>
-
-            <p>
-                <strong>Name:</strong>
-                <span id="user-name">Tourist Name</span>
-            </p>
-
-            <p>
-                <strong>Email:</strong>
-                <span id="user-email">tourist@example.com</span>
-            </p>
-
-            <button type="button" onclick="showEditForm()">
-                Edit Information
-            </button>
-
-            <form id="edit-form" hidden>
-                <label for="name">Name:</label>
-                <input type="text" id="name" value="Tourist Name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email"
-                       value="tourist@example.com" required>
-
-                <button type="submit">Save Changes</button>
-            </form>
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="places.html"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.html"><span>♨</span> Restaurants</a>
+            <a href="cafes.html"><span>☕</span> Cafes</a>
+            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="my-account.html" class="active"><span>♙</span> My Account</a>
+            <a href="About.html"><span>ⓘ</span> About Us</a>
+        </div>
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="home-main">
+        <!-- Top Bar -->
+        <header class="home-topbar">
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
+            </div>
+            <div class="home-account-links">
+                <a href="role-selection.html"
+                   class="home-signup"
+                   id="account-button">
+                    Log In
+                </a>
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
+            </div>
+        </header>
+        <!-- Account Content -->
+        <section class="account-page">
+            <h1>My Account</h1>
+            <p>Manage your profile and travel information.</p>
+            <!-- Personal Information -->
+            <section class="account-profile">
+                <h2>Personal Information</h2>
+                <p>
+                    <strong>Name:</strong>
+                    <span id="user-name">Tourist Name</span>
+                </p>
+                <p>
+                    <strong>Email:</strong>
+                    <span id="user-email">tourist@example.com</span>
+                </p>
+                <button type="button" onclick="showEditForm()">
+                    Edit Information
+                </button>
+                <form id="edit-form" hidden>
+                    <label for="name">Name:</label>
+                    <input type="text"
+                           id="name"
+                           value="Tourist Name"
+                           required>
+                    <label for="email">Email:</label>
+                    <input type="email"
+                           id="email"
+                           value="tourist@example.com"
+                           required>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </section>
+            <!-- Favorite Places -->
+            <section class="account-section">
+                <h2>Favorite Places</h2>
+                <p>View the places you would like to visit.</p>
+                <a href="places.html">Explore Places</a>
+            </section>
+            <!-- My Trips -->
+            <section class="account-section">
+                <h2>My Trips</h2>
+                <p>View and manage your travel plans.</p>
+                <a href="index.html">Plan a Trip</a>
+            </section>
+            <!-- Travel Preferences -->
+            <section class="account-section">
+                <h2>Travel Preferences</h2>
+                <p>Choose the activities and experiences you enjoy.</p>
+                <a href="explore-al-ahsa.html">Explore Al Ahsa</a>
+            </section>
+            <!-- Password and Security -->
+            <section class="account-section">
+                <h2>Password &amp; Security</h2>
+                <p>Manage your account settings and security.</p>
+                <a href="settings.html">Open Settings</a>
+            </section>
         </section>
-
-        <section class="account-section">
-            <h2>Favorite Places</h2>
-            <p>View the places you would like to visit.</p>
-            <a href="places.html">Explore Places</a>
-        </section>
-
-        <section class="account-section">
-            <h2>My Trips</h2>
-            <p>View and manage your travel plans.</p>
-            <a href="index.html">Plan a Trip</a>
-        </section>
-
-        <section class="account-section">
-            <h2>Travel Preferences</h2>
-            <p>Choose the activities and experiences you enjoy.</p>
-            <a href="explore-al-ahsa.html">Explore Al Ahsa</a>
-        </section>
-
-        <section class="account-section">
-            <h2>Password &amp; Security</h2>
-            <p>Manage your account settings and security.</p>
-            <a href="settings.html">Open Settings</a>
-        </section>
-     
     </main>
-
-
+    <!-- AI Assistant Button -->
     <button class="chat-button"
             onclick="openAI()"
-            aria-label="AI Assistant">
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
     </button>
-
+    <!-- Shared JavaScript -->
     <script src="script.js"></script>
-
+    <!-- Account Editing -->
     <script>
         function showEditForm() {
             document.getElementById("edit-form").hidden = false;
+            document.getElementById("name").value =
+                document.getElementById("user-name").textContent;
+            document.getElementById("email").value =
+                document.getElementById("user-email").textContent;
         }
-
         document.getElementById("edit-form").addEventListener("submit", function (event) {
             event.preventDefault();
-
             document.getElementById("user-name").textContent =
-                document.getElementById("name").value;
-
+                document.getElementById("name").value.trim();
             document.getElementById("user-email").textContent =
-                document.getElementById("email").value;
-
+                document.getElementById("email").value.trim();
             this.hidden = true;
         });
     </script>
- <!-- Al-Ahsa Vision Hub Footer -->
-<footer class="site-footer">
-    <div class="site-footer-main">
-
-        <div class="site-footer-brand">
-            <h3>Al-Ahsa Vision Hub</h3>
-            <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
         </div>
-
-        <div class="site-footer-links">
-            <h4>Explore Al-Ahsa</h4>
-            <p>Discover places, restaurants, cafés, and seasonal events.</p>
+        <div class="site-footer-bottom">
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
-
-        <div class="site-footer-contact">
-            <h4>Our Vision</h4>
-            <p>Making your journey through Al-Ahsa memorable.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Contact Us</h4>
-            <p>05123546798</p>
-
-            <p>
-                <a href="https://www.instagram.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ◎ Instagram
-                </a>
-            </p>
-
-            <p>
-                <a href="https://x.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    𝕏 X (Twitter)
-                </a>
-            </p>
-        </div>
-
-    </div>
-
-    <div class="site-footer-bottom">
-        <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
-        <p>Explore Al-Ahsa, experience its beauty.</p>
-    </div>
-</footer>
+    </footer>
 </body>
 </html>

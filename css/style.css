@@ -2874,3 +2874,17 @@ body.about-page {
         width: 100%;
     }
 }
+/* Fixed Top Bar */
+.home-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1500;
+    box-sizing: border-box;
+}
+/* Keep page content below the fixed top bar */
+.home-main {
+    padding-top: 85px;
+}

@@ -1,153 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Settings | Al-Ahsa Vision Hub</title>
-
-    <!-- Shared CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
-   <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-
-<div class="sidebar-backdrop" onclick="toggleMenu()"></div>
-
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <a href="index.html">
-            <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
-        </a>
-        <h2>Al-Ahsa <span>Vision Hub</span></h2>
-        <p>Discover the beauty of Al-Ahsa</p>
-    </div>
-
-    <div class="sidebar-links">
-        <a href="index.html"><span>⌂</span> Home</a>
-        <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
-        <a href="places.html"><span>⌘</span> Tourist Places</a>
-        <a href="restaurants.html"><span>♨</span> Restaurants</a>
-        <a href="cafes.html"><span>☕</span> Cafes</a>
-        <a href="markets.html"><span>♧</span> Markets</a>
-        <a href="settings.html"><span>⚙</span> Settings</a>
-        <a href="my-account.html"><span>♙</span> My Account</a>
-        <a href="About.html"><span>ⓘ</span> About Us</a>
-    </div>
-
-    <div class="sidebar-decoration">
-        <span>🌴</span>
-        <p>THE HEART OF AL-AHSA</p>
-    </div>
-</nav>
-
-<main class="home-main">
-    <header class="home-topbar">
-        <div class="home-location">
-            <span class="location-dot"></span>
-            DISCOVER AL-AHSA, SAUDI ARABIA
-        </div>
-
-        <div class="home-account-links">
-            <a href="login.html" class="home-login">Log In</a>
-            <a href="signup.html" class="home-signup">Sign Up</a>
-            <a href="index.html" class="home-small-logo">
-                <img src="images/logo.png" alt="Logo">
+    <!-- Menu Button -->
+    <button class="menu-button"
+            onclick="toggleMenu()"
+            aria-label="Open menu">
+        ☰
+    </button>
+    <!-- Sidebar Background -->
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png"
+                     alt="Al-Ahsa Vision Hub"
+                     class="sidebar-logo">
             </a>
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Discover the beauty of Al-Ahsa</p>
         </div>
-    </header>
-
-
-</main>
-
-<button class="chat-button"
-        onclick="openAI()"
-        aria-label="Open assistant"
-        title="Assistant"></button>
-
-
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="places.html"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.html"><span>♨</span> Restaurants</a>
+            <a href="cafes.html"><span>☕</span> Cafes</a>
+            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="settings.html" class="active"><span>⚙</span> Settings</a>
+            <a href="my-account.html"><span>♙</span> My Account</a>
+            <a href="About.html"><span>ⓘ</span> About Us</a>
+        </div>
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="home-main">
+        <!-- Top Bar -->
+        <header class="home-topbar">
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
+            </div>
+            <div class="home-account-links">
+                <a href="role-selection.html"
+                   class="home-signup"
+                   id="account-button">
+                    Log In
+                </a>
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
+            </div>
+        </header>
+    </main>
     <!-- Settings Content -->
     <main class="settings-page">
-
         <h1>Settings</h1>
         <p>Manage your account and preferences.</p>
-
         <section class="settings-section">
             <h2>Account</h2>
             <p>Manage your personal account information.</p>
             <a href="my-account.html">My Account</a>
         </section>
-
         <section class="settings-section">
             <h2>Language</h2>
             <label for="language">Choose your language:</label>
-
             <select id="language">
                 <option value="en">English</option>
                 <option value="ar">Arabic</option>
             </select>
         </section>
-
         <section class="settings-section">
             <h2>Notifications</h2>
-
             <label>
                 <input type="checkbox" id="notifications" checked>
                 Enable notifications
             </label>
         </section>
-
         <section class="settings-section">
             <h2>Appearance</h2>
             <label for="appearance">Choose appearance:</label>
-
             <select id="appearance">
                 <option value="light">Light Mode</option>
                 <option value="dark">Dark Mode</option>
             </select>
         </section>
-
         <section class="settings-section">
             <h2>Privacy &amp; Security</h2>
             <p>Manage your privacy and security preferences.</p>
         </section>
-
         <section class="settings-section">
             <h2>Help &amp; Support</h2>
             <p>Get help with using Al-Ahsa Vision Hub.</p>
             <a href="About.html">Contact Us</a>
         </section>
-
-        <!-- Log Out Button -->
         <section class="settings-section">
             <h2>Log Out</h2>
             <p>Log out and return to the Welcome page.</p>
-
             <button type="button" onclick="logout()">
                 Log Out
             </button>
         </section>
-
     </main>
-
-    <!-- Shared AI Assistant Button -->
+    <!-- AI Assistant Button -->
     <button class="chat-button"
             onclick="openAI()"
-            aria-label="AI Assistant">
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
     </button>
-
     <!-- Shared JavaScript -->
     <script src="script.js"></script>
-
     <script>
-        // Log out and return to Welcome page
         function logout() {
             window.location.href = "Welcome.html";
         }
-
-        // Appearance selection
         document.getElementById("appearance").addEventListener("change", function () {
             document.body.classList.toggle(
                 "dark-mode",
@@ -155,54 +130,44 @@
             );
         });
     </script>
-<!-- Al-Ahsa Vision Hub Footer -->
-<footer class="site-footer">
-    <div class="site-footer-main">
-
-        <div class="site-footer-brand">
-            <h3>Al-Ahsa Vision Hub</h3>
-            <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
         </div>
-
-        <div class="site-footer-links">
-            <h4>Explore Al-Ahsa</h4>
-            <p>Discover places, restaurants, cafés, and seasonal events.</p>
+        <div class="site-footer-bottom">
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
-
-        <div class="site-footer-contact">
-            <h4>Our Vision</h4>
-            <p>Making your journey through Al-Ahsa memorable.</p>
-        </div>
-
-        <div class="site-footer-contact">
-            <h4>Contact Us</h4>
-            <p>05123546798</p>
-
-            <p>
-                <a href="https://www.instagram.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ◎ Instagram
-                </a>
-            </p>
-
-            <p>
-                <a href="https://x.com/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    𝕏 X (Twitter)
-                </a>
-            </p>
-        </div>
-
-    </div>
-
-    <div class="site-footer-bottom">
-        <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
-        <p>Explore Al-Ahsa, experience its beauty.</p>
-    </div>
-</footer>
-</body>
-</html>
+    </footer>
 </body>
 </html>

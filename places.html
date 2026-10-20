@@ -8,15 +8,20 @@
 </head>
 <body>
     <!-- Menu Button -->
-    <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
+    <button class="menu-button"
+            onclick="toggleMenu()"
+            aria-label="Open menu">
         ☰
     </button>
+    <!-- Sidebar Background -->
     <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <a href="index.html">
-                <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
+                <img src="images/logo.png"
+                     alt="Al-Ahsa Vision Hub"
+                     class="sidebar-logo">
             </a>
             <h2>Al-Ahsa <span>Vision Hub</span></h2>
             <p>Discover the beauty of Al-Ahsa</p>
@@ -46,8 +51,11 @@
                 DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
             <div class="home-account-links">
-                <a href="login.html" class="home-login">Log In</a>
-                <a href="signup.html" class="home-signup">Sign Up</a>
+                <a href="role-selection.html"
+                   class="home-signup"
+                   id="account-button">
+                    Log In
+                </a>
                 <a href="index.html" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
@@ -55,7 +63,7 @@
         </header>
         <!-- Tourist Places Section -->
         <section class="home-section places-section">
-            <!-- Split Green Banner and Image -->
+            <!-- Green Banner and Image -->
             <div style="
                 display: flex;
                 align-items: stretch;
@@ -66,7 +74,6 @@
                 background: #075b3b;
                 box-shadow: 0 8px 24px rgba(25, 55, 40, 0.12);
             ">
-                <!-- Green Text Side -->
                 <div style="
                     flex: 1;
                     min-width: 0;
@@ -107,7 +114,6 @@
                         and historic landmarks of Al-Ahsa.
                     </p>
                 </div>
-                <!-- Image Side with Gradient Blend -->
                 <div style="
                     flex: 1.1;
                     min-width: 0;
@@ -124,8 +130,7 @@
                     background-size: cover;
                     background-position: center;
                     background-repeat: no-repeat;
-                ">
-                </div>
+                "></div>
             </div>
             <!-- Tourist Places Grid -->
             <div class="places-grid">
@@ -141,16 +146,7 @@
                         A family park with green spaces, seating areas, and games.
                     </p>
                     <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
+                        style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
                         View Details
                     </button>
                 </div>
@@ -166,16 +162,7 @@
                         A mountain in Al-Ahsa famous for its cool caves.
                     </p>
                     <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
+                        style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
                         View Details
                     </button>
                 </div>
@@ -192,16 +179,7 @@
                         and an administrative headquarters.
                     </p>
                     <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
+                        style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
                         View Details
                     </button>
                 </div>
@@ -214,6 +192,7 @@
             aria-label="Open AI Assistant"
             title="AI Assistant">
     </button>
+    <!-- Shared JavaScript -->
     <script src="script.js"></script>
     <!-- Footer -->
     <footer class="site-footer">
@@ -250,7 +229,7 @@
             </div>
         </div>
         <div class="site-footer-bottom">
-            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
     </footer>
