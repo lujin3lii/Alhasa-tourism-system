@@ -1,52 +1,168 @@
-<!-- القائمة الجانبية Navigation Sidebar -->
-<nav class="sidebar">
-    <h2>Al-Ahsa Hub</h2>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="cafes.html" class="active">Cafes</a></li>
-        <li><a href="markets.html">Markets</a></li>
-        <li><a href="settings.html">Settings</a></li>
-    </ul>
-</nav>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafes | Al-Ahsa Vision Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Menu Button -->
+    <button class="menu-button" onclick="toggleMenu()" aria-label="Open menu">
+        ☰
+    </button>
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
 
-<!-- المحتوى الرئيسي Main Content -->
-<div class="main-content">
-    <header class="page-header">
-        <div class="header-content">
-            <h1>Cafes</h1>
-            <p>Discover the finest specialty coffee spots and dessert places in Al-Ahsa.</p>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Al-Ahsa Vision Hub" class="sidebar-logo">
+            </a>
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Discover the beauty of Al-Ahsa</p>
         </div>
-    </header>
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="places.html"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.html"><span>♨</span> Restaurants</a>
+            <a href="cafes.html" class="active"><span>☕</span> Cafes</a>
+            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="my-account.html"><span>♙</span> My Account</a>
+            <a href="About.html"><span>ⓘ</span> About Us</a>
+        </div>
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+    </nav>
 
-    <main class="cards-container">
-        <!-- بطاقة 1: Jolla -->
-        <div class="card">
-            <div class="card-image">
-                <img src="images/jolla.jpg" alt="Jolla Cafe">
+    <!-- Main Content -->
+    <main class="home-main">
+        <!-- Top Bar -->
+        <header class="home-topbar">
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
-            <h2>Jolla</h2>
-            <p>Offers various types of specialty cold and hot coffee alongside a variety of delicious desserts.</p>
-            <button class="details-btn">View Details</button>
-        </div>
-
-        <!-- بطاقة 2: Berah Coffee House -->
-        <div class="card">
-            <div class="card-image">
-                <img src="images/berah.jpg" alt="Berah Coffee House">
+            <div class="home-account-links">
+                <a href="role-selection.html" class="home-signup" id="account-button">
+                    Log In
+                </a>
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
             </div>
-            <h2>Berah Coffee House</h2>
-            <p>A cozy spot with a warm architectural style serving premium coffee and freshly baked pastries.</p>
-            <button class="details-btn">View Details</button>
-        </div>
+        </header>
 
-        <!-- بطاقة 3: Ocean -->
-        <div class="card">
-            <div class="card-image">
-                <img src="images/ocean.jpg" alt="Ocean Cafe">
+        <!-- Cafes Section -->
+        <section class="home-section cafes-section">
+            <!-- Green Banner -->
+            <div style="
+                display: flex;
+                align-items: stretch;
+                min-height: 250px;
+                margin-bottom: 40px;
+                overflow: hidden;
+                border-radius: 18px;
+                background: #075b3b;
+                box-shadow: 0 8px 24px rgba(25, 55, 40, 0.12);
+                padding: 35px;
+                color: #ffffff;
+            ">
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <span style="color: #d7eadc; font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-bottom: 14px;">
+                        SAVOR SPECIALTY COFFEE IN AL-AHSA
+                    </span>
+                    <h1 style="color: #ffffff; font-size: clamp(30px, 4vw, 46px); font-weight: 700; line-height: 1.2; margin: 0 0 16px;">
+                        Cafes
+                    </h1>
+                    <p style="color: #ffffff; font-size: 16px; line-height: 1.8; max-width: 480px; margin: 0;">
+                        Discover the finest specialty coffee spots and cozy dessert places in Al-Ahsa.
+                    </p>
+                </div>
             </div>
-            <h2>Ocean</h2>
-            <p>Famous for its signature breakfast plates, fresh croissants, and refreshing coffee brews.</p>
-            <button class="details-btn">View Details</button>
-        </div>
+
+            <!-- Cards Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+                <!-- Card 1: Jolla -->
+                <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+                    <img src="images/jolla.jpg" alt="Jolla Cafe" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1;">
+                        <h2 style="font-size: 22px; color: #111827; margin: 0 0 12px;">Jolla</h2>
+                        <p style="font-size: 15px; color: #4b5563; line-height: 1.6; margin-bottom: 20px; flex-grow: 1;">
+                            Offers various types of specialty cold and hot coffee alongside a variety of delicious desserts.
+                        </p>
+                        <button type="button" style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Berah -->
+                <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+                    <img src="images/berah.jpg" alt="Berah Coffee House" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1;">
+                        <h2 style="font-size: 22px; color: #111827; margin: 0 0 12px;">Berah Coffee House</h2>
+                        <p style="font-size: 15px; color: #4b5563; line-height: 1.6; margin-bottom: 20px; flex-grow: 1;">
+                            A cozy spot with a warm architectural style serving premium coffee and freshly baked pastries.
+                        </p>
+                        <button type="button" style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Ocean -->
+                <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column;">
+                    <img src="images/ocean.jpg" alt="Ocean Cafe" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px; display: flex; flex-direction: column; flex-grow: 1;">
+                        <h2 style="font-size: 22px; color: #111827; margin: 0 0 12px;">Ocean</h2>
+                        <p style="font-size: 15px; color: #4b5563; line-height: 1.6; margin-bottom: 20px; flex-grow: 1;">
+                            Famous for its signature breakfast plates, fresh croissants, and refreshing coffee brews.
+                        </p>
+                        <button type="button" style="background-color: #075b3b; color: #ffffff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-</div>
+
+    <!-- AI Assistant Button -->
+    <button class="chat-button" onclick="openAI()" aria-label="Open AI Assistant" title="AI Assistant"></button>
+
+    <script src="script.js"></script>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+                <p><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">◎ Instagram</a></p>
+                <p><a href="https://x.com/" target="_blank" rel="noopener noreferrer">𝕏 X (Twitter)</a></p>
+            </div>
+        </div>
+        <div class="site-footer-bottom">
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
+        </div>
+    </footer>
+</body>
+</html>
