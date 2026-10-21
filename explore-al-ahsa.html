@@ -1,1 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Explore Al-Ahsa | Al-Ahsa Vision Hub</title>
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Explore Page Styling -->
+    <style>
+        .explore-page {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 35px 5% 70px;
+        }
+
+        .explore-page::before,
+        .explore-page::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            border-radius: 50%;
+            pointer-events: none;
+            background: linear-gradient(
+                135deg,
+                rgba(7, 91, 112, 0.82),
+                rgba(8, 127, 131, 0.78)
+            );
+        }
+
+        .explore-page::before {
+            width: 530px;
+            height: 530px;
+            top: -180px;
+            right: -190px;
+        }
+
+        .explore-page::after {
+            width: 560px;
+            height: 560px;
+            bottom: -420px;
+            left: -260px;
+        }
+
+        .explore-page .explore-heading {
+            margin: 40px 0 25px;
+            color: #111111;
+            font-size: clamp(32px, 5vw, 54px);
+            font-weight: 600;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .explore-page .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 35px;
+            align-items: start;
+        }
+
+        .explore-page .explore-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            color: #26383b;
+            text-decoration: none;
+            background: transparent;
+            border: none;
+            border-radius: 14px;
+            box-shadow: none;
+            transition: transform 0.25s ease;
+        }
+
+        .explore-page .explore-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .explore-page .explore-card img {
+            display: block;
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .explore-page .explore-card h2 {
+            margin: 22px 0 7px;
+            color: #214b38;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .explore-page .explore-card p {
+            margin: 0;
+            color: #687779;
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        .explore-page .explore-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #075b70;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .explore-page .explore-card:hover .explore-link {
+            color: #087f83;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+            .explore-page .explore-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 28px;
+            }
+
+            .explore-page .explore-card img {
+                height: 300px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .explore-page {
+                padding: 25px 6% 50px;
+            }
+
+            .explore-page .explore-heading {
+                margin-top: 30px;
+                font-size: 34px;
+            }
+
+            .explore-page .explore-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .explore-page .explore-card img {
+                height: 300px;
+            }
+
+            .explore-page .explore-card h2 {
+                margin-top: 15px;
+            }
+
+            .explore-page::before {
+                width: 320px;
+                height: 320px;
+                top: -100px;
+                right: -200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Menu Button -->
+    <button class="menu-button"
+            onclick="toggleMenu()"
+            aria-label="Open menu">
+        ☰
+    </button>
+
+    <!-- Sidebar Background -->
+    <div class="sidebar-backdrop"
+         onclick="toggleMenu()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png"
+                     alt="Al-Ahsa Vision Hub"
+                     class="sidebar-logo">
+            </a>
+
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+
+            <p>Discover the beauty of Al-Ahsa</p>
+        </div>
+
+        <div class="sidebar-links">
+            <a href="index.html"><span>⌂</span> Home</a>
+
+            <a href="explore-al-ahsa.html">
+                <span>⌖</span> Explore Al-Ahsa
+            </a>
+
+            <a href="places.html">
+                <span>⌘</span> Tourist Places
+            </a>
+
+            <a href="restaurants.html">
+                <span>♨️</span> Restaurants
+            </a>
+
+            <a href="cafes.html">
+                <span>☕</span> Cafes
+            </a>
+
+            <a href="markets.html">
+                <span>♧</span> Markets
+            </a>
+
+            <a href="settings.html">
+                <span>⚙️</span> Settings
+            </a>
+
+            <a href="my-account.html">
+                <span>♙</span> My Account
+            </a>
+
+            <a href="About.html">
+                <span>ⓘ</span> About Us
+            </a>
+        </div>
+
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+
+    </nav>
+
+    <!-- Main Content -->
+    <main class="home-main">
+
+        <!-- Top Bar -->
+        <header class="home-topbar">
+
+            <div class="home-location">
+                <span class="location-dot"></span>
+                DISCOVER AL-AHSA, SAUDI ARABIA
+            </div>
+
+            <div class="home-account-links">
+
+                <a href="role-selection.html"
+                   class="home-signup"
+                   id="account-button">
+                    Log In
+                </a>
+
+                <a href="index.html" class="home-small-logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
+
+            </div>
+
+        </header>
+
+        <!-- Explore Al-Ahsa -->
+        <section class="explore-page">
+
+            <h1 class="explore-heading">Explore Al-Ahsa</h1>
+
+            <div class="explore-grid">
+
+                <!-- Tourist and Entertainment Places -->
+                <a href="places.html" class="explore-card">
+
+                    <img src="images/tourist-places.jpg"
+                         alt="Tourist and entertainment places in Al-Ahsa">
+
+                    <h2>Tourist and Entertainment Places</h2>
+
+                    <p>
+                        Discover a variety of modern and traditional
+                        tourist attractions and entertainment venues.
+                    </p>
+
+                    <span class="explore-link">
+                        Explore Places →
+                    </span>
+
+                </a>
+
+                <!-- Restaurants -->
+                <a href="restaurants.html" class="explore-card">
+
+                    <img src="images/restaurants.jpg"
+                         alt="Restaurants">
+
+                    <h2>Restaurants</h2>
+
+                    <p>
+                        Discover restaurants serving local Saudi dishes
+                        and a variety of international cuisines.
+                    </p>
+
+                    <span class="explore-link">
+                        Explore Restaurants →
+                    </span>
+
+                </a>
+
+                <!-- Cafes -->
+                <a href="cafes.html" class="explore-card">
+
+                    <img src="images/cafes.jpg"
+                         alt="Cafes and specialty coffee shops">
+
+                    <h2>Cafes</h2>
+
+                    <p>
+                        Find specialty coffee shops, cozy cafes,
+                        and relaxing places to enjoy your favorite drink.
+                    </p>
+
+                    <span class="explore-link">
+                        Explore Cafes →
+                    </span>
+
+                </a>
+
+                <!-- Shopping Markets -->
+                <a href="markets.html" class="explore-card">
+
+                    <img src="images/markets.jpg"
+                         alt="Shopping markets in Al-Ahsa">
+
+                    <h2>Shopping Markets</h2>
+
+                    <p>
+                        Explore traditional markets, shopping destinations,
+                        and local products in Al-Ahsa.
+                    </p>
+
+                    <span class="explore-link">
+                        Explore Markets →
+                    </span>
+
+                </a>
+
+                <!-- Al-Ahsa Seasons -->
+                <a href="seasons.html" class="explore-card">
+
+                    <img src="images/seasons.jpg"
+                         alt="Seasonal events and festivals">
+
+                    <h2>Al-Ahsa Seasons</h2>
+
+                    <p>
+                        Discover seasonal events, festivals,
+                        cultural activities, and special experiences
+                        throughout the year.
+                    </p>
+
+                    <span class="explore-link">
+                        Explore Seasons →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- AI Assistant Button -->
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
+    </button>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="site-footer-main">
+
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+
+                <p>
+                    Discover the beauty, heritage, and experiences
+                    of Al-Ahsa.
+                </p>
+            </div>
+
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+
+                <p>
+                    Discover places, restaurants, cafés,
+                    and seasonal events.
+                </p>
+            </div>
+
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+
+                <p>
+                    Making your journey through Al-Ahsa memorable.
+                </p>
+            </div>
+
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+
+                <p>05123546798</p>
+
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="site-footer-bottom">
+            <p>
+                ©️ 2026 Al-Ahsa Vision Hub. All rights reserved.
+            </p>
+
+            <p>
+                Explore Al-Ahsa, experience its beauty.
+            </p>
+        </div>
+
+    </footer>
+
+    <!-- Shared JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Choose Your Role | Al-Ahsa Tourism</title>
+
+<!-- Shared CSS File -->
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Role Selection Page Styling -->
+<style>
+* {
+box-sizing: border-box;
+}
+
+body.role-selection-page {
+margin: 0;
+min-height: 100vh;
+padding: 30px 20px;
+font-family: Arial, sans-serif;
+background: linear-gradient(
+135deg,
+#123e35,
+#347c61
+);
+
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.role-selection-page .role-container {
+background-color: #fffdf7;
+width: 100%;
+max-width: 1000px;
+padding: 45px 35px;
+border-radius: 20px;
+text-align: center;
+box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+}
+
+.role-selection-page .role-logo {
+display: block;
+width: 160px;
+max-width: 100%;
+height: auto;
+margin: 0 auto 25px;
+}
+
+.role-selection-page .role-title {
+font-size: 30px;
+color: #174d3e;
+margin: 15px 0;
+}
+
+.role-selection-page .role-subtitle {
+color: #666;
+font-size: 16px;
+margin-bottom: 40px;
+}
+
+.role-selection-page .role-options {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 20px;
+}
+
+.role-selection-page .role-card {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+min-width: 0;
+min-height: 170px;
+padding: 25px 12px;
+
+background-color: #f2f7f2;
+border: 2px solid #dce7df;
+border-radius: 15px;
+
+color: #174d3e;
+text-decoration: none;
+
+transition: all 0.3s ease;
+}
+
+.role-selection-page .role-card:hover {
+background-color: #e2f1e7;
+border-color: #347c61;
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.role-selection-page .role-card:focus-visible {
+outline: 3px solid #174d3e;
+outline-offset: 4px;
+}
+
+.role-selection-page .role-card h2 {
+font-size: 20px;
+font-weight: bold;
+color: #174d3e;
+margin: 0 0 12px;
+white-space: nowrap;
+}
+
+.role-selection-page .role-card p {
+font-size: 14px;
+color: #666;
+margin: 0;
+line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+.role-selection-page .role-container {
+padding: 35px 20px;
+}
+
+.role-selection-page .role-title {
+font-size: 24px;
+}
+
+.role-selection-page .role-options {
+grid-template-columns: 1fr;
+gap: 15px;
+}
+
+.role-selection-page .role-card {
+width: 100%;
+min-height: 120px;
+}
+}
+</style>
+</head>
+
+<body class="role-selection-page">
+    <!-- Sidebar Menu Button -->
+
+<button
+
+    type="button"
+
+    class="menu-button"
+
+    onclick="toggleMenu()"
+
+    aria-label="Open menu">
+
+    ☰
+
+</button>
+
+<!-- Sidebar Backdrop -->
+
+<div
+
+    class="sidebar-backdrop"
+
+    onclick="toggleMenu()">
+
+</div>
+
+<!-- Sidebar Navigation -->
+
+<nav class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+
+        <a href="index.html">
+
+            <img
+
+                src="images/logo.PNG"
+
+                alt="Al-Ahsa Vision Hub"
+
+                class="sidebar-logo">
+
+        </a>
+
+        <h2>
+
+            Al-Ahsa <span>Vision Hub</span>
+
+        </h2>
+
+        <p>Discover the beauty of Al-Ahsa</p>
+
+    </div>
+
+    <!-- Sidebar Links -->
+
+    <div class="sidebar-links">
+
+        <a href="index.html">
+
+            <span>⌂</span> Home
+
+        </a>
+
+        <a href="explore-al-ahsa.html">
+
+            <span>⌖</span> Explore Al-Ahsa
+
+        </a>
+
+        <a href="places.html">
+
+            <span>⌘</span> Tourist Places
+
+        </a>
+
+        <a href="restaurants.html">
+
+            <span>♨</span> Restaurants
+
+        </a>
+
+        <a href="cafes.html">
+
+            <span>☕</span> Cafes
+
+        </a>
+
+        <a href="markets.html">
+
+            <span>♧</span> Markets
+
+        </a>
+
+        <a href="settings.html">
+
+            <span>⚙</span> Settings
+
+        </a>
+
+        <a href="my-account.html">
+
+            <span>♙</span> My Account
+
+        </a>
+
+        <a href="About.HTML">
+
+            <span>ⓘ</span> About Us
+
+        </a>
+
+    </div>
+
+    <!-- Sidebar Decoration -->
+
+    <div class="sidebar-decoration">
+
+        <span>🌴</span>
+
+        <p>THE HEART OF AL-AHSA</p>
+
+    </div>
+
+</nav>
+
+<main class="role-container">
+
+<!-- Project Logo -->
+<img
+src="images/logo.PNG"
+alt="Al-Ahsa Tourism Logo"
+class="role-logo"
+>
+
+<!-- Welcome Message -->
+<h1 class="role-title">
+Welcome to Al-Ahsa Tourism
+</h1>
+
+<p class="role-subtitle">
+Please select your role to continue
+</p>
+
+<!-- User Role Selection -->
+<div class="role-options">
+
+<!-- Tourist -->
+<a href="login.html?role=tourist"
+class="role-card">
+
+<h2>Tourist</h2>
+<p>Explore Al-Ahsa</p>
+
+</a>
+
+<!-- Business Owner -->
+<a href="login.html?role=business"
+class="role-card">
+
+<h2>Business Owner</h2>
+<p>Manage your business</p>
+
+</a>
+
+<!-- System Admin -->
+<a href="login.html?role=admin"
+class="role-card">
+
+<h2>System Admin</h2>
+<p>System Management</p>
+
+</a>
+
+</div>
+
+</main>
+
+<!-- AI Assistant Button -->
+<button
+type="button"
+class="chat-button"
+onclick="openAI()"
+aria-label="Open AI Assistant"
+title="AI Assistant">
+</button>
+
+<!-- Shared JavaScript File -->
+<script src="script.js"></script>
+
+</body>
+</html>
