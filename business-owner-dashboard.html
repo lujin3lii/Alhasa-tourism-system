@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Owner Dashboard | Al-Ahsa Vision Hub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f5f8f4;
+            color: #263b32;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Main content */
+        .dashboard-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Hero video */
+        .business-hero {
+            position: relative;
+            width: 100%;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+            background: #075b45;
+        }
+
+        .business-hero video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .business-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 40, 29, 0.64);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: min(850px, 90%);
+            padding: 60px 20px;
+        }
+
+        .hero-content h1 {
+            margin: 0 0 20px;
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 13px 28px;
+            border: 2px solid white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s ease;
+        }
+
+        .hero-btn.primary {
+            background: white;
+            color: #075b45;
+        }
+
+        .hero-btn.secondary {
+            background: transparent;
+            color: white;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Management cards */
+        .dashboard-section {
+            width: min(1150px, 92%);
+            margin: 0 auto;
+            padding: 55px 0;
+        }
+
+        .section-heading {
+            margin: 0 0 12px;
+            text-align: center;
+            color: #075b45;
+            font-size: 30px;
+        }
+
+        .section-description {
+            max-width: 720px;
+            margin: 0 auto 32px;
+            text-align: center;
+            color: #63736b;
+            line-height: 1.8;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .dashboard-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 25px;
+            background: white;
+            border: 1px solid #e2eae3;
+            border-radius: 18px;
+            box-shadow: 0 5px 18px rgba(30, 70, 48, 0.06);
+        }
+
+        .card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            margin-bottom: 18px;
+            border-radius: 14px;
+            background: #e6f1e9;
+            color: #075b45;
+            font-size: 25px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 12px;
+            color: #075b45;
+            font-size: 19px;
+        }
+
+        .dashboard-card p {
+            flex: 1;
+            margin: 0 0 20px;
+            color: #66756d;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .card-link {
+            display: inline-block;
+            padding: 10px 17px;
+            border-radius: 25px;
+            background: #075b45;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card-link:hover {
+            background: #08775a;
+        }
+
+        /* Business tips */
+        .tips-section {
+            padding: 50px 20px;
+            background: #eaf2eb;
+        }
+
+        .tips-inner {
+            width: min(1000px, 100%);
+            margin: 0 auto;
+        }
+
+        .tips-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-top: 28px;
+        }
+
+        .tip-item {
+            padding: 22px;
+            border-radius: 15px;
+            background: white;
+        }
+
+        .tip-item h3 {
+            margin: 0 0 10px;
+            color: #075b45;
+            font-size: 17px;
+        }
+
+        .tip-item p {
+            margin: 0;
+            color: #63736b;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* Responsive dashboard content */
+        @media (max-width: 900px) {
+            .dashboard-cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .tips-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .business-hero {
+                min-height: 430px;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+            }
+
+            .dashboard-section {
+                padding: 38px 0;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Menu Button -->
+    <button class="menu-button"
+            onclick="toggleMenu()"
+            aria-label="Open menu">
+        ☰
+    </button>
+
+    <!-- Sidebar Background -->
+    <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+
+    <!-- Business Owner Sidebar -->
+    <nav class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <a href="index.html">
+                <img src="images/logo.png"
+                     alt="Al-Ahsa Vision Hub"
+                     class="sidebar-logo">
+            </a>
+
+            <h2>Al-Ahsa <span>Vision Hub</span></h2>
+            <p>Business Owner Portal</p>
+        </div>
+
+        <div class="sidebar-links">
+            <a href="business-owner-dashboard.html">
+                <span>⌂</span> Dashboard
+            </a>
+
+            <a href="business-owner-my-business.html">
+                <span>▣</span> My Business
+            </a>
+
+            <a href="business-owner-edit.html">
+                <span>✎</span> Edit Business Information
+            </a>
+
+            <a href="business-owner-photos.html">
+                <span>▧</span> Manage Photos
+            </a>
+
+            <a href="business-owner-account.html">
+                <span>♙</span> My Account
+            </a>
+
+            <a href="index.html">
+                <span>⌂</span> Back to Home
+            </a>
+        </div>
+
+        <div class="sidebar-decoration">
+            <span>🌴</span>
+            <p>THE HEART OF AL-AHSA</p>
+        </div>
+
+    </nav>
+
+    <!-- Top Bar -->
+    <header class="home-topbar">
+
+        <div class="home-location">
+            <span class="location-dot"></span>
+            DISCOVER AL-AHSA, SAUDI ARABIA
+        </div>
+
+        <div class="home-account-links">
+            <a href="business-owner-account.html"
+               class="home-signup"
+               id="account-button">
+                My Account
+            </a>
+
+            <a href="index.html" class="home-small-logo">
+                <img src="images/logo.png" alt="Logo">
+            </a>
+        </div>
+
+    </header>
+
+    <!-- Main page content -->
+    <main class="dashboard-content">
+
+        <!-- Video hero -->
+        <section class="business-hero">
+            <video autoplay muted loop playsinline>
+                <source src="videos/business.mp4" type="video/mp4">
+                Your browser does not support the video.
+            </video>
+
+            <div class="hero-content">
+                <h1>Welcome to Your Business Hub</h1>
+
+                <p>
+                    Manage your business information, update your photos,
+                    and keep your business profile ready for visitors
+                    exploring Al-Ahsa.
+                </p>
+
+                <div class="hero-buttons">
+                    <a class="hero-btn primary"
+                       href="business-owner-my-business.html">
+                        My Business
+                    </a>
+
+                    <a class="hero-btn secondary"
+                       href="business-owner-edit.html">
+                        Edit Business
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business management cards -->
+        <section class="dashboard-section">
+            <h2 class="section-heading">Manage Your Business</h2>
+
+            <p class="section-description">
+                Everything you need to manage your business profile
+                in one place.
+            </p>
+
+            <div class="dashboard-cards">
+
+                <article class="dashboard-card">
+                    <div class="card-icon">▣</div>
+                    <h3>My Business</h3>
+                    <p>
+                        View your business information and check the details
+                        displayed on your profile.
+                    </p>
+                    <a class="card-link"
+                       href="business-owner-my-business.html">
+                        View Business
+                    </a>
+                </article>
+
+                <article class="dashboard-card">
+                    <div class="card-icon">✎</div>
+                    <h3>Edit Information</h3>
+                    <p>
+                        Update your business name, contact details,
+                        location, and description.
+                    </p>
+                    <a class="card-link"
+                       href="business-owner-edit.html">
+                        Edit Details
+                    </a>
+                </article>
+
+                <article class="dashboard-card">
+                    <div class="card-icon">▧</div>
+                    <h3>Manage Photos</h3>
+                    <p>
+                        Manage the photos that represent your business
+                        and help visitors learn about it.
+                    </p>
+                    <a class="card-link"
+                       href="business-owner-photos.html">
+                        Manage Photos
+                    </a>
+                </article>
+
+                <article class="dashboard-card">
+                    <div class="card-icon">♙</div>
+                    <h3>My Account</h3>
+                    <p>
+                        Review your account information and access
+                        your personal account settings.
+                    </p>
+                    <a class="card-link"
+                       href="business-owner-account.html">
+                        My Account
+                    </a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Business owner tips -->
+        <section class="tips-section">
+            <div class="tips-inner">
+                <h2 class="section-heading">Tips for Your Business</h2>
+
+                <p class="section-description">
+                    A complete and up-to-date profile helps present
+                    your business clearly.
+                </p>
+
+                <div class="tips-list">
+
+                    <article class="tip-item">
+                        <h3>Keep Your Information Updated</h3>
+                        <p>
+                            Make sure your contact details, location,
+                            and business description are correct.
+                        </p>
+                    </article>
+
+                    <article class="tip-item">
+                        <h3>Use Clear Photos</h3>
+                        <p>
+                            Choose clear, relevant photos that show
+                            your business and its services.
+                        </p>
+                    </article>
+
+                    <article class="tip-item">
+                        <h3>Write a Helpful Description</h3>
+                        <p>
+                            Explain what your business offers using
+                            simple and clear information.
+                        </p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Al-Ahsa Vision Hub Footer -->
+    <footer class="site-footer">
+        <div class="site-footer-main">
+
+            <div class="site-footer-brand">
+                <h3>Al-Ahsa Vision Hub</h3>
+                <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
+            </div>
+
+            <div class="site-footer-links">
+                <h4>Explore Al-Ahsa</h4>
+                <p>Discover places, restaurants, cafés, and seasonal events.</p>
+            </div>
+
+            <div class="site-footer-contact">
+                <h4>Our Vision</h4>
+                <p>Making your journey through Al-Ahsa memorable.</p>
+            </div>
+
+            <div class="site-footer-contact">
+                <h4>Contact Us</h4>
+                <p>05123546798</p>
+
+                <p>
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+
+                <p>
+                    <a href="https://x.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="site-footer-bottom">
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>Explore Al-Ahsa, experience its beauty.</p>
+        </div>
+    </footer>
+
+    <!-- AI Assistant -->
+    <button
+        class="chat-button"
+        onclick="openAI()"
+        aria-label="Open AI Assistant"
+        title="AI Assistant">
+    </button>
+
+    <!-- Shared JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>

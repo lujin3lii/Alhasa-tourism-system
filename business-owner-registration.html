@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Business Owner Registration | Al-Ahsa Vision Hub</title>
-
     <link rel="stylesheet" href="css/style.css">
-
     <style>
         .business-registration-page {
             min-height: 100vh;
@@ -16,22 +13,18 @@
             background: linear-gradient(135deg, #ffffff, #f5f8f4, #eaf2eb);
             font-family: inherit;
         }
-
         .business-registration-page * {
             box-sizing: border-box;
         }
-
         .registration-wrap {
             width: 100%;
             max-width: 760px;
             margin: 0 auto;
         }
-
         .brand-heading {
             text-align: center;
             margin-bottom: 26px;
         }
-
         .project-logo {
             display: block;
             width: 125px;
@@ -39,25 +32,21 @@
             object-fit: contain;
             margin: 0 auto 14px;
         }
-
         .brand-heading h1 {
             margin: 0 0 8px;
             color: #075b45;
             font-size: 30px;
         }
-
         .brand-heading p {
             margin: 0;
             color: #68796e;
             font-size: 15px;
             line-height: 1.7;
         }
-
         .back-home-container {
             margin-bottom: 16px;
             text-align: left;
         }
-
         .back-home-link {
             display: inline-flex;
             align-items: center;
@@ -68,12 +57,10 @@
             text-decoration: none;
             transition: color 0.2s ease;
         }
-
         .back-home-link:hover {
             color: #08775a;
             text-decoration: underline;
         }
-
         .registration-card {
             padding: 32px;
             background: #ffffff;
@@ -81,51 +68,42 @@
             border-radius: 20px;
             box-shadow: 0 16px 42px rgba(32, 72, 51, 0.09);
         }
-
         .form-intro {
             margin-bottom: 25px;
         }
-
         .form-intro h2 {
             margin: 0 0 7px;
             color: #263b32;
             font-size: 22px;
         }
-
         .form-intro p {
             margin: 0;
             color: #68796e;
             font-size: 14px;
             line-height: 1.7;
         }
-
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 19px 18px;
         }
-
         .field {
             display: flex;
             flex-direction: column;
             gap: 8px;
             min-width: 0;
         }
-
         .field.full-width {
             grid-column: 1 / -1;
         }
-
         .field label {
             color: #263b32;
             font-size: 14px;
             font-weight: 600;
         }
-
         .required {
             color: #b54747;
         }
-
         .field input,
         .field select,
         .field textarea {
@@ -141,34 +119,28 @@
             outline: none;
             transition: 0.2s;
         }
-
         .field textarea {
             min-height: 100px;
             resize: vertical;
         }
-
         .field input:focus,
         .field select:focus,
         .field textarea:focus {
             border-color: #08775a;
             box-shadow: 0 0 0 3px rgba(8, 119, 90, 0.12);
         }
-
         .field input::placeholder,
         .field textarea::placeholder {
             color: #9aa79d;
         }
-
         .hint {
             color: #7b8a7f;
             font-size: 12px;
             line-height: 1.5;
         }
-
         .form-actions {
             margin-top: 26px;
         }
-
         .submit-button {
             width: 100%;
             min-height: 49px;
@@ -182,47 +154,38 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
         .submit-button:hover {
             transform: translateY(-1px);
             box-shadow: 0 8px 20px rgba(7, 91, 69, 0.2);
         }
-
         .login-note {
             margin-top: 18px;
             text-align: center;
             color: #68796e;
             font-size: 13px;
         }
-
         .login-note a {
             color: #075b45;
             font-weight: bold;
             text-decoration: none;
         }
-
         .login-note a:hover {
             text-decoration: underline;
         }
-
         @media (max-width: 600px) {
             .business-registration-page {
                 padding: 28px 14px 42px;
             }
-
             .form-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
-
             .field.full-width {
                 grid-column: auto;
             }
-
             .registration-card {
                 padding: 22px 18px;
             }
-
             .project-logo {
                 width: 100px;
                 height: 100px;
@@ -230,41 +193,30 @@
         }
     </style>
 </head>
-
 <body>
-
 <main class="business-registration-page">
-
     <!-- Back to Home -->
     <div class="back-home-container">
         <a href="index.html" class="back-home-link">
             &larr; Back to Home
         </a>
     </div>
-
     <div class="registration-wrap">
-
         <!-- Project Logo and Name -->
         <header class="brand-heading">
-
             <img
                 src="images/logo.png"
                 alt="Al-Ahsa Vision Hub Logo"
                 class="project-logo"
             >
-
             <h1>Al-Ahsa Vision Hub</h1>
-
             <p>
                 Join our community and share your business
                 with visitors of Al-Ahsa.
             </p>
-
         </header>
-
         <!-- Registration Form -->
         <section class="registration-card">
-
             <div class="form-intro">
                 <h2>Business Owner Registration</h2>
                 <p>
@@ -272,11 +224,8 @@
                     to create an account.
                 </p>
             </div>
-
             <form id="businessRegistrationForm">
-
                 <div class="form-grid">
-
                     <div class="field">
                         <label for="ownerName">
                             Owner Full Name <span class="required">*</span>
@@ -290,7 +239,6 @@
                             required
                         >
                     </div>
-
                     <div class="field">
                         <label for="businessName">
                             Business Name <span class="required">*</span>
@@ -303,7 +251,6 @@
                             required
                         >
                     </div>
-
                     <div class="field">
                         <label for="email">
                             Email Address <span class="required">*</span>
@@ -317,7 +264,6 @@
                             required
                         >
                     </div>
-
                     <div class="field">
                         <label for="phone">
                             Phone Number <span class="required">*</span>
@@ -331,7 +277,6 @@
                             required
                         >
                     </div>
-
                     <div class="field">
                         <label for="businessType">
                             Business Type <span class="required">*</span>
@@ -359,7 +304,6 @@
                             <option value="other">Other</option>
                         </select>
                     </div>
-
                     <div class="field">
                         <label for="businessSize">
                             Business Size <span class="required">*</span>
@@ -377,7 +321,6 @@
                             <option value="large">Large</option>
                         </select>
                     </div>
-
                     <div class="field full-width">
                         <label for="businessLocation">
                             Business Location <span class="required">*</span>
@@ -390,7 +333,6 @@
                             required
                         >
                     </div>
-
                     <div class="field full-width">
                         <label for="description">
                             Business Description
@@ -404,7 +346,6 @@
                             A short description helps visitors understand your business.
                         </span>
                     </div>
-
                     <div class="field">
                         <label for="password">
                             Password <span class="required">*</span>
@@ -422,7 +363,6 @@
                             Use at least 8 characters.
                         </span>
                     </div>
-
                     <div class="field">
                         <label for="confirmPassword">
                             Confirm Password <span class="required">*</span>
@@ -437,21 +377,16 @@
                             required
                         >
                     </div>
-
                 </div>
-
                 <div class="form-actions">
                     <button class="submit-button" type="submit">
                         Create Business Account
                     </button>
                 </div>
-
             </form>
         </section>
-
     </div>
 </main>
-
 <!-- AI Assistant Button: exact code provided by you -->
 <button
     class="chat-button"
@@ -459,21 +394,16 @@
     aria-label="Open AI Assistant"
     title="AI Assistant">
 </button>
-
 <script src="script.js"></script>
-
 <script>
     // Front-end validation only. PHP/backend is needed to save accounts.
     document
         .getElementById("businessRegistrationForm")
         .addEventListener("submit", function (event) {
-
             event.preventDefault();
-
             const password = document.getElementById("password");
             const confirmPassword =
                 document.getElementById("confirmPassword");
-
             if (password.value !== confirmPassword.value) {
                 confirmPassword.setCustomValidity(
                     "Passwords do not match."
@@ -481,20 +411,15 @@
                 confirmPassword.reportValidity();
                 return;
             }
-
             confirmPassword.setCustomValidity("");
-
-            alert(
-                "The page design is ready. Connect it to the PHP/backend to register accounts."
-            );
+            // Go to the Business Owner Dashboard
+            window.location.href = "business-owner-dashboard.html";
         });
-
     document
         .getElementById("confirmPassword")
         .addEventListener("input", function () {
             this.setCustomValidity("");
         });
 </script>
-
 </body>
 </html>
