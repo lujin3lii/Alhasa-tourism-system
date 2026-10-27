@@ -1528,7 +1528,6 @@ body:has(.sidebar.open) .sidebar-backdrop {
     .account-page .account-section {
         padding: 22px 18px;
     }
-<<<<<<< HEAD
     .places-grid,
     .restaurants-grid,
     .cafes-grid,
@@ -2888,7 +2887,6 @@ body.about-page {
 /* Keep page content below the fixed top bar */
 .home-main {
     padding-top: 85px;
-=======
 }
 .main-content {
     margin-left: 260px;
@@ -2994,5 +2992,4 @@ body.about-page {
     .cards-container {
         grid-template-columns: 1fr;
     }
->>>>>>> d4513b1 (update my work)
 }
