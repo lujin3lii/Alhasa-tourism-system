@@ -2993,3 +2993,519 @@ body.about-page {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ========================================
+   PLACE DETAILS PAGE
+   Scoped styles — does not change the header,
+   sidebar, footer, or AI assistant button.
+======================================== */
+
+/* Main section */
+.details-section {
+    width: min(100% - 40px, 1120px);
+    margin: 28px auto 40px;
+    padding: 0 0 24px;
+    box-sizing: border-box;
+    background: transparent;
+    color: #244b45;
+    direction: rtl;
+}
+
+.details-section *,
+.details-section *::before,
+.details-section *::after {
+    box-sizing: border-box;
+}
+
+/* Back link */
+.details-section .details-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 4px 18px;
+    color: #12614f;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.details-section .details-back:hover {
+    color: #0b4237;
+}
+
+/* Main white card */
+.details-section .details-container {
+    width: 100%;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #edf3f0;
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(24, 75, 61, 0.07);
+}
+
+/* Place image */
+.details-section .details-image {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+    background: #edf5f1;
+}
+
+/* Content inside the card */
+.details-section .details-content {
+    padding: 28px;
+}
+
+/* Place name and favorite button */
+.details-section .details-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 12px;
+}
+
+.details-section .details-title {
+    margin: 0;
+    color: #105c49;
+    font-size: 32px;
+    font-weight: 750;
+    line-height: 1.5;
+}
+
+.details-section .favorite-form {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.details-section .favorite-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid #e2eee8;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #145c4b;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.details-section .favorite-button:hover {
+    background: #edf7f1;
+    transform: scale(1.05);
+}
+
+.details-section .favorite-button.is-favorite {
+    background: #e8f4ed;
+    color: #c34e52;
+    border-color: #d8e9df;
+}
+
+/* Location, description and general text */
+.details-section .details-description {
+    margin: 22px 0 26px;
+    color: #45645d;
+    font-size: 16px;
+    line-height: 2;
+    overflow-wrap: anywhere;
+}
+
+/* Information cards: location, hours, website */
+.details-section .details-info {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 26px 0 30px;
+}
+
+.details-section .details-info-card {
+    min-width: 0;
+    padding: 24px 18px;
+    text-align: center;
+    background: #f1f7f3;
+    border: 1px solid #edf4ef;
+    border-radius: 14px;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.details-section .details-info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(24, 75, 61, 0.07);
+}
+
+.details-section .details-info-card h3 {
+    margin: 0 0 12px;
+    color: #145d4b;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.details-section .details-info-card p {
+    margin: 0 0 10px;
+    color: #47665e;
+    font-size: 14px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+
+.details-section .details-info-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* Links and action buttons inside details */
+.details-section .details-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    max-width: 100%;
+    min-height: 38px;
+    padding: 9px 18px;
+    border: 1px solid #12614f;
+    border-radius: 9px;
+    background: #12614f;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    transition: background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.details-section .details-link:hover {
+    background: #0b493b;
+    border-color: #0b493b;
+    color: #ffffff;
+}
+
+/* Messages */
+.details-section .action-message,
+.details-section .details-message {
+    margin: 16px 0;
+    padding: 13px 16px;
+    border: 1px solid #dcece2;
+    border-radius: 10px;
+    background: #f0f8f2;
+    color: #205c48;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.details-section .details-message {
+    margin: 24px;
+    padding: 30px;
+    text-align: center;
+}
+
+.details-section .details-message h2 {
+    margin-top: 0;
+    color: #145d4b;
+}
+
+/* Reviews section */
+.details-section .details-reviews {
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid #e3ece7;
+}
+
+.details-section .details-reviews > h2 {
+    margin: 0 0 20px;
+    color: #145d4b;
+    font-size: 23px;
+    font-weight: 750;
+}
+
+/* Rating summary */
+.details-section .details-rating-summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+    color: #45645d;
+    font-size: 14px;
+}
+
+.details-section .details-rating-summary strong {
+    color: #244b45;
+    font-size: 19px;
+}
+
+.details-section .details-stars {
+    color: #e7a526;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/* Individual review cards */
+.details-section .review-card {
+    margin-bottom: 13px;
+    padding: 20px;
+    border: 1px solid #e5eeea;
+    border-radius: 13px;
+    background: #ffffff;
+    transition: box-shadow 0.2s ease;
+}
+
+.details-section .review-card:hover {
+    box-shadow: 0 4px 14px rgba(24, 75, 61, 0.05);
+}
+
+.details-section .review-card .details-rating-summary {
+    margin-bottom: 10px;
+}
+
+.details-section .review-comment {
+    margin: 10px 0 0;
+    color: #617b74;
+    font-size: 14px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+
+/* Add a review */
+.details-section .review-form-container {
+    margin-top: 18px;
+    padding: 22px;
+    border: 1px solid #edf4ef;
+    border-radius: 14px;
+    background: #f1f7f3;
+}
+
+.details-section .review-form-container h3 {
+    margin: 0 0 8px;
+    color: #145d4b;
+    font-size: 19px;
+}
+
+.details-section .review-form-container > p {
+    margin: 0 0 18px;
+    color: #607b73;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.details-section .review-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 13px;
+}
+
+.details-section .review-form > label {
+    color: #315a50;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.details-section .rating-fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.details-section .rating-fieldset legend {
+    margin-bottom: 12px;
+    color: #315a50;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.details-section .rating-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.details-section .rating-options label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 40px;
+    padding: 8px 10px;
+    border: 1px solid #dce9e1;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #e7a526;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.details-section .rating-options label:has(input:checked) {
+    border-color: #12614f;
+    background: #e1f0e6;
+}
+
+.details-section .rating-options input {
+    accent-color: #12614f;
+    cursor: pointer;
+}
+
+.details-section .review-form textarea {
+    display: block;
+    width: 100%;
+    min-height: 105px;
+    padding: 13px 15px;
+    border: 1px solid #dfeae4;
+    border-radius: 10px;
+    outline: none;
+    background: #ffffff;
+    color: #244b45;
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.8;
+    resize: vertical;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.details-section .review-form textarea::placeholder {
+    color: #9aada6;
+}
+
+.details-section .review-form textarea:focus {
+    border-color: #438c73;
+    box-shadow: 0 0 0 3px rgba(67, 140, 115, 0.12);
+}
+
+.details-section .review-submit {
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+/* Keyboard accessibility */
+.details-section a:focus-visible,
+.details-section button:focus-visible,
+.details-section input:focus-visible,
+.details-section textarea:focus-visible {
+    outline: 2px solid #4b967b;
+    outline-offset: 3px;
+}
+
+/* ========================================
+   Responsive layout
+======================================== */
+
+@media (max-width: 900px) {
+    .details-section {
+        width: min(100% - 30px, 760px);
+        margin-top: 22px;
+    }
+
+    .details-section .details-image {
+        height: 260px;
+    }
+
+    .details-section .details-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .details-section .details-content {
+        padding: 24px;
+    }
+
+    .details-section .details-title {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    .details-section {
+        width: calc(100% - 24px);
+        margin: 16px auto 28px;
+    }
+
+    .details-section .details-image {
+        height: 210px;
+    }
+
+    .details-section .details-content {
+        padding: 18px 15px;
+    }
+
+    .details-section .details-title-row {
+        gap: 10px;
+    }
+
+    .details-section .details-title {
+        font-size: 24px;
+    }
+
+    .details-section .favorite-button {
+        width: 40px;
+        height: 40px;
+        font-size: 21px;
+    }
+
+    .details-section .details-description {
+        margin: 17px 0 22px;
+        font-size: 14px;
+        line-height: 1.9;
+    }
+
+    .details-section .details-info {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        margin: 20px 0 24px;
+    }
+
+    .details-section .details-info-card {
+        padding: 20px 15px;
+    }
+
+    .details-section .details-reviews {
+        margin-top: 24px;
+        padding-top: 22px;
+    }
+
+    .details-section .details-reviews > h2 {
+        font-size: 21px;
+    }
+
+    .details-section .review-card {
+        padding: 15px;
+    }
+
+    .details-section .review-form-container {
+        padding: 17px 13px;
+    }
+
+    .details-section .rating-options {
+        gap: 6px;
+    }
+
+    .details-section .rating-options label {
+        min-width: 36px;
+        padding: 7px;
+        font-size: 16px;
+    }
+
+    .details-section .review-submit {
+        align-self: stretch;
+    }
+
+    .details-section .review-submit .details-link {
+        width: 100%;
+    }
+}
