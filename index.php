@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +15,11 @@
         ☰
     </button>
     <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -23,43 +27,63 @@
             <h2>Al-Ahsa <span>Vision Hub</span></h2>
             <p>Discover the beauty of Al-Ahsa</p>
         </div>
+
         <div class="sidebar-links">
-            <a href="index.html" class="active"><span>⌂</span> Home</a>
+            <a href="index.php" class="active"><span>⌂</span> Home</a>
             <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
-            <a href="places.html"><span>⌘</span> Tourist Places</a>
-            <a href="restaurants.html"><span>♨</span> Restaurants</a>
-            <a href="cafes.html"><span>☕</span> Cafes</a>
-            <a href="markets.html"><span>♧</span> Markets</a>
+            <a href="places.php"><span>⌘</span> Tourist Places</a>
+            <a href="restaurants.php"><span>♨</span> Restaurants</a>
+            <a href="cafes.php"><span>☕</span> Cafes</a>
+            <a href="markets.php"><span>♧</span> Markets</a>
             <a href="hotels.html"><span>⌂</span> Hotels</a>
             <a href="settings.html"><span>⚙</span> Settings</a>
             <a href="my-account.html"><span>♙</span> My Account</a>
             <a href="About.html"><span>ⓘ</span> About Us</a>
         </div>
+
         <div class="sidebar-decoration">
             <span>🌴</span>
             <p>THE HEART OF AL-AHSA</p>
         </div>
     </nav>
+
     <!-- Main Content -->
     <main class="home-main">
+
         <!-- Top Bar -->
         <header class="home-topbar">
             <div class="home-location">
                 <span class="location-dot"></span>
                 DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
+
             <!-- Account Button -->
             <div class="home-account-links">
-                <a href="role-selection.html"
-                   class="home-signup"
-                   id="account-button">
-                    Log In
-                </a>
-                <a href="index.html" class="home-small-logo">
+
+                <?php if (isset($_SESSION['tourist_id'])): ?>
+
+                    <a href="my-account.html"
+                       class="home-signup"
+                       id="account-button">
+                        <?= htmlspecialchars($_SESSION['tourist_name'], ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+
+                <?php else: ?>
+
+                    <a href="role-selection.html"
+                       class="home-signup"
+                       id="account-button">
+                        Log In
+                    </a>
+
+                <?php endif; ?>
+
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
             </div>
         </header>
+
         <!-- Video Hero -->
         <section class="home-hero home-video-hero">
             <video class="home-hero-video"
@@ -72,6 +96,7 @@
                 <source src="videos/home.mp4" type="video/mp4">
                 Your browser does not support HTML video.
             </video>
+
             <div class="home-hero-overlay">
                 <span class="home-eyebrow">YOUR JOURNEY STARTS HERE</span>
                 <h1>Discover the Beauty of <span>Al-Ahsa</span></h1>
@@ -79,6 +104,7 @@
                     Explore heritage landmarks, peaceful natural landscapes
                     and authentic local experiences across Al-Ahsa — all in one place.
                 </p>
+
                 <div class="home-hero-actions">
                     <a href="explore-al-ahsa.html" class="home-btn home-btn-primary">
                         Explore Al-Ahsa →
@@ -87,11 +113,13 @@
                         Plan Your Trip
                     </a>
                 </div>
+
                 <div class="home-hero-caption">
                     Heritage, nature and authentic local experiences.
                 </div>
             </div>
         </section>
+
         <!-- Introduction -->
         <section class="home-intro section-pad">
             <div class="home-intro-text">
@@ -106,6 +134,7 @@
                     Use Al-Ahsa Vision Hub to discover places, explore local
                     businesses and plan a trip that matches your interests.
                 </p>
+
                 <div class="home-highlights">
                     <div>
                         <span class="home-highlight-icon">🏛️</span>
@@ -123,22 +152,26 @@
                         <small>Find places worth visiting</small>
                     </div>
                 </div>
+
                 <a href="About.html" class="home-text-link">
                     Learn More About Us →
                 </a>
             </div>
+
             <div class="home-intro-image">
                 <video autoplay muted loop playsinline preload="metadata"
                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;"
                        aria-label="Tourist places in Al-Ahsa">
                     <source src="videos/tourist-places.mp4" type="video/mp4">
                 </video>
+
                 <div class="home-image-caption">
                     <span>Discover the Wonders of Al-Ahsa</span>
-                    <a href="places.html" aria-label="Explore tourist places">→</a>
+                    <a href="places.php" aria-label="Explore tourist places">→</a>
                 </div>
             </div>
         </section>
+
         <!-- Explore Al-Ahsa -->
         <section class="home-categories section-pad home-explore-section">
             <div class="home-section-heading">
@@ -153,6 +186,7 @@
                     </p>
                 </div>
             </div>
+
             <div class="home-explore-feature">
                 <div class="home-explore-details">
                     <span class="home-explore-label">YOUR GUIDE TO AL-AHSA</span>
@@ -162,6 +196,7 @@
                         somewhere to eat, a cozy cafe, local shopping
                         or seasonal activities, start your journey here.
                     </p>
+
                     <div class="home-explore-tags">
                         <span>Tourist Places</span>
                         <span>Restaurants</span>
@@ -170,26 +205,31 @@
                         <span>Hotels</span>
                         <span>Seasonal Events</span>
                     </div>
+
                     <a href="explore-al-ahsa.html"
                        class="home-btn home-btn-primary home-explore-button">
                         Explore Al-Ahsa →
                     </a>
                 </div>
+
                 <div class="home-explore-visual">
                     <video autoplay muted loop playsinline preload="metadata"
                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px;"
                            aria-label="Explore Al-Ahsa">
                         <source src="videos/explore.mp4" type="video/mp4">
                     </video>
+
                     <div class="home-explore-image-caption">
                         Discover the heritage of Al-Ahsa
                     </div>
                 </div>
             </div>
         </section>
+
         <!-- Accessibility -->
         <section class="home-accessibility">
             <div class="accessibility-icon">♿</div>
+
             <div class="accessibility-text">
                 <span class="home-eyebrow">A MORE COMFORTABLE VISIT</span>
                 <h2>Accessibility Services</h2>
@@ -198,10 +238,12 @@
                     accessible entrances and parking where details are available.
                 </p>
             </div>
+
             <a href="settings.html" class="home-btn home-btn-primary">
                 View Accessibility →
             </a>
         </section>
+
         <!-- Trip Planner -->
         <section class="home-trip section-pad" id="trip-planner">
             <div class="home-trip-image">
@@ -211,6 +253,7 @@
                     <source src="videos/plan.mp4" type="video/mp4">
                 </video>
             </div>
+
             <div class="home-trip-content">
                 <span class="home-eyebrow">YOUR TRIP, YOUR WAY</span>
                 <h2>Plan a Trip That Fits You</h2>
@@ -218,6 +261,7 @@
                     Create a more personalized visit by exploring destinations
                     that match your interests, available time and budget.
                 </p>
+
                 <div class="home-trip-features">
                     <div>
                         <strong>01</strong>
@@ -232,11 +276,13 @@
                         <span>Review your plan and useful destination links.</span>
                     </div>
                 </div>
+
                 <a href="itinerary.html" class="home-btn home-btn-primary">
                     Plan Your Trip →
                 </a>
             </div>
         </section>
+
         <!-- Business Owners -->
         <section class="home-business">
             <div class="home-business-overlay">
@@ -247,11 +293,13 @@
                     and experiences. Connect with the tourism community
                     and make your business easier to find.
                 </p>
+
                 <a href="business-owner-registration.html" class="home-btn home-btn-light">
                     Join Our Community →
                 </a>
             </div>
         </section>
+
         <!-- About Strip -->
         <section class="home-about-strip section-pad">
             <div>
@@ -263,19 +311,24 @@
                     and plan their experiences more easily.
                 </p>
             </div>
+
             <a href="About.html" class="home-btn home-btn-primary">
                 About Us →
             </a>
         </section>
+
     </main>
+
     <!-- AI Assistant Button -->
     <button class="chat-button"
             onclick="openAI()"
             aria-label="Open assistant"
             title="Assistant">
     </button>
+
     <!-- Shared JavaScript -->
     <script src="script.js"></script>
+
     <!-- Footer -->
     <footer class="site-footer">
         <div class="site-footer-main">
@@ -283,14 +336,17 @@
                 <h3>Al-Ahsa Vision Hub</h3>
                 <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
             </div>
+
             <div class="site-footer-links">
                 <h4>Explore Al-Ahsa</h4>
                 <p>Discover places, restaurants, cafés, and seasonal events.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Our Vision</h4>
                 <p>Making your journey through Al-Ahsa memorable.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Contact Us</h4>
                 <p>05123546798</p>
@@ -310,10 +366,12 @@
                 </p>
             </div>
         </div>
+
         <div class="site-footer-bottom">
             <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
     </footer>
+
 </body>
 </html>
