@@ -1,3 +1,60 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$ownerID = (int) ($_SESSION['business_owner_id'] ?? 0);
+$ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
+
+$business = [
+    'Name' => '',
+    'Place_Type' => '',
+    'Business_Size' => '',
+    'Location' => '',
+    'phone' => '',
+    'Opening_Hours' => '',
+    'Description' => ''
+];
+
+if ($ownerID > 0) {
+    $stmt = $conn->prepare("
+        SELECT Name, Place_Type, Business_Size, Location,
+               phone, Opening_Hours, Description
+        FROM places
+        WHERE Business_Owner_ID = ?
+        LIMIT 1
+    ");
+
+    if ($stmt) {
+        $stmt->bind_param("i", $ownerID);
+        $stmt->execute();
+
+        $stmt->bind_result(
+            $name,
+            $type,
+            $size,
+            $location,
+            $phone,
+            $hours,
+            $description
+        );
+
+        if ($stmt->fetch()) {
+            $business = [
+                'Name' => $name ?? '',
+                'Place_Type' => $type ?? '',
+                'Business_Size' => $size ?? '',
+                'Location' => $location ?? '',
+                'phone' => $phone ?? '',
+                'Opening_Hours' => $hours ?? '',
+                'Description' => $description ?? ''
+            ];
+        }
+
+        $stmt->close();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +144,7 @@
     <nav class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="business-owner-index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -98,12 +155,13 @@
         </div>
 
         <div class="sidebar-links">
-            <a href="business-owner-dashboard.html"><span>⌂</span> Dashboard</a>
-            <a href="business-owner-my-business.html"><span>▣</span> My Business</a>
-            <a href="business-owner-edit.html"><span>✎</span> Edit Business Information</a>
-            <a href="business-owner-photos.html"><span>▧</span> Manage Photos</a>
-            <a href="business-owner-account.html"><span>♙</span> My Account</a>
-            <a href="index.html"><span>⌂</span> Back to Home</a>
+            <a href="business-owner-index.php"><span>⌂</span> Home</a>
+            <a href="business-owner-dashboard.php"><span>⌂</span> Dashboard</a>
+            <a href="business-owner-my-business.php"><span>▣</span> My Business</a>
+            <a href="business-owner-edit.php"><span>✎</span> Edit Business Information</a>
+            <a href="business-owner-photos.php"><span>▧</span> Manage Photos</a>
+            <a href="business-owner-account.php"><span>♙</span> My Account</a>
+            <a href="index.php"><span>⌂</span> Back to Home</a>
         </div>
 
         <div class="sidebar-decoration">
@@ -119,8 +177,10 @@
             DISCOVER AL-AHSA, SAUDI ARABIA
         </div>
         <div class="home-account-links">
-            <a href="business-owner-account.html" class="home-signup" id="account-button">My Account</a>
-            <a href="index.html" class="home-small-logo">
+            <a href="business-owner-account.php" class="home-signup" id="account-button">
+                <?php echo htmlspecialchars($ownerName); ?>
+            </a>
+            <a href="business-owner-index.php" class="home-small-logo">
                 <img src="images/logo.png" alt="Logo">
             </a>
         </div>
@@ -150,49 +210,68 @@
                         <div class="business-form-grid">
                             <div class="business-field">
                                 <label for="business-name">Business Name</label>
-                                <input type="text" id="business-name" name="business-name" placeholder="Enter your business name" required>
+                                <input type="text" id="business-name" name="business-name"
+                                       value="<?php echo htmlspecialchars($business['Name']); ?>"
+                                       placeholder="Enter your business name" required>
                             </div>
                             <div class="business-field">
                                 <label for="business-type">Business Type</label>
                                 <select id="business-type" name="business-type" required>
                                     <option value="">Select business type</option>
-                                    <option>Restaurant</option>
-                                    <option>Café</option>
-                                    <option>Hotel</option>
-                                    <option>Shop</option>
-                                    <option>Other</option>
+                                    <?php
+                                    $types = ['Restaurant', 'Café', 'Hotel', 'Shop', 'Other'];
+                                    foreach ($types as $type):
+                                    ?>
+                                        <option value="<?php echo htmlspecialchars($type); ?>"
+                                            <?php echo ($business['Place_Type'] === $type) ? 'selected' : ''; ?>>
+                                            <?php echo htmlspecialchars($type); ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="business-field">
                                 <label for="business-size">Business Size</label>
                                 <select id="business-size" name="business-size">
                                     <option value="">Select business size</option>
-                                    <option>Small</option>
-                                    <option>Medium</option>
-                                    <option>Large</option>
+                                    <?php foreach (['Small', 'Medium', 'Large'] as $size): ?>
+                                        <option value="<?php echo htmlspecialchars($size); ?>"
+                                            <?php echo ($business['Business_Size'] === $size) ? 'selected' : ''; ?>>
+                                            <?php echo htmlspecialchars($size); ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="business-field">
                                 <label for="business-location">Business Location</label>
-                                <input type="text" id="business-location" name="business-location" placeholder="Enter business location">
+                                <input type="text" id="business-location" name="business-location"
+                                       value="<?php echo htmlspecialchars($business['Location']); ?>"
+                                       placeholder="Enter business location">
                             </div>
                             <div class="business-field">
                                 <label for="business-phone">Contact Number</label>
-                                <input type="tel" id="business-phone" name="business-phone" placeholder="Enter contact number">
+                                <input type="tel" id="business-phone" name="business-phone"
+                                       value="<?php echo htmlspecialchars($business['phone']); ?>"
+                                       placeholder="Enter contact number">
                             </div>
                             <div class="business-field">
                                 <label for="business-hours">Opening Hours</label>
-                                <input type="text" id="business-hours" name="business-hours" placeholder="Example: 9:00 AM - 11:00 PM">
+                                <input type="text" id="business-hours" name="business-hours"
+                                       value="<?php echo htmlspecialchars($business['Opening_Hours']); ?>"
+                                       placeholder="Example: 9:00 AM - 11:00 PM">
                             </div>
                             <div class="business-field full-width">
                                 <label for="business-description">Business Description</label>
-                                <textarea id="business-description" name="business-description" placeholder="Write a short description about your business"></textarea>
+                                <textarea id="business-description" name="business-description"
+                                          placeholder="Write a short description about your business"><?php echo htmlspecialchars($business['Description']); ?></textarea>
                             </div>
                         </div>
 
                         <div class="business-actions">
-                            <button type="button" class="business-button" onclick="alert('The form design is ready. Saving information requires backend integration.')">✓ Save Changes</button>
-                            <a href="business-owner-my-business.html" class="business-button secondary">Cancel</a>
+                            <button type="button" class="business-button"
+                                onclick="alert('Saving information will be connected to the database in a later step.')">
+                                ✓ Save Changes
+                            </button>
+                            <a href="business-owner-my-business.php" class="business-button secondary">Cancel</a>
                         </div>
                     </form>
                 </div>

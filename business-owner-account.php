@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+$ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
+$ownerEmail = $_SESSION['business_owner_email'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +94,7 @@
     <nav class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="business-owner-index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -98,12 +105,13 @@
         </div>
 
         <div class="sidebar-links">
-            <a href="business-owner-dashboard.html"><span>⌂</span> Dashboard</a>
-            <a href="business-owner-my-business.html"><span>▣</span> My Business</a>
-            <a href="business-owner-edit.html"><span>✎</span> Edit Business Information</a>
-            <a href="business-owner-photos.html"><span>▧</span> Manage Photos</a>
-            <a href="business-owner-account.html"><span>♙</span> My Account</a>
-            <a href="index.html"><span>⌂</span> Back to Home</a>
+            <a href="business-owner-index.php"><span>⌂</span> Home</a>
+            <a href="business-owner-dashboard.php"><span>⌂</span> Dashboard</a>
+            <a href="business-owner-my-business.php"><span>▣</span> My Business</a>
+            <a href="business-owner-edit.php"><span>✎</span> Edit Business Information</a>
+            <a href="business-owner-photos.php"><span>▧</span> Manage Photos</a>
+            <a href="business-owner-account.php"><span>♙</span> My Account</a>
+            <a href="index.php"><span>⌂</span> Back to Home</a>
         </div>
 
         <div class="sidebar-decoration">
@@ -119,8 +127,10 @@
             DISCOVER AL-AHSA, SAUDI ARABIA
         </div>
         <div class="home-account-links">
-            <a href="business-owner-account.html" class="home-signup" id="account-button">My Account</a>
-            <a href="index.html" class="home-small-logo">
+            <a href="business-owner-account.php" class="home-signup" id="account-button">
+                <?php echo htmlspecialchars($ownerName); ?>
+            </a>
+            <a href="business-owner-index.php" class="home-small-logo">
                 <img src="images/logo.png" alt="Logo">
             </a>
         </div>
@@ -150,15 +160,20 @@
                         <div class="business-form-grid">
                             <div class="business-field">
                                 <label for="owner-name">Full Name</label>
-                                <input type="text" id="owner-name" name="owner-name" placeholder="Enter your full name" required>
+                                <input type="text" id="owner-name" name="owner-name"
+                                       value="<?php echo htmlspecialchars($ownerName === 'My Account' ? '' : $ownerName); ?>"
+                                       placeholder="Enter your full name" required>
                             </div>
                             <div class="business-field">
                                 <label for="owner-email">Email Address</label>
-                                <input type="email" id="owner-email" name="owner-email" placeholder="Enter your email address" required>
+                                <input type="email" id="owner-email" name="owner-email"
+                                       value="<?php echo htmlspecialchars($ownerEmail); ?>"
+                                       placeholder="Enter your email address" required>
                             </div>
                             <div class="business-field">
                                 <label for="owner-phone">Phone Number</label>
-                                <input type="tel" id="owner-phone" name="owner-phone" placeholder="Enter your phone number">
+                                <input type="tel" id="owner-phone" name="owner-phone"
+                                       placeholder="Enter your phone number">
                             </div>
                         </div>
                         <div class="business-actions">

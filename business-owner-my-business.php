@@ -1,12 +1,72 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$ownerID = (int) ($_SESSION['business_owner_id'] ?? 0);
+$ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
+
+$business = [
+    'Name' => '',
+    'Place_Type' => '',
+    'Business_Size' => '',
+    'Location' => '',
+    'Description' => ''
+];
+
+if ($ownerID > 0) {
+    $stmt = $conn->prepare("
+        SELECT Name, Place_Type, Business_Size, Location, Description
+        FROM places
+        WHERE Business_Owner_ID = ?
+        LIMIT 1
+    ");
+
+    if ($stmt) {
+        $stmt->bind_param("i", $ownerID);
+        $stmt->execute();
+
+        $stmt->bind_result(
+            $name,
+            $type,
+            $size,
+            $location,
+            $description
+        );
+
+        if ($stmt->fetch()) {
+            $business = [
+                'Name' => $name ?? '',
+                'Place_Type' => $type ?? '',
+                'Business_Size' => $size ?? '',
+                'Location' => $location ?? '',
+                'Description' => $description ?? ''
+            ];
+        }
+
+        $stmt->close();
+    }
+}
+
+function displayBusinessValue($value, $emptyText) {
+    if (trim((string)$value) === '') {
+        return '<span class="empty-value">' .
+            htmlspecialchars($emptyText) .
+            '</span>';
+    }
+
+    return htmlspecialchars($value);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Business | Al-Ahsa Vision Hub</title>
 
-    <!-- Main CSS -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -28,7 +88,6 @@
             margin: 0 auto;
         }
 
-        /* Page Heading */
         .business-heading {
             margin-bottom: 28px;
         }
@@ -73,7 +132,6 @@
             text-decoration: underline;
         }
 
-        /* Main Business Card */
         .business-card {
             overflow: hidden;
             margin-bottom: 25px;
@@ -122,7 +180,6 @@
             padding: 28px;
         }
 
-        /* Business Information */
         .details-heading {
             margin: 0 0 20px;
             color: #263b32;
@@ -168,7 +225,6 @@
             font-style: italic;
         }
 
-        /* Action Buttons */
         .business-actions {
             display: flex;
             flex-wrap: wrap;
@@ -209,7 +265,6 @@
             background: #f1f7f2;
         }
 
-        /* Information Note */
         .business-note {
             display: flex;
             align-items: flex-start;
@@ -239,7 +294,6 @@
             line-height: 1.8;
         }
 
-        /* Mobile */
         @media (max-width: 600px) {
             .business-page {
                 padding: 105px 15px 35px;
@@ -303,7 +357,7 @@
     <nav class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="business-owner-index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -314,29 +368,35 @@
         </div>
 
         <div class="sidebar-links">
-            <a href="business-owner-dashboard.html">
+
+            <a href="business-owner-index.php">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="business-owner-dashboard.php">
                 <span>⌂</span> Dashboard
             </a>
 
-            <a href="business-owner-my-business.html">
+            <a href="business-owner-my-business.php">
                 <span>▣</span> My Business
             </a>
 
-            <a href="business-owner-edit.html">
+            <a href="business-owner-edit.php">
                 <span>✎</span> Edit Business Information
             </a>
 
-            <a href="business-owner-photos.html">
+            <a href="business-owner-photos.php">
                 <span>▧</span> Manage Photos
             </a>
 
-            <a href="business-owner-account.html">
+            <a href="business-owner-account.php">
                 <span>♙</span> My Account
             </a>
 
-            <a href="index.html">
+            <a href="index.php">
                 <span>⌂</span> Back to Home
             </a>
+
         </div>
 
         <div class="sidebar-decoration">
@@ -355,15 +415,17 @@
         </div>
 
         <div class="home-account-links">
-            <a href="business-owner-account.html"
+
+            <a href="business-owner-account.php"
                class="home-signup"
                id="account-button">
-                My Account
+                <?php echo htmlspecialchars($ownerName); ?>
             </a>
 
-            <a href="index.html" class="home-small-logo">
+            <a href="business-owner-index.php" class="home-small-logo">
                 <img src="images/logo.png" alt="Logo">
             </a>
+
         </div>
 
     </header>
@@ -373,7 +435,7 @@
 
         <div class="business-container">
 
-            <a href="business-owner-dashboard.html"
+            <a href="business-owner-dashboard.php"
                class="business-back-link">
                 &larr; Back to Dashboard
             </a>
@@ -427,8 +489,11 @@
                                 Business Name
                             </span>
 
-                            <span class="detail-value empty-value">
-                                No business information available yet
+                            <span class="detail-value">
+                                <?php echo displayBusinessValue(
+                                    $business['Name'],
+                                    'No business information available yet'
+                                ); ?>
                             </span>
                         </div>
 
@@ -437,8 +502,11 @@
                                 Business Type
                             </span>
 
-                            <span class="detail-value empty-value">
-                                Not provided
+                            <span class="detail-value">
+                                <?php echo displayBusinessValue(
+                                    $business['Place_Type'],
+                                    'Not provided'
+                                ); ?>
                             </span>
                         </div>
 
@@ -447,8 +515,11 @@
                                 Business Size
                             </span>
 
-                            <span class="detail-value empty-value">
-                                Not provided
+                            <span class="detail-value">
+                                <?php echo displayBusinessValue(
+                                    $business['Business_Size'],
+                                    'Not provided'
+                                ); ?>
                             </span>
                         </div>
 
@@ -457,8 +528,11 @@
                                 Business Location
                             </span>
 
-                            <span class="detail-value empty-value">
-                                Not provided
+                            <span class="detail-value">
+                                <?php echo displayBusinessValue(
+                                    $business['Location'],
+                                    'Not provided'
+                                ); ?>
                             </span>
                         </div>
 
@@ -467,8 +541,11 @@
                                 Business Description
                             </span>
 
-                            <span class="detail-value empty-value">
-                                No description has been added yet.
+                            <span class="detail-value">
+                                <?php echo displayBusinessValue(
+                                    $business['Description'],
+                                    'No description has been added yet.'
+                                ); ?>
                             </span>
                         </div>
 
@@ -477,12 +554,12 @@
                     <!-- Action Buttons -->
                     <div class="business-actions">
 
-                        <a href="business-owner-edit.html"
+                        <a href="business-owner-edit.php"
                            class="business-button">
                             ✎ Edit Business Information
                         </a>
 
-                        <a href="business-owner-photos.html"
+                        <a href="business-owner-photos.php"
                            class="business-button secondary">
                             ▧ Manage Photos
                         </a>
@@ -519,6 +596,7 @@
 
     <!-- Al-Ahsa Vision Hub Footer -->
     <footer class="site-footer">
+
         <div class="site-footer-main">
 
             <div class="site-footer-brand">
@@ -563,6 +641,7 @@
             <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
+
     </footer>
 
     <!-- AI Assistant Button -->

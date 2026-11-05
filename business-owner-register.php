@@ -1,3 +1,147 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$errorMessage = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $ownerName = trim($_POST['owner_name'] ?? '');
+    $businessName = trim($_POST['business_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $businessType = trim($_POST['business_type'] ?? '');
+    $businessSize = trim($_POST['business_size'] ?? '');
+    $businessLocation = trim($_POST['business_location'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    if (
+        $ownerName === '' || $businessName === '' ||
+        $email === '' || $phone === '' ||
+        $businessType === '' || $businessSize === '' ||
+        $businessLocation === '' || $password === ''
+    ) {
+        $errorMessage = 'Please fill in all required fields.';
+
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errorMessage = 'Please enter a valid email address.';
+
+    } elseif (strlen($password) < 8) {
+        $errorMessage = 'Password must be at least 8 characters.';
+
+    } elseif ($password !== $confirmPassword) {
+        $errorMessage = 'Passwords do not match.';
+
+    } else {
+
+        // Check whether the email already exists
+        $checkStmt = $conn->prepare(
+            "SELECT Business_Owner_ID
+             FROM business_owners
+             WHERE Email = ?
+             LIMIT 1"
+        );
+
+        if (!$checkStmt) {
+            $errorMessage = 'Database error: ' . $conn->error;
+        } else {
+            $checkStmt->bind_param("s", $email);
+            $checkStmt->execute();
+            $checkStmt->store_result();
+
+            if ($checkStmt->num_rows > 0) {
+                $errorMessage = 'This email is already registered.';
+            }
+
+            $checkStmt->close();
+        }
+
+        if ($errorMessage === '') {
+
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            try {
+                $conn->begin_transaction();
+
+                // Save business owner information
+                $ownerStmt = $conn->prepare(
+                    "INSERT INTO business_owners
+                    (Name, Email, Password)
+                    VALUES (?, ?, ?)"
+                );
+
+                if (!$ownerStmt) {
+                    throw new Exception($conn->error);
+                }
+
+                $ownerStmt->bind_param(
+                    "sss",
+                    $ownerName,
+                    $email,
+                    $hashedPassword
+                );
+
+                if (!$ownerStmt->execute()) {
+                    throw new Exception($ownerStmt->error);
+                }
+
+                $businessOwnerID = $conn->insert_id;
+                $ownerStmt->close();
+
+                // Save business information
+                $placeStmt = $conn->prepare(
+                    "INSERT INTO places
+                    (Name, Place_Type, Description, Location,
+                     Business_Owner_ID, Business_Size, phone)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)"
+                );
+
+                if (!$placeStmt) {
+                    throw new Exception($conn->error);
+                }
+
+                $placeStmt->bind_param(
+                    "ssssiss",
+                    $businessName,
+                    $businessType,
+                    $description,
+                    $businessLocation,
+                    $businessOwnerID,
+                    $businessSize,
+                    $phone
+                );
+
+                if (!$placeStmt->execute()) {
+                    throw new Exception($placeStmt->error);
+                }
+
+                $placeStmt->close();
+
+                // Save session information
+                $_SESSION['business_owner_id'] = $businessOwnerID;
+                $_SESSION['business_owner_name'] = $ownerName;
+                $_SESSION['business_owner_email'] = $email;
+
+                $conn->commit();
+
+                // Go directly to Business Owner Home
+                header("Location: business-owner-index.php");
+                exit;
+
+            } catch (Throwable $e) {
+                $conn->rollback();
+                $errorMessage = 'Registration failed. Please try again.';
+
+                // Show the database error while developing
+                // Remove this line before publishing the website.
+                error_log($e->getMessage());
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +149,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Owner Registration | Al-Ahsa Vision Hub</title>
     <link rel="stylesheet" href="css/style.css">
+
     <style>
         .business-registration-page {
             min-height: 100vh;
@@ -172,6 +317,15 @@
         .login-note a:hover {
             text-decoration: underline;
         }
+        .registration-error {
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            border-radius: 9px;
+            background: #fff0f0;
+            border: 1px solid #f0cccc;
+            color: #a83232;
+            font-size: 14px;
+        }
         @media (max-width: 600px) {
             .business-registration-page {
                 padding: 28px 14px 42px;
@@ -193,15 +347,20 @@
         }
     </style>
 </head>
+
 <body>
+
 <main class="business-registration-page">
-    <!-- Back to Home -->
+
+    <!-- Back to Business Home -->
     <div class="back-home-container">
-        <a href="index.html" class="back-home-link">
+        <a href="business-owner-index.php" class="back-home-link">
             &larr; Back to Home
         </a>
     </div>
+
     <div class="registration-wrap">
+
         <!-- Project Logo and Name -->
         <header class="brand-heading">
             <img
@@ -215,8 +374,10 @@
                 with visitors of Al-Ahsa.
             </p>
         </header>
+
         <!-- Registration Form -->
         <section class="registration-card">
+
             <div class="form-intro">
                 <h2>Business Owner Registration</h2>
                 <p>
@@ -224,8 +385,21 @@
                     to create an account.
                 </p>
             </div>
-            <form id="businessRegistrationForm">
+
+            <?php if ($errorMessage !== ''): ?>
+                <div class="registration-error">
+                    <?php echo htmlspecialchars($errorMessage); ?>
+                </div>
+            <?php endif; ?>
+
+            <form
+                id="businessRegistrationForm"
+                method="POST"
+                action="business-owner-register.php"
+            >
+
                 <div class="form-grid">
+
                     <div class="field">
                         <label for="ownerName">
                             Owner Full Name <span class="required">*</span>
@@ -236,9 +410,11 @@
                             name="owner_name"
                             placeholder="Enter your full name"
                             autocomplete="name"
+                            value="<?php echo htmlspecialchars($_POST['owner_name'] ?? ''); ?>"
                             required
                         >
                     </div>
+
                     <div class="field">
                         <label for="businessName">
                             Business Name <span class="required">*</span>
@@ -248,9 +424,11 @@
                             id="businessName"
                             name="business_name"
                             placeholder="Enter your business name"
+                            value="<?php echo htmlspecialchars($_POST['business_name'] ?? ''); ?>"
                             required
                         >
                     </div>
+
                     <div class="field">
                         <label for="email">
                             Email Address <span class="required">*</span>
@@ -261,9 +439,11 @@
                             name="email"
                             placeholder="name@example.com"
                             autocomplete="email"
+                            value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
                             required
                         >
                     </div>
+
                     <div class="field">
                         <label for="phone">
                             Phone Number <span class="required">*</span>
@@ -274,53 +454,67 @@
                             name="phone"
                             placeholder="Enter your phone number"
                             autocomplete="tel"
+                            value="<?php echo htmlspecialchars($_POST['phone'] ?? ''); ?>"
                             required
                         >
                     </div>
+
                     <div class="field">
                         <label for="businessType">
                             Business Type <span class="required">*</span>
                         </label>
-                        <select
-                            id="businessType"
-                            name="business_type"
-                            required
-                        >
-                            <option value="" selected disabled>
+                        <select id="businessType" name="business_type" required>
+                            <option value="" disabled
+                                <?php echo empty($_POST['business_type']) ? 'selected' : ''; ?>>
                                 Select business type
                             </option>
-                            <option value="local-food-products">
+                            <option value="local-food-products"
+                                <?php echo (($_POST['business_type'] ?? '') === 'local-food-products') ? 'selected' : ''; ?>>
                                 Local Food &amp; Products
                             </option>
-                            <option value="handicrafts-artisans">
+                            <option value="handicrafts-artisans"
+                                <?php echo (($_POST['business_type'] ?? '') === 'handicrafts-artisans') ? 'selected' : ''; ?>>
                                 Handicrafts &amp; Artisans
                             </option>
-                            <option value="tourism-experiences">
+                            <option value="tourism-experiences"
+                                <?php echo (($_POST['business_type'] ?? '') === 'tourism-experiences') ? 'selected' : ''; ?>>
                                 Tourism Experiences
                             </option>
-                            <option value="events-activities">
+                            <option value="events-activities"
+                                <?php echo (($_POST['business_type'] ?? '') === 'events-activities') ? 'selected' : ''; ?>>
                                 Events &amp; Activities
                             </option>
-                            <option value="other">Other</option>
+                            <option value="other"
+                                <?php echo (($_POST['business_type'] ?? '') === 'other') ? 'selected' : ''; ?>>
+                                Other
+                            </option>
                         </select>
                     </div>
+
                     <div class="field">
                         <label for="businessSize">
                             Business Size <span class="required">*</span>
                         </label>
-                        <select
-                            id="businessSize"
-                            name="business_size"
-                            required
-                        >
-                            <option value="" selected disabled>
+                        <select id="businessSize" name="business_size" required>
+                            <option value="" disabled
+                                <?php echo empty($_POST['business_size']) ? 'selected' : ''; ?>>
                                 Select business size
                             </option>
-                            <option value="small">Small</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large</option>
+                            <option value="small"
+                                <?php echo (($_POST['business_size'] ?? '') === 'small') ? 'selected' : ''; ?>>
+                                Small
+                            </option>
+                            <option value="medium"
+                                <?php echo (($_POST['business_size'] ?? '') === 'medium') ? 'selected' : ''; ?>>
+                                Medium
+                            </option>
+                            <option value="large"
+                                <?php echo (($_POST['business_size'] ?? '') === 'large') ? 'selected' : ''; ?>>
+                                Large
+                            </option>
                         </select>
                     </div>
+
                     <div class="field full-width">
                         <label for="businessLocation">
                             Business Location <span class="required">*</span>
@@ -330,9 +524,11 @@
                             id="businessLocation"
                             name="business_location"
                             placeholder="Enter the city or address in Al-Ahsa"
+                            value="<?php echo htmlspecialchars($_POST['business_location'] ?? ''); ?>"
                             required
                         >
                     </div>
+
                     <div class="field full-width">
                         <label for="description">
                             Business Description
@@ -341,11 +537,12 @@
                             id="description"
                             name="description"
                             placeholder="Briefly describe your products or services"
-                        ></textarea>
+                        ><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
                         <span class="hint">
                             A short description helps visitors understand your business.
                         </span>
                     </div>
+
                     <div class="field">
                         <label for="password">
                             Password <span class="required">*</span>
@@ -363,6 +560,7 @@
                             Use at least 8 characters.
                         </span>
                     </div>
+
                     <div class="field">
                         <label for="confirmPassword">
                             Confirm Password <span class="required">*</span>
@@ -377,49 +575,66 @@
                             required
                         >
                     </div>
+
                 </div>
+
                 <div class="form-actions">
                     <button class="submit-button" type="submit">
                         Create Business Account
                     </button>
                 </div>
+
             </form>
+
+            <!-- Login Link -->
+            <p class="login-note">
+                Already have an account?
+                <a href="business-owner-login.php">Log In</a>
+            </p>
+
         </section>
     </div>
 </main>
-<!-- AI Assistant Button: exact code provided by you -->
+
+<!-- AI Assistant Button: unchanged -->
 <button
     class="chat-button"
     onclick="openAI()"
     aria-label="Open AI Assistant"
     title="AI Assistant">
 </button>
+
 <script src="script.js"></script>
+
 <script>
-    // Front-end validation only. PHP/backend is needed to save accounts.
     document
         .getElementById("businessRegistrationForm")
         .addEventListener("submit", function (event) {
-            event.preventDefault();
+
             const password = document.getElementById("password");
             const confirmPassword =
                 document.getElementById("confirmPassword");
+
             if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+
                 confirmPassword.setCustomValidity(
                     "Passwords do not match."
                 );
+
                 confirmPassword.reportValidity();
                 return;
             }
+
             confirmPassword.setCustomValidity("");
-            // Go to the Business Owner Dashboard
-            window.location.href = "business-owner-dashboard.html";
         });
+
     document
         .getElementById("confirmPassword")
         .addEventListener("input", function () {
             this.setCustomValidity("");
         });
 </script>
+
 </body>
 </html>

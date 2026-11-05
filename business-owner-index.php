@@ -1,9 +1,13 @@
+<?php
+session_start();
+require_once 'db.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Owner Dashboard | Al-Ahsa Vision Hub</title>
+    <title>Business Owner Home | Al-Ahsa Vision Hub</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -279,7 +283,7 @@
     <nav class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="business-owner-index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -290,29 +294,35 @@
         </div>
 
         <div class="sidebar-links">
-            <a href="business-owner-dashboard.html">
+
+            <a href="business-owner-index.php">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="business-owner-dashboard.php">
                 <span>⌂</span> Dashboard
             </a>
 
-            <a href="business-owner-my-business.html">
+            <a href="business-owner-my-business.php">
                 <span>▣</span> My Business
             </a>
 
-            <a href="business-owner-edit.html">
+            <a href="business-owner-edit.php">
                 <span>✎</span> Edit Business Information
             </a>
 
-            <a href="business-owner-photos.html">
+            <a href="business-owner-photos.php">
                 <span>▧</span> Manage Photos
             </a>
 
-            <a href="business-owner-account.html">
+            <a href="business-owner-account.php">
                 <span>♙</span> My Account
             </a>
 
-            <a href="index.html">
+            <a href="index.php">
                 <span>⌂</span> Back to Home
             </a>
+
         </div>
 
         <div class="sidebar-decoration">
@@ -331,13 +341,17 @@
         </div>
 
         <div class="home-account-links">
-            <a href="business-owner-account.html"
+            <a href="business-owner-account.php"
                class="home-signup"
                id="account-button">
-                My Account
+                <?php
+                echo isset($_SESSION['business_owner_name'])
+                    ? htmlspecialchars($_SESSION['business_owner_name'])
+                    : 'My Account';
+                ?>
             </a>
 
-            <a href="index.html" class="home-small-logo">
+            <a href="business-owner-index.php" class="home-small-logo">
                 <img src="images/logo.png" alt="Logo">
             </a>
         </div>
@@ -365,12 +379,12 @@
 
                 <div class="hero-buttons">
                     <a class="hero-btn primary"
-                       href="business-owner-my-business.html">
+                       href="business-owner-my-business.php">
                         My Business
                     </a>
 
                     <a class="hero-btn secondary"
-                       href="business-owner-edit.html">
+                       href="business-owner-edit.php">
                         Edit Business
                     </a>
                 </div>
@@ -396,7 +410,7 @@
                         displayed on your profile.
                     </p>
                     <a class="card-link"
-                       href="business-owner-my-business.html">
+                       href="business-owner-my-business.php">
                         View Business
                     </a>
                 </article>
@@ -409,7 +423,7 @@
                         location, and description.
                     </p>
                     <a class="card-link"
-                       href="business-owner-edit.html">
+                       href="business-owner-edit.php">
                         Edit Details
                     </a>
                 </article>
@@ -422,7 +436,7 @@
                         and help visitors learn about it.
                     </p>
                     <a class="card-link"
-                       href="business-owner-photos.html">
+                       href="business-owner-photos.php">
                         Manage Photos
                     </a>
                 </article>
@@ -435,8 +449,22 @@
                         your personal account settings.
                     </p>
                     <a class="card-link"
-                       href="business-owner-account.html">
+                       href="business-owner-account.php">
                         My Account
+                    </a>
+                </article>
+
+                <!-- Dashboard Card -->
+                <article class="dashboard-card">
+                    <div class="card-icon">▤</div>
+                    <h3>Dashboard</h3>
+                    <p>
+                        View your business performance, customer reviews,
+                        average rating, and total favorites.
+                    </p>
+                    <a class="card-link"
+                       href="business-owner-dashboard.php">
+                        View Dashboard
                     </a>
                 </article>
 
