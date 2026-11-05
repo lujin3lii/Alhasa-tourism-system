@@ -1,9 +1,32 @@
+
+<?php
+include 'db.php';
+
+// Fetch published seasonal events
+$sql = "SELECT
+            Places.*,
+            Seasonal_events.Start_Date,
+            Seasonal_events.End_Date,
+            Seasonal_events.Ticket_URL
+        FROM Places
+        INNER JOIN Seasonal_events
+            ON Places.Place_ID = Seasonal_events.Place_ID
+        WHERE Places.Place_Type = 'seasonal events'
+        AND Places.Is_Published = 1";
+
+$result = $conn->query($sql);
+
+function e($value) {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotels | Al-Ahsa Vision Hub</title>
+    <title>Al-Ahsa Seasons | Al-Ahsa Vision Hub</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,7 +43,7 @@
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -36,7 +59,7 @@
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>
-            <a href="hotels.html" class="active"><span>⌂</span> Hotels</a>
+            <a href="hotels.php"><span>⌂</span> Hotels</a>
             <a href="settings.php"><span>⚙</span> Settings</a>
             <a href="my-account.html"><span>♙</span> My Account</a>
             <a href="About.html"><span>ⓘ</span> About Us</a>
@@ -65,16 +88,16 @@
                     Log In
                 </a>
 
-                <a href="index.html" class="home-small-logo">
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
             </div>
         </header>
 
-        <!-- Hotels Section -->
-        <section class="home-section hotels-section">
+        <!-- Seasons Section -->
+        <section class="home-section seasons-section">
 
-            <!-- Hotel Banner -->
+            <!-- Seasons Banner -->
             <div style="
                 display: flex;
                 align-items: stretch;
@@ -105,7 +128,7 @@
                         letter-spacing: 2px;
                         margin-bottom: 14px;
                     ">
-                        STAY &amp; EXPLORE AL-AHSA
+                        EXPERIENCE THE SEASONS OF AL-AHSA
                     </span>
 
                     <h1 style="
@@ -115,7 +138,7 @@
                         line-height: 1.2;
                         margin: 0 0 16px;
                     ">
-                        Hotels &amp; Stays
+                        Al-Ahsa Seasons
                     </h1>
 
                     <p style="
@@ -125,9 +148,8 @@
                         max-width: 380px;
                         margin: 0;
                     ">
-                        Discover comfortable and luxurious hotels
-                        in Al-Ahsa, from elegant city stays to
-                        relaxing destinations.
+                        Discover the seasonal events and unique experiences
+                        of Al-Ahsa.
                     </p>
                 </div>
 
@@ -144,7 +166,7 @@
                             rgba(7, 91, 59, 0.15) 42%,
                             rgba(7, 91, 59, 0) 65%
                         ),
-                        url('images/hotels.jpg');
+                        url('images/seasons.jpg');
                     background-size: cover;
                     background-position: center;
                     background-repeat: no-repeat;
@@ -152,137 +174,62 @@
                 </div>
             </div>
 
-            <!-- Hotels Grid -->
+            <!-- Seasons Grid -->
             <div class="restaurants-grid">
 
-                <!-- InterContinental Al Ahsa -->
-                <div class="about-card"
-                     style="max-width: 100%; padding: 20px;">
+                <?php if ($result && $result->num_rows > 0): ?>
 
-                    <img src="images/intercontinental.jpg"
-                         alt="InterContinental Al Ahsa"
-                         style="
-                            width: 100%;
-                            height: 180px;
-                            border-radius: 12px;
-                            object-fit: cover;
-                            margin-bottom: 15px;
-                         ">
+                    <?php while ($season = $result->fetch_assoc()): ?>
 
-                    <h2 style="font-size: 24px; margin-bottom: 10px;">
-                        InterContinental Al Ahsa
-                    </h2>
+                        <div class="about-card"
+                             style="max-width: 100%; padding: 20px;">
 
-                    <p style="
-                        font-size: 17px;
-                        line-height: 1.6;
-                        margin-bottom: 20px;
-                    ">
-                        A luxurious five-star hotel offering
-                        elegant rooms, excellent hospitality,
-                        and a relaxing stay in Al-Ahsa.
-                    </p>
+                            <img src="<?php echo e($season['Image']); ?>"
+                                 alt="<?php echo e($season['Name']); ?>"
+                                 style="
+                                    width: 100%;
+                                    height: 180px;
+                                    border-radius: 12px;
+                                    object-fit: cover;
+                                    margin-bottom: 15px;
+                                 ">
 
-                    <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                        View Details
-                    </button>
-                </div>
+                            <h2 style="font-size: 24px; margin-bottom: 10px;">
+                                <?php echo e($season['Name']); ?>
+                            </h2>
 
-                <!-- Braira Al Ahsa -->
-                <div class="about-card"
-                     style="max-width: 100%; padding: 20px;">
+                            <p style="
+                                font-size: 17px;
+                                line-height: 1.6;
+                                margin-bottom: 20px;
+                            ">
+                                <?php echo e($season['Short_Description']); ?>
+                            </p>
 
-                    <img src="images/braira.jpg"
-                         alt="Braira Al Ahsa"
-                         style="
-                            width: 100%;
-                            height: 180px;
-                            border-radius: 12px;
-                            object-fit: cover;
-                            margin-bottom: 15px;
-                         ">
+                            <button type="button"
+                                onclick="window.location.href='season-details.php?id=<?php echo (int)$season['Place_ID']; ?>'"
+                                style="
+                                    background-color: #075b3b;
+                                    color: #ffffff;
+                                    border: none;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    font-size: 15px;
+                                    font-weight: 600;
+                                    cursor: pointer;
+                                ">
+                                View Details
+                            </button>
 
-                    <h2 style="font-size: 24px; margin-bottom: 10px;">
-                        Braira Al Ahsa
-                    </h2>
+                        </div>
 
-                    <p style="
-                        font-size: 17px;
-                        line-height: 1.6;
-                        margin-bottom: 20px;
-                    ">
-                        A modern and elegant hotel featuring
-                        comfortable rooms and a welcoming
-                        atmosphere for visitors.
-                    </p>
+                    <?php endwhile; ?>
 
-                    <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                        View Details
-                    </button>
-                </div>
+                <?php else: ?>
 
-                <!-- Somewhere Hotel Al Ahsa -->
-                <div class="about-card"
-                     style="max-width: 100%; padding: 20px;">
+                    <p>No seasonal events are available at the moment.</p>
 
-                    <img src="images/somewhere.jpg"
-                         alt="Somewhere Hotel Al Ahsa"
-                         style="
-                            width: 100%;
-                            height: 180px;
-                            border-radius: 12px;
-                            object-fit: cover;
-                            margin-bottom: 15px;
-                         ">
-
-                    <h2 style="font-size: 24px; margin-bottom: 10px;">
-                        Somewhere Hotel Al Ahsa
-                    </h2>
-
-                    <p style="
-                        font-size: 17px;
-                        line-height: 1.6;
-                        margin-bottom: 20px;
-                    ">
-                        A stylish hotel with contemporary
-                        interiors and comfortable accommodation
-                        for a pleasant stay in Al-Ahsa.
-                    </p>
-
-                    <button type="button"
-                        style="
-                            background-color: #075b3b;
-                            color: #ffffff;
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            font-size: 15px;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">
-                        View Details
-                    </button>
-                </div>
+                <?php endif; ?>
 
             </div>
         </section>
@@ -319,6 +266,7 @@
             <div class="site-footer-contact">
                 <h4>Contact Us</h4>
                 <p>05123546798</p>
+
                 <p>
                     <a href="https://www.instagram.com/"
                        target="_blank"
@@ -326,6 +274,7 @@
                         ◎ Instagram
                     </a>
                 </p>
+
                 <p>
                     <a href="https://x.com/"
                        target="_blank"
