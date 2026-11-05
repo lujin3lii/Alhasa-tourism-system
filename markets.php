@@ -47,14 +47,14 @@ function e($value) {
         </div>
 
         <div class="sidebar-links">
-            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="index.php"><span>⌂</span> Home</a>
             <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
             <a href="places.php"><span>⌘</span> Tourist Places</a>
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php" class="active"><span>♧</span> Markets</a>
             <a href="hotels.html"><span>⌂</span> Hotels</a>
-            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="settings.php"><span>⚙</span> Settings</a>
             <a href="my-account.html"><span>♙</span> My Account</a>
             <a href="About.html"><span>ⓘ</span> About Us</a>
         </div>

@@ -36,7 +36,7 @@ session_start();
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>
             <a href="hotels.html"><span>⌂</span> Hotels</a>
-            <a href="settings.html"><span>⚙</span> Settings</a>
+            <a href="settings.php"><span>⚙</span> Settings</a>
             <a href="my-account.html"><span>♙</span> My Account</a>
             <a href="About.html"><span>ⓘ</span> About Us</a>
         </div>

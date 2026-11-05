@@ -58,7 +58,7 @@ function e($value) {
 
         <div class="sidebar-links">
 
-            <a href="index.html"><span>⌂</span> Home</a>
+            <a href="index.php"><span>⌂</span> Home</a>
 
             <a href="explore-al-ahsa.html">
                 <span>⌖</span> Explore Al-Ahsa
@@ -76,7 +76,7 @@ function e($value) {
                 <span>☕</span> Cafes
             </a>
 
-            <a href="markets.html">
+            <a href="markets.php">
                 <span>♧</span> Markets
             </a>
 
@@ -84,7 +84,7 @@ function e($value) {
                 <span>⌂</span> Hotels
             </a>
 
-            <a href="settings.html">
+            <a href="settings.php">
                 <span>⚙</span> Settings
             </a>
 

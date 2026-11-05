@@ -2,8 +2,6 @@
 session_start();
 require_once 'db.php';
 
-// Select the project database
-
 $errorMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,15 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
-    if ($password !== $confirmPassword) {
+    if ($name === '' || $email === '' || $password === '') {
+
+        $errorMessage = "Please complete all required fields.";
+
+    } elseif ($password !== $confirmPassword) {
 
         $errorMessage = "Passwords do not match.";
 
     } else {
 
-        // Check if the email already exists
         $check = $conn->prepare(
-            "SELECT `Id` FROM `tourist` WHERE `Email` = ? LIMIT 1"
+            "SELECT `Id` FROM `tourist`
+             WHERE `Email` = ? LIMIT 1"
         );
 
         if (!$check) {
@@ -31,53 +33,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
 
             $check->bind_param("s", $email);
-            $check->execute();
-            $check->store_result();
 
-            if ($check->num_rows > 0) {
+            if (!$check->execute()) {
 
-                $errorMessage = "This email is already registered.";
+                $errorMessage = "Database error: " . $check->error;
 
             } else {
 
-                // Hash the password
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $check->store_result();
 
-                // Insert the new tourist
-                $stmt = $conn->prepare(
-                    "INSERT INTO `tourist`
-                    (`Name`, `Email`, `Password`, `Create_at`)
-                    VALUES (?, ?, ?, CURRENT_TIMESTAMP)"
-                );
+                if ($check->num_rows > 0) {
 
-                if (!$stmt) {
-
-                    $errorMessage = "Database error: " . $conn->error;
+                    $errorMessage = "This email is already registered.";
 
                 } else {
 
-                    $stmt->bind_param("sss", $name, $email, $hashedPassword);
+                    $hashedPassword = password_hash(
+                        $password,
+                        PASSWORD_DEFAULT
+                    );
 
-                    if ($stmt->execute()) {
+                    $stmt = $conn->prepare(
+                        "INSERT INTO `tourist`
+                        (`Name`, `Email`, `Password`, `Create_at`)
+                        VALUES (?, ?, ?, CURRENT_TIMESTAMP)"
+                    );
 
-                        // Start the tourist session
-                        session_regenerate_id(true);
+                    if (!$stmt) {
 
-                        $_SESSION['tourist_id'] = $stmt->insert_id;
-                        $_SESSION['tourist_name'] = $name;
-                        $_SESSION['tourist_email'] = $email;
-
-                        // Redirect to homepage
-                        header("Location: index.php");
-                        exit;
+                        $errorMessage = "Database error: " . $conn->error;
 
                     } else {
 
-                        $errorMessage = "Unable to create your account: " . $stmt->error;
+                        $stmt->bind_param(
+                            "sss",
+                            $name,
+                            $email,
+                            $hashedPassword
+                        );
 
+                        if ($stmt->execute()) {
+
+                            $newTouristId = $stmt->insert_id;
+
+                            session_regenerate_id(true);
+
+                            $_SESSION['tourist_id'] = $newTouristId;
+                            $_SESSION['tourist_name'] = $name;
+                            $_SESSION['tourist_email'] = $email;
+
+                            $stmt->close();
+                            $check->close();
+
+                            header("Location: index.php");
+                            exit;
+
+                        } else {
+
+                            $errorMessage = "Unable to create your account: "
+                                . $stmt->error;
+                        }
+
+                        $stmt->close();
                     }
-
-                    $stmt->close();
                 }
             }
 
@@ -141,7 +159,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Passwords do not match.
             </p>
 
-            <button type="submit" class="auth-button" id="create-account-button">
+            <button type="submit"
+                    class="auth-button"
+                    id="create-account-button">
                 Create Account
             </button>
 
@@ -205,11 +225,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 
-    <?php if ($errorMessage): ?>
+    <?php if ($errorMessage !== ''): ?>
         <script>
             alert(<?= json_encode($errorMessage) ?>);
         </script>
     <?php endif; ?>
 
 </body>
-</html> 
+</html>
