@@ -1,6 +1,20 @@
 <?php
 session_start();
 
+/* Handle Business Owner Logout */
+if (isset($_GET['logout']) && $_GET['logout'] == '1') {
+    unset(
+        $_SESSION['business_owner_id'],
+        $_SESSION['business_owner_name'],
+        $_SESSION['business_owner_email']
+    );
+
+    session_write_close();
+
+    header("Location: index.php");
+    exit;
+}
+
 $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
 $ownerEmail = $_SESSION['business_owner_email'] ?? '';
 ?>
@@ -64,6 +78,7 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
         .photo-preview-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
         .photo-preview { min-height: 130px; display: flex; align-items: center; justify-content: center; padding: 15px; border: 1px solid #e1e9e2; border-radius: 13px; background: #fbfdfb; color: #68796e; text-align: center; overflow-wrap: anywhere; }
         .photo-preview img { display: block; max-width: 100%; max-height: 200px; margin: 0 auto 8px; border-radius: 9px; }
+
         @media (max-width:600px) {
             .business-page { padding: 120px 15px 35px; }
             .business-heading h1 { font-size: 26px; }
@@ -126,10 +141,12 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
             <span class="location-dot"></span>
             DISCOVER AL-AHSA, SAUDI ARABIA
         </div>
+
         <div class="home-account-links">
             <a href="business-owner-account.php" class="home-signup" id="account-button">
-                <?php echo htmlspecialchars($ownerName); ?>
+                <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?>
             </a>
+
             <a href="business-owner-index.php" class="home-small-logo">
                 <img src="images/logo.png" alt="Logo">
             </a>
@@ -139,6 +156,7 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
     <!-- Main Content -->
     <main class="business-page">
         <div class="business-container">
+
             <header class="business-heading">
                 <span class="business-label">BUSINESS OWNER PORTAL</span>
                 <h1>My Account</h1>
@@ -156,28 +174,37 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
 
                 <div class="business-card-body">
                     <h3 class="details-heading">Personal Details</h3>
+
                     <form id="account-form">
                         <div class="business-form-grid">
+
                             <div class="business-field">
                                 <label for="owner-name">Full Name</label>
                                 <input type="text" id="owner-name" name="owner-name"
-                                       value="<?php echo htmlspecialchars($ownerName === 'My Account' ? '' : $ownerName); ?>"
+                                       value="<?php echo htmlspecialchars($ownerName === 'My Account' ? '' : $ownerName, ENT_QUOTES, 'UTF-8'); ?>"
                                        placeholder="Enter your full name" required>
                             </div>
+
                             <div class="business-field">
                                 <label for="owner-email">Email Address</label>
                                 <input type="email" id="owner-email" name="owner-email"
-                                       value="<?php echo htmlspecialchars($ownerEmail); ?>"
+                                       value="<?php echo htmlspecialchars($ownerEmail, ENT_QUOTES, 'UTF-8'); ?>"
                                        placeholder="Enter your email address" required>
                             </div>
+
                             <div class="business-field">
                                 <label for="owner-phone">Phone Number</label>
                                 <input type="tel" id="owner-phone" name="owner-phone"
                                        placeholder="Enter your phone number">
                             </div>
+
                         </div>
+
                         <div class="business-actions">
-                            <button type="button" class="business-button" onclick="alert('Saving profile details requires backend integration.')">✓ Save Profile</button>
+                            <button type="button" class="business-button"
+                                    onclick="alert('Saving profile details requires backend integration.')">
+                                ✓ Save Profile
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -195,26 +222,44 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
                 <div class="business-card-body">
                     <form id="password-form">
                         <div class="business-form-grid">
+
                             <div class="business-field full-width">
                                 <label for="current-password">Current Password</label>
-                                <input type="password" id="current-password" name="current-password" autocomplete="current-password" placeholder="Enter current password">
+                                <input type="password" id="current-password"
+                                       name="current-password"
+                                       autocomplete="current-password"
+                                       placeholder="Enter current password">
                             </div>
+
                             <div class="business-field">
                                 <label for="new-password">New Password</label>
-                                <input type="password" id="new-password" name="new-password" autocomplete="new-password" placeholder="Enter new password">
+                                <input type="password" id="new-password"
+                                       name="new-password"
+                                       autocomplete="new-password"
+                                       placeholder="Enter new password">
                             </div>
+
                             <div class="business-field">
                                 <label for="confirm-password">Confirm New Password</label>
-                                <input type="password" id="confirm-password" name="confirm-password" autocomplete="new-password" placeholder="Confirm new password">
+                                <input type="password" id="confirm-password"
+                                       name="confirm-password"
+                                       autocomplete="new-password"
+                                       placeholder="Confirm new password">
                             </div>
+
                         </div>
+
                         <div class="business-actions">
-                            <button type="button" class="business-button" onclick="alert('Password changes must be securely connected to your backend.')">Update Password</button>
+                            <button type="button" class="business-button"
+                                    onclick="alert('Password changes must be securely connected to your backend.')">
+                                Update Password
+                            </button>
                         </div>
                     </form>
                 </div>
             </section>
 
+            <!-- Protect Your Account -->
             <section class="business-note">
                 <div class="business-note-icon" aria-hidden="true">ⓘ</div>
                 <div>
@@ -222,31 +267,63 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
                     <p>Never share your password with anyone. Profile updates and password changes must be connected to a secure backend before they can be saved.</p>
                 </div>
             </section>
+
+            <!-- Log Out -->
+            <section class="business-card" style="margin-top: 25px;">
+                <div class="business-card-body">
+                    <h3 class="details-heading">Log Out</h3>
+                    <p style="color: #68796e; font-size: 14px; line-height: 1.8;">
+                        Sign out of your business owner account and return to the main website.
+                    </p>
+
+                    <div class="business-actions">
+                        <a href="business-owner-account.php?logout=1"
+                           class="business-button">
+                            ↪ Log Out
+                        </a>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </main>
 
     <!-- Al-Ahsa Vision Hub Footer -->
     <footer class="site-footer">
         <div class="site-footer-main">
+
             <div class="site-footer-brand">
                 <h3>Al-Ahsa Vision Hub</h3>
                 <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
             </div>
+
             <div class="site-footer-links">
                 <h4>Explore Al-Ahsa</h4>
                 <p>Discover places, restaurants, cafés, and seasonal events.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Our Vision</h4>
                 <p>Making your journey through Al-Ahsa memorable.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Contact Us</h4>
                 <p>05123546798</p>
-                <p><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">◎ Instagram</a></p>
-                <p><a href="https://x.com/" target="_blank" rel="noopener noreferrer">𝕏 X (Twitter)</a></p>
+                <p>
+                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+                        ◎ Instagram
+                    </a>
+                </p>
+                <p>
+                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">
+                        𝕏 X (Twitter)
+                    </a>
+                </p>
             </div>
+
         </div>
+
         <div class="site-footer-bottom">
             <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
@@ -254,11 +331,10 @@ $ownerEmail = $_SESSION['business_owner_email'] ?? '';
     </footer>
 
     <!-- AI Assistant Button -->
-    <button
-        class="chat-button"
-        onclick="openAI()"
-        aria-label="Open AI Assistant"
-        title="AI Assistant">
+    <button class="chat-button"
+            onclick="openAI()"
+            aria-label="Open AI Assistant"
+            title="AI Assistant">
     </button>
 
     <!-- Main JavaScript -->

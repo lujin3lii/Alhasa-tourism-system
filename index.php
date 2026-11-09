@@ -30,15 +30,16 @@ session_start();
 
         <div class="sidebar-links">
             <a href="index.php" class="active"><span>⌂</span> Home</a>
-            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="explore-al-ahsa.php"><span>⌖</span> Explore Al-Ahsa</a>
             <a href="places.php"><span>⌘</span> Tourist Places</a>
+            <a href="seasons.php"><span>⌘</span> Seasons</a>
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>
-            <a href="hotels.html"><span>⌂</span> Hotels</a>
+            <a href="hotels.php"><span>⌂</span> Hotels</a>
             <a href="settings.php"><span>⚙</span> Settings</a>
-            <a href="my-account.html"><span>♙</span> My Account</a>
-            <a href="About.html"><span>ⓘ</span> About Us</a>
+            <a href="my-account.php"><span>♙</span> My Account</a>
+            <a href="About.php"><span>ⓘ</span> About Us</a>
         </div>
 
         <div class="sidebar-decoration">
@@ -62,7 +63,7 @@ session_start();
 
                 <?php if (isset($_SESSION['tourist_id'])): ?>
 
-                    <a href="my-account.html"
+                    <a href="my-account.php"
                        class="home-signup"
                        id="account-button">
                         <?= htmlspecialchars($_SESSION['tourist_name'], ENT_QUOTES, 'UTF-8') ?>
@@ -106,7 +107,7 @@ session_start();
                 </p>
 
                 <div class="home-hero-actions">
-                    <a href="explore-al-ahsa.html" class="home-btn home-btn-primary">
+                    <a href="explore-al-ahsa.php" class="home-btn home-btn-primary">
                         Explore Al-Ahsa →
                     </a>
                     <a href="#trip-planner" class="home-btn home-btn-outline">
@@ -206,7 +207,7 @@ session_start();
                         <span>Seasonal Events</span>
                     </div>
 
-                    <a href="explore-al-ahsa.html"
+                    <a href="explore-al-ahsa.php"
                        class="home-btn home-btn-primary home-explore-button">
                         Explore Al-Ahsa →
                     </a>
@@ -239,7 +240,7 @@ session_start();
                 </p>
             </div>
 
-            <a href="settings.html" class="home-btn home-btn-primary">
+            <a href="accessibility.php" class="home-btn home-btn-primary">
                 View Accessibility →
             </a>
         </section>
@@ -277,7 +278,7 @@ session_start();
                     </div>
                 </div>
 
-                <a href="itinerary.html" class="home-btn home-btn-primary">
+                <a href="survey.php" class="home-btn home-btn-primary">
                     Plan Your Trip →
                 </a>
             </div>

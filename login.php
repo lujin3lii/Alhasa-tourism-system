@@ -9,72 +9,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    $stmt = $conn->prepare(
-        "SELECT `Id`, `Name`, `Email`, `Password`
-         FROM `tourist`
-         WHERE `Email` = ?
-         LIMIT 1"
-    );
+    if ($email === '' || $password === '') {
 
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-
-    $result = $stmt->get_result();
-    $tourist = $result->fetch_assoc();
-
-    if ($tourist) {
-
-        $storedPassword = $tourist['Password'];
-
-        // Support previously stored plain passwords and hashed passwords
-        $validPassword = password_verify($password, $storedPassword);
-
-        if (!$validPassword && hash_equals((string)$storedPassword, $password)) {
-
-            $newHash = password_hash($password, PASSWORD_DEFAULT);
-
-            $update = $conn->prepare(
-                "UPDATE `tourist` SET `Password` = ? WHERE `Id` = ?"
-            );
-
-            $update->bind_param("si", $newHash, $tourist['Id']);
-            $update->execute();
-            $update->close();
-
-            $validPassword = true;
-        }
-
-        if ($validPassword) {
-
-            session_regenerate_id(true);
-
-            $_SESSION['tourist_id'] = $tourist['Id'];
-            $_SESSION['tourist_name'] = $tourist['Name'];
-            $_SESSION['tourist_email'] = $tourist['Email'];
-
-            header("Location: index.php");
-            exit;
-
-        } else {
-            $errorMessage = "Incorrect email or password.";
-        }
+        $errorMessage = "Please enter your email and password.";
 
     } else {
-        $errorMessage = "Incorrect email or password.";
-    }
 
-    $stmt->close();
+        // Find tourist account
+        $stmt = $conn->prepare(
+            "SELECT `Tourist_ID`, `Name`, `Email`, `Password`
+             FROM `tourist`
+             WHERE `Email` = ?
+             LIMIT 1"
+        );
+
+        if (!$stmt) {
+
+            $errorMessage = "Database error: " . $conn->error;
+
+        } else {
+
+            $stmt->bind_param("s", $email);
+
+            if (!$stmt->execute()) {
+
+                $errorMessage = "Database error: " . $stmt->error;
+
+            } else {
+
+                $result = $stmt->get_result();
+                $tourist = $result->fetch_assoc();
+
+                if ($tourist) {
+
+                    $storedPassword = $tourist['Password'];
+
+                    // Verify encrypted password
+                    $validPassword = password_verify(
+                        $password,
+                        $storedPassword
+                    );
+
+                    // Support old plain-text passwords
+                    if (
+                        !$validPassword &&
+                        hash_equals((string)$storedPassword, $password)
+                    ) {
+
+                        $newHash = password_hash(
+                            $password,
+                            PASSWORD_DEFAULT
+                        );
+
+                        $update = $conn->prepare(
+                            "UPDATE `tourist`
+                             SET `Password` = ?
+                             WHERE `Tourist_ID` = ?"
+                        );
+
+                        if ($update) {
+
+                            $update->bind_param(
+                                "si",
+                                $newHash,
+                                $tourist['Tourist_ID']
+                            );
+
+                            if ($update->execute()) {
+                                $validPassword = true;
+                            }
+
+                            $update->close();
+                        }
+                    }
+
+                    if ($validPassword) {
+
+                        // Start a new session after successful login
+                        session_regenerate_id(true);
+
+                        $_SESSION['tourist_id'] = $tourist['Tourist_ID'];
+                        $_SESSION['tourist_name'] = $tourist['Name'];
+                        $_SESSION['tourist_email'] = $tourist['Email'];
+
+                        $stmt->close();
+
+                        // Redirect to homepage
+                        header("Location: index.php");
+                        exit();
+
+                    } else {
+
+                        $errorMessage = "Incorrect email or password.";
+                    }
+
+                } else {
+
+                    $errorMessage = "Incorrect email or password.";
+                }
+            }
+
+            $stmt->close();
+        }
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - Al-Ahsa Vision Hub</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="auth-page">
 
     <main class="auth-card">
@@ -84,11 +136,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              class="small-logo">
 
         <h1>Welcome Back</h1>
-        <p class="auth-subtitle">Continue your journey in Al-Ahsa</p>
+
+        <p class="auth-subtitle">
+            Continue your journey in Al-Ahsa
+        </p>
 
         <form action="login.php" method="post">
 
             <label for="email">Email</label>
+
             <input type="email"
                    id="email"
                    name="email"
@@ -96,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    required>
 
             <label for="password">Password</label>
+
             <input type="password"
                    id="password"
                    name="password"
@@ -126,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="script.js"></script>
 
-    <?php if ($errorMessage): ?>
+    <?php if ($errorMessage !== ''): ?>
         <script>
             alert(<?= json_encode($errorMessage) ?>);
         </script>

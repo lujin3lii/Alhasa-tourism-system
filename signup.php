@@ -21,9 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
 
+        // Check if email already exists
         $check = $conn->prepare(
-            "SELECT `Id` FROM `tourist`
-             WHERE `Email` = ? LIMIT 1"
+            "SELECT `Tourist_ID`
+             FROM `tourist`
+             WHERE `Email` = ?
+             LIMIT 1"
         );
 
         if (!$check) {
@@ -48,11 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 } else {
 
+                    // Encrypt password
                     $hashedPassword = password_hash(
                         $password,
                         PASSWORD_DEFAULT
                     );
 
+                    // Create new tourist account
                     $stmt = $conn->prepare(
                         "INSERT INTO `tourist`
                         (`Name`, `Email`, `Password`, `Create_at`)
@@ -74,8 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         if ($stmt->execute()) {
 
-                            $newTouristId = $stmt->insert_id;
+                            // Get the new tourist ID
+                            $newTouristId = $conn->insert_id;
 
+                            // Start a new session
                             session_regenerate_id(true);
 
                             $_SESSION['tourist_id'] = $newTouristId;
@@ -85,8 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $stmt->close();
                             $check->close();
 
+                            // Redirect to homepage
                             header("Location: index.php");
-                            exit;
+                            exit();
 
                         } else {
 
@@ -107,12 +115,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Account - Al-Ahsa Vision Hub</title>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="auth-page">
 
     <main class="auth-card">
@@ -122,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              class="small-logo">
 
         <h1>Create Account</h1>
+
         <p class="auth-subtitle">Start exploring Al-Ahsa</p>
 
         <form action="signup.php" method="post" id="signup-form">
@@ -193,6 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const createButton = document.getElementById('create-account-button');
 
         function checkPasswords() {
+
             const password = passwordInput.value;
             const confirmPassword = confirmPasswordInput.value;
 
@@ -217,6 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         confirmPasswordInput.addEventListener('input', checkPasswords);
 
         signupForm.addEventListener('submit', function(event) {
+
             if (passwordInput.value !== confirmPasswordInput.value) {
                 event.preventDefault();
                 passwordMessage.style.display = 'block';

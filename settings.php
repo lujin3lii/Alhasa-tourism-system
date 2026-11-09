@@ -384,14 +384,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
 
     <div class="sidebar-links">
         <a href="index.php"><span>⌂</span> Home</a>
-        <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+        <a href="explore-al-ahsa.php"><span>⌖</span> Explore Al-Ahsa</a>
         <a href="places.php"><span>⌘</span> Tourist Places</a>
+        <a href="seasons.php"><span>⌘</span> Seasons</a>
         <a href="restaurants.php"><span>♨</span> Restaurants</a>
         <a href="cafes.php"><span>☕</span> Cafes</a>
+        <a href="hotels.php" class="active"><span>⌂</span> Hotels</a>
         <a href="markets.php"><span>♧</span> Markets</a>
         <a href="settings.php" class="active"><span>⚙</span> Settings</a>
-        <a href="my-account.html"><span>♙</span> My Account</a>
-        <a href="About.html"><span>ⓘ</span> About Us</a>
+        <a href="my-account.php"><span>♙</span> My Account</a>
+        <a href="About.php"><span>ⓘ</span> About Us</a>
     </div>
 
     <div class="sidebar-decoration">

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,18 +10,21 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="about-page">
+
     <!-- Menu Button -->
     <button class="menu-button"
             onclick="toggleMenu()"
             aria-label="Open menu">
         ☰
     </button>
+
     <!-- Sidebar Background -->
     <div class="sidebar-backdrop" onclick="toggleMenu()"></div>
+
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -26,57 +32,89 @@
             <h2>Al-Ahsa <span>Vision Hub</span></h2>
             <p>Discover the beauty of Al-Ahsa</p>
         </div>
+
         <div class="sidebar-links">
             <a href="index.php"><span>⌂</span> Home</a>
-            <a href="explore-al-ahsa.html">
+
+            <a href="explore-al-ahsa.php">
                 <span>⌖</span> Explore Al-Ahsa
             </a>
+
             <a href="places.php">
                 <span>⌘</span> Tourist Places
             </a>
+
+            <a href="seasons.php">
+                <span>⌘</span> Seasons
+            </a>
+
             <a href="restaurants.php">
                 <span>♨</span> Restaurants
             </a>
+
             <a href="cafes.php">
                 <span>☕</span> Cafes
             </a>
+
             <a href="markets.php">
                 <span>♧</span> Markets
             </a>
+
             <a href="settings.php">
                 <span>⚙</span> Settings
             </a>
-            <a href="my-account.html">
+
+            <a href="my-account.php">
                 <span>♙</span> My Account
             </a>
-            <a href="About.html" class="active">
+
+            <a href="About.php" class="active">
                 <span>ⓘ</span> About Us
             </a>
         </div>
+
         <div class="sidebar-decoration">
             <span>🌴</span>
             <p>THE HEART OF AL-AHSA</p>
         </div>
     </nav>
+
     <!-- Main Content -->
     <main class="home-main about-main">
+
         <!-- Top Bar -->
         <header class="home-topbar" style="margin-bottom: 25px;">
             <div class="home-location">
                 <span class="location-dot"></span>
                 DISCOVER AL-AHSA, SAUDI ARABIA
             </div>
+
             <div class="home-account-links">
-                <a href="role-selection.html"
-                   class="home-signup"
-                   id="account-button">
-                    Log In
-                </a>
-                <a href="index.html" class="home-small-logo">
+
+                <?php if (isset($_SESSION['tourist_id'])): ?>
+
+                    <a href="my-account.php"
+                       class="home-signup"
+                       id="account-button">
+                        <?= htmlspecialchars($_SESSION['tourist_name'] ?? 'My Account', ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+
+                <?php else: ?>
+
+                    <a href="role-selection.html"
+                       class="home-signup"
+                       id="account-button">
+                        Log In
+                    </a>
+
+                <?php endif; ?>
+
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
             </div>
         </header>
+
         <!-- About Hero -->
         <section class="about-hero">
             <span class="about-label">DISCOVER OUR PROJECT</span>
@@ -86,6 +124,7 @@
                 and more personalized tourism experience.
             </p>
         </section>
+
         <!-- Who We Are -->
         <section class="about-content-section">
             <div class="about-intro-card">
@@ -107,12 +146,14 @@
                 </p>
             </div>
         </section>
+
         <!-- Vision and Mission -->
         <section class="about-section-block">
             <div class="about-section-heading">
                 <span>OUR DIRECTION</span>
                 <h2>Vision &amp; Mission</h2>
             </div>
+
             <div class="about-info-grid">
                 <article class="about-info-card vision-card">
                     <div class="about-card-icon">◎</div>
@@ -125,6 +166,7 @@
                         digital solutions.
                     </p>
                 </article>
+
                 <article class="about-info-card mission-card">
                     <div class="about-card-icon">➤</div>
                     <h3>Our Mission</h3>
@@ -137,6 +179,7 @@
                 </article>
             </div>
         </section>
+
         <!-- Objectives -->
         <section class="about-section-block">
             <div class="about-section-heading">
@@ -147,6 +190,7 @@
                     and experience Al-Ahsa.
                 </p>
             </div>
+
             <div class="about-objectives-grid">
                 <article class="about-objective-card">
                     <span class="objective-number">01</span>
@@ -156,6 +200,7 @@
                         to help visitors plan their trips more easily.
                     </p>
                 </article>
+
                 <article class="about-objective-card">
                     <span class="objective-number">02</span>
                     <h3>Promote Local Destinations</h3>
@@ -164,6 +209,7 @@
                         sites, attractions, restaurants, and markets.
                     </p>
                 </article>
+
                 <article class="about-objective-card">
                     <span class="objective-number">03</span>
                     <h3>Personalize the Experience</h3>
@@ -172,6 +218,7 @@
                         interests, preferences, and trip duration.
                     </p>
                 </article>
+
                 <article class="about-objective-card">
                     <span class="objective-number">04</span>
                     <h3>Support Local Businesses</h3>
@@ -182,12 +229,14 @@
                 </article>
             </div>
         </section>
+
         <!-- Platform Features -->
         <section class="about-section-block about-features-section">
             <div class="about-section-heading">
                 <span>EXPLORE MORE WITH US</span>
                 <h2>What Our Platform Offers</h2>
             </div>
+
             <div class="about-features-grid">
                 <div class="about-feature">
                     <span>⌖</span>
@@ -197,6 +246,7 @@
                         places across Al-Ahsa.
                     </p>
                 </div>
+
                 <div class="about-feature">
                     <span>☕</span>
                     <h3>Dining &amp; Cafes</h3>
@@ -205,6 +255,7 @@
                         different tastes and preferences.
                     </p>
                 </div>
+
                 <div class="about-feature">
                     <span>◷</span>
                     <h3>Events &amp; Seasons</h3>
@@ -213,6 +264,7 @@
                         and activities in the region.
                     </p>
                 </div>
+
                 <div class="about-feature">
                     <span>✧</span>
                     <h3>Smart Recommendations</h3>
@@ -223,6 +275,7 @@
                 </div>
             </div>
         </section>
+
         <!-- Closing Section -->
         <section class="about-closing">
             <h2>Experience Al-Ahsa in a New Way</h2>
@@ -230,35 +283,44 @@
                 Your journey to discover the heritage,
                 culture, and experiences of Al-Ahsa starts here.
             </p>
-            <a href="explore-al-ahsa.html"
+
+            <a href="explore-al-ahsa.php"
                class="about-explore-button">
                 Explore Al-Ahsa
             </a>
         </section>
+
     </main>
+
     <!-- AI Assistant Button -->
     <button class="chat-button"
             onclick="openAI()"
             aria-label="Open assistant"
             title="Assistant"></button>
+
     <!-- Al-Ahsa Vision Hub Footer -->
     <footer class="site-footer">
         <div class="site-footer-main">
+
             <div class="site-footer-brand">
                 <h3>Al-Ahsa Vision Hub</h3>
                 <p>Discover the beauty, heritage, and experiences of Al-Ahsa.</p>
             </div>
+
             <div class="site-footer-links">
                 <h4>Explore Al-Ahsa</h4>
                 <p>Discover places, restaurants, cafés, and seasonal events.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Our Vision</h4>
                 <p>Making your journey through Al-Ahsa memorable.</p>
             </div>
+
             <div class="site-footer-contact">
                 <h4>Contact Us</h4>
                 <p>05123546798</p>
+
                 <p>
                     <a href="https://www.instagram.com/"
                        target="_blank"
@@ -266,6 +328,7 @@
                         ◎ Instagram
                     </a>
                 </p>
+
                 <p>
                     <a href="https://x.com/"
                        target="_blank"
@@ -274,13 +337,17 @@
                     </a>
                 </p>
             </div>
+
         </div>
+
         <div class="site-footer-bottom">
-            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
     </footer>
+
     <!-- Shared JavaScript -->
     <script src="script.js"></script>
+
 </body>
 </html>

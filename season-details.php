@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include 'db.php';
@@ -38,7 +37,7 @@ $averageRating = null;
 $errorMessage = '';
 $actionMessage = '';
 
-$touristId = $_SESSION['Tourist_ID'] ?? null;
+$touristId = $_SESSION['tourist_id'] ?? null;
 $isFavorite = false;
 
 if (!$placeId || $placeId < 1) {
@@ -162,7 +161,7 @@ if (
 
             $stmt = $conn->prepare(
                 "INSERT INTO Place_Reviews
-                 (Tourist_ID, Place_ID, Comment, Rating, Created_at)
+                 (Tourist_ID, Place_ID, Comment, Rating, Create_at)
                  VALUES (?, ?, ?, ?, NOW())"
             );
 
@@ -323,7 +322,7 @@ if (
     <nav class="sidebar" id="sidebar">
 
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -334,17 +333,18 @@ if (
         </div>
 
         <div class="sidebar-links">
-            <a href="index.html"><span>⌂</span> Home</a>
-            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="index.php"><span>⌂</span> Home</a>
+            <a href="explore-al-ahsa.php"><span>⌖</span> Explore Al-Ahsa</a>
             <a href="places.php" class="active">
                 <span>⌘</span> Tourist Places
             </a>
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>
-            <a href="settings.html"><span>⚙</span> Settings</a>
-            <a href="my-account.html"><span>♙</span> My Account</a>
-            <a href="About.html"><span>ⓘ</span> About Us</a>
+            <a href="hotels.php" class="active"><span>⌂</span> Hotels</a>
+            <a href="settings.php"><span>⚙</span> Settings</a>
+            <a href="my-account.php"><span>♙</span> My Account</a>
+            <a href="About.php"><span>ⓘ</span> About Us</a>
         </div>
 
         <div class="sidebar-decoration">
@@ -366,15 +366,25 @@ if (
             </div>
 
             <div class="home-account-links">
-                <a href="role-selection.html"
-                   class="home-signup"
-                   id="account-button">
-                    Log In
-                </a>
 
-                <a href="index.html" class="home-small-logo">
+                <?php if (isset($_SESSION['tourist_id'])): ?>
+                    <a href="my-account.php"
+                       class="home-signup"
+                       id="account-button">
+                        <?= htmlspecialchars($_SESSION['tourist_name'], ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                <?php else: ?>
+                    <a href="role-selection.html"
+                       class="home-signup"
+                       id="account-button">
+                        Log In
+                    </a>
+                <?php endif; ?>
+
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
+
             </div>
 
         </header>
@@ -418,7 +428,7 @@ if (
                                     class="favorite-button <?= $isFavorite ? 'is-favorite' : '' ?>"
                                     aria-label="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>"
                                     title="<?= $isFavorite ? 'Remove from favorites' : 'Add to favorites' ?>">
-                                    <?= $isFavorite ? '♥' : '♡' ?>
+                                    <?= $isFavorite ? '♥️' : '♡' ?>
                                 </button>
                             </form>
 
@@ -730,7 +740,7 @@ if (
         </div>
 
         <div class="site-footer-bottom">
-            <p>© 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
+            <p>©️ 2026 Al-Ahsa Vision Hub. All rights reserved.</p>
             <p>Explore Al-Ahsa, experience its beauty.</p>
         </div>
 

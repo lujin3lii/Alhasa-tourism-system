@@ -2,9 +2,8 @@
 session_start();
 require_once 'db.php';
 
-/* Temporary access while fixing the login system */
+/* Business Owner Information */
 $ownerID = (int) ($_SESSION['business_owner_id'] ?? 0);
-
 $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
 
 $totalReviews = 0;
@@ -16,16 +15,15 @@ $dbError = '';
 
 try {
 
-    /* Load statistics only when a business owner is logged in */
     if ($ownerID > 0) {
 
-        /* Total reviews and average rating */
+        /* Total Reviews and Average Rating */
         $stmt = $conn->prepare("
             SELECT
-                COUNT(pr.Review_ID),
+                COUNT(pr.Place_Review_id),
                 COALESCE(AVG(pr.Rating), 0)
             FROM places p
-            LEFT JOIN Place_Reviews pr
+            LEFT JOIN place_reviews pr
                 ON p.Place_ID = pr.Place_ID
             WHERE p.Business_Owner_ID = ?
         ");
@@ -38,7 +36,7 @@ try {
 
         $averageRating = round((float)$averageRating, 1);
 
-        /* Total favorites */
+        /* Total Favorites */
         $stmt = $conn->prepare("
             SELECT COUNT(*)
             FROM favorites f
@@ -53,12 +51,12 @@ try {
         $stmt->fetch();
         $stmt->close();
 
-        /* Reviews during the last six months */
+        /* Reviews During the Last Six Months */
         $stmt = $conn->prepare("
             SELECT
                 DATE_FORMAT(pr.Create_at, '%Y-%m') AS review_month,
                 COUNT(*) AS review_count
-            FROM Place_Reviews pr
+            FROM place_reviews pr
             INNER JOIN places p
                 ON pr.Place_ID = p.Place_ID
             WHERE p.Business_Owner_ID = ?
@@ -84,7 +82,7 @@ try {
 
         $stmt->close();
 
-        /* Prepare six months, including months with zero reviews */
+        /* Prepare Six Months */
         for ($i = 5; $i >= 0; $i--) {
 
             $date = new DateTime('first day of this month');
@@ -99,14 +97,14 @@ try {
             ];
         }
 
-        /* Recent reviews */
+        /* Recent Reviews */
         $stmt = $conn->prepare("
             SELECT
                 pr.Comment,
                 pr.Rating,
                 pr.Create_at,
                 p.Name
-            FROM Place_Reviews pr
+            FROM place_reviews pr
             INNER JOIN places p
                 ON pr.Place_ID = p.Place_ID
             WHERE p.Business_Owner_ID = ?
@@ -132,7 +130,7 @@ try {
     $dbError = 'Unable to load dashboard statistics. Please check the database table and column names.';
 }
 
-/* Prepare chart scale */
+/* Prepare Chart Scale */
 $maxMonthlyReviews = 1;
 
 foreach ($monthlyReviews as $month) {
@@ -553,7 +551,7 @@ foreach ($monthlyReviews as $month) {
             <a href="business-owner-account.php"
                class="home-signup"
                id="account-button">
-                <?php echo htmlspecialchars($ownerName); ?>
+                <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?>
             </a>
 
             <a href="business-owner-index.php" class="home-small-logo">
@@ -572,14 +570,14 @@ foreach ($monthlyReviews as $month) {
             <div class="dashboard-heading">
                 <h1>Business Dashboard</h1>
                 <p>
-                    Welcome, <?php echo htmlspecialchars($ownerName); ?>!
+                    Welcome, <?php echo htmlspecialchars($ownerName, ENT_QUOTES, 'UTF-8'); ?>!
                     Here you can monitor your business performance and visitor feedback.
                 </p>
             </div>
 
             <?php if ($dbError !== ''): ?>
                 <div class="database-error">
-                    <?php echo htmlspecialchars($dbError); ?>
+                    <?php echo htmlspecialchars($dbError, ENT_QUOTES, 'UTF-8'); ?>
                 </div>
             <?php endif; ?>
 
@@ -677,7 +675,7 @@ foreach ($monthlyReviews as $month) {
                                 <div class="review-top">
 
                                     <span class="review-business">
-                                        <?php echo htmlspecialchars($review['Name']); ?>
+                                        <?php echo htmlspecialchars($review['Name'], ENT_QUOTES, 'UTF-8'); ?>
                                     </span>
 
                                     <span class="review-stars">
@@ -693,7 +691,9 @@ foreach ($monthlyReviews as $month) {
                                 <p class="review-comment">
                                     <?php
                                     echo htmlspecialchars(
-                                        $review['Comment'] ?? 'No comment provided.'
+                                        $review['Comment'] ?? 'No comment provided.',
+                                        ENT_QUOTES,
+                                        'UTF-8'
                                     );
                                     ?>
                                 </p>
@@ -701,7 +701,9 @@ foreach ($monthlyReviews as $month) {
                                 <div class="review-date">
                                     <?php
                                     echo htmlspecialchars(
-                                        date('d M Y', strtotime($review['Create_at']))
+                                        date('d M Y', strtotime($review['Create_at'])),
+                                        ENT_QUOTES,
+                                        'UTF-8'
                                     );
                                     ?>
                                 </div>

@@ -1,5 +1,5 @@
-```php
 <?php
+session_start();
 include 'db.php';
 
 // Fetch published entertainment places from the database
@@ -37,7 +37,7 @@ function e($value) {
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="images/logo.png"
                      alt="Al-Ahsa Vision Hub"
                      class="sidebar-logo">
@@ -48,15 +48,16 @@ function e($value) {
 
         <div class="sidebar-links">
             <a href="index.php"><span>⌂</span> Home</a>
-            <a href="explore-al-ahsa.html"><span>⌖</span> Explore Al-Ahsa</a>
+            <a href="explore-al-ahsa.php"><span>⌖</span> Explore Al-Ahsa</a>
             <a href="places.php" class="active"><span>⌘</span> Tourist Places</a>
+            <a href="seasons.php"><span>⌘</span> Seasons</a>
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>
-            <a href="hotels.html"><span>⌂</span> Hotels</a>
+            <a href="hotels.php"><span>⌂</span> Hotels</a>
             <a href="settings.php"><span>⚙</span> Settings</a>
-            <a href="my-account.html"><span>♙</span> My Account</a>
-            <a href="About.html"><span>ⓘ</span> About Us</a>
+            <a href="my-account.php"><span>♙</span> My Account</a>
+            <a href="About.php"><span>ⓘ</span> About Us</a>
         </div>
 
         <div class="sidebar-decoration">
@@ -76,13 +77,21 @@ function e($value) {
             </div>
 
             <div class="home-account-links">
-                <a href="role-selection.html"
-                   class="home-signup"
-                   id="account-button">
-                    Log In
-                </a>
+                <?php if (isset($_SESSION['tourist_id'])): ?>
+                    <a href="my-account.php"
+                       class="home-signup"
+                       id="account-button">
+                        <?= htmlspecialchars($_SESSION['tourist_name'], ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                <?php else: ?>
+                    <a href="role-selection.html"
+                       class="home-signup"
+                       id="account-button">
+                        Log In
+                    </a>
+                <?php endif; ?>
 
-                <a href="index.html" class="home-small-logo">
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
             </div>
@@ -270,4 +279,3 @@ function e($value) {
 
 </body>
 </html>
-```

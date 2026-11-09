@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
 
-        // Check whether the email already exists
+        // Check existing email
         $checkStmt = $conn->prepare(
             "SELECT Business_Owner_ID
              FROM business_owners
@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$checkStmt) {
             $errorMessage = 'Database error: ' . $conn->error;
         } else {
+
             $checkStmt->bind_param("s", $email);
             $checkStmt->execute();
             $checkStmt->store_result();
@@ -60,16 +61,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($errorMessage === '') {
 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $hashedPassword = password_hash(
+                $password,
+                PASSWORD_DEFAULT
+            );
 
             try {
+
                 $conn->begin_transaction();
 
                 // Save business owner information
                 $ownerStmt = $conn->prepare(
                     "INSERT INTO business_owners
-                    (Name, Email, Password)
-                    VALUES (?, ?, ?)"
+                    (Name, Email, Password, Phone)
+                    VALUES (?, ?, ?, ?)"
                 );
 
                 if (!$ownerStmt) {
@@ -77,10 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 $ownerStmt->bind_param(
-                    "sss",
+                    "ssss",
                     $ownerName,
                     $email,
-                    $hashedPassword
+                    $hashedPassword,
+                    $phone
                 );
 
                 if (!$ownerStmt->execute()) {
@@ -94,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $placeStmt = $conn->prepare(
                     "INSERT INTO places
                     (Name, Place_Type, Description, Location,
-                     Business_Owner_ID, Business_Size, phone)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)"
+                     Business_Owner_ID, Business_Size)
+                    VALUES (?, ?, ?, ?, ?, ?)"
                 );
 
                 if (!$placeStmt) {
@@ -103,14 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 $placeStmt->bind_param(
-                    "ssssiss",
+                    "ssssis",
                     $businessName,
                     $businessType,
                     $description,
                     $businessLocation,
                     $businessOwnerID,
-                    $businessSize,
-                    $phone
+                    $businessSize
                 );
 
                 if (!$placeStmt->execute()) {
@@ -119,29 +124,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $placeStmt->close();
 
-                // Save session information
+                // Save session
                 $_SESSION['business_owner_id'] = $businessOwnerID;
                 $_SESSION['business_owner_name'] = $ownerName;
                 $_SESSION['business_owner_email'] = $email;
+                $_SESSION['business_owner_phone'] = $phone;
 
                 $conn->commit();
 
-                // Go directly to Business Owner Home
+                // Redirect to Business Owner Home
                 header("Location: business-owner-index.php");
                 exit;
 
             } catch (Throwable $e) {
-                $conn->rollback();
-                $errorMessage = 'Registration failed. Please try again.';
 
-                // Show the database error while developing
-                // Remove this line before publishing the website.
-                error_log($e->getMessage());
+                $conn->rollback();
+
+                error_log(
+                    "Business Registration Error: " .
+                    $e->getMessage()
+                );
+
+                $errorMessage = 'Registration failed: ' .
+                    $e->getMessage();
             }
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -325,6 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #f0cccc;
             color: #a83232;
             font-size: 14px;
+            overflow-wrap: anywhere;
         }
         @media (max-width: 600px) {
             .business-registration-page {
@@ -352,7 +364,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main class="business-registration-page">
 
-    <!-- Back to Business Home -->
     <div class="back-home-container">
         <a href="business-owner-index.php" class="back-home-link">
             &larr; Back to Home
@@ -361,7 +372,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="registration-wrap">
 
-        <!-- Project Logo and Name -->
         <header class="brand-heading">
             <img
                 src="images/logo.png"
@@ -375,7 +385,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </p>
         </header>
 
-        <!-- Registration Form -->
         <section class="registration-card">
 
             <div class="form-intro">
@@ -586,7 +595,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             </form>
 
-            <!-- Login Link -->
             <p class="login-note">
                 Already have an account?
                 <a href="business-owner-login.php">Log In</a>
@@ -596,7 +604,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </main>
 
-<!-- AI Assistant Button: unchanged -->
 <button
     class="chat-button"
     onclick="openAI()"

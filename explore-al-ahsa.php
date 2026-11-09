@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -196,13 +199,14 @@
                 <span>⌂</span> Home
             </a>
 
-            <a href="explore-al-ahsa.html">
+            <a href="explore-al-ahsa.php">
                 <span>⌖</span> Explore Al-Ahsa
             </a>
 
             <a href="places.php">
                 <span>⌘</span> Tourist Places
             </a>
+            <a href="seasons.php"><span>⌘</span> Seasons</a>
 
             <a href="restaurants.php">
                 <span>♨</span> Restaurants
@@ -224,11 +228,11 @@
                 <span>⚙</span> Settings
             </a>
 
-            <a href="my-account.html">
+            <a href="my-account.php">
                 <span>♙</span> My Account
             </a>
 
-            <a href="About.html">
+            <a href="About.php">
                 <span>ⓘ</span> About Us
             </a>
 
@@ -254,13 +258,25 @@
 
             <div class="home-account-links">
 
-                <a href="role-selection.html"
-                   class="home-signup"
-                   id="account-button">
-                    Log In
-                </a>
+                <?php if (isset($_SESSION['tourist_id'])): ?>
 
-                <a href="index.html" class="home-small-logo">
+                    <a href="my-account.php"
+                       class="home-signup"
+                       id="account-button">
+                        <?= htmlspecialchars($_SESSION['tourist_name'], ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+
+                <?php else: ?>
+
+                    <a href="role-selection.html"
+                       class="home-signup"
+                       id="account-button">
+                        Log In
+                    </a>
+
+                <?php endif; ?>
+
+                <a href="index.php" class="home-small-logo">
                     <img src="images/logo.png" alt="Logo">
                 </a>
 
@@ -460,7 +476,7 @@
 
         <div class="site-footer-bottom">
             <p>
-                © 2026 Al-Ahsa Vision Hub. All rights reserved.
+                ©️ 2026 Al-Ahsa Vision Hub. All rights reserved.
             </p>
 
             <p>
