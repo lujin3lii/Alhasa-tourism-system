@@ -1,27 +1,21 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 require_once 'db.php'; 
 
-// Check if admin is logged in (Uncomment when login is fully ready)
-// if (!isset($_SESSION['admin_id'])) { header("Location: login.php"); exit; }
-
-// 1. Fetch total visits
 $total_visits_query = $conn->query("SELECT COUNT(*) AS total FROM site_visits");
 $total_visits = $total_visits_query->fetch_assoc()['total'];
 
-// 2. Fetch guest visits
 $guest_visits_query = $conn->query("SELECT COUNT(*) AS total FROM site_visits WHERE Tourist_ID IS NULL");
 $guest_visits = $guest_visits_query->fetch_assoc()['total'];
 
-// 3. Fetch total places
 $total_places_query = $conn->query("SELECT COUNT(*) AS total FROM places");
 $total_places = $total_places_query->fetch_assoc()['total'];
 
-// 4. Fetch total business owners
 $total_owners_query = $conn->query("SELECT COUNT(*) AS total FROM business_owners");
 $total_owners = $total_owners_query->fetch_assoc()['total'];
 
-// 5. Fetch admins for the table
 $admins_result = $conn->query("SELECT * FROM admin");
 ?>
 
@@ -31,12 +25,10 @@ $admins_result = $conn->query("SELECT * FROM admin");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Al-Ahsa Vision Hub</title>
-    <!-- Link to the shared CSS file -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Admin Sidebar (Same design as tourist, different links) -->
     <div class="sidebar">
         <div class="sidebar-links">
             <a href="admin-home.php"><span>⌂</span> Admin Home</a>
@@ -53,11 +45,9 @@ $admins_result = $conn->query("SELECT * FROM admin");
         </div>
     </div>
 
-    <!-- Main Content Area -->
     <div class="main-content">
         <h1>Admin Dashboard</h1>
         
-        <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>Total Site Visits</h3>
@@ -77,7 +67,6 @@ $admins_result = $conn->query("SELECT * FROM admin");
             </div>
         </div>
 
-        <!-- Admin Table -->
         <h2>Admin Accounts</h2>
         <table class="admin-table">
             <thead>
@@ -90,7 +79,7 @@ $admins_result = $conn->query("SELECT * FROM admin");
             </thead>
             <tbody>
                 <?php 
-                if ($admins_result->num_rows > 0) {
+                if ($admins_result && $admins_result->num_rows > 0) {
                     while($row = $admins_result->fetch_assoc()): 
                 ?>
                 <tr>
@@ -109,7 +98,6 @@ $admins_result = $conn->query("SELECT * FROM admin");
         </table>
     </div>
 
-    <!-- AI Assistant Button -->
     <button
         class="chat-button"
         onclick="openAI()"
@@ -117,7 +105,6 @@ $admins_result = $conn->query("SELECT * FROM admin");
         title="AI Assistant">
     </button>
 
-    <!-- Al-Ahsa Vision Hub Footer -->
     <footer class="site-footer">
         <div class="site-footer-main">
             <div class="site-footer-brand">
