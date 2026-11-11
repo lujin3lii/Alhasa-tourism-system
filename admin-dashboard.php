@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
 require_once 'db.php'; 
 
@@ -32,43 +30,26 @@ $admins_result = $conn->query("SELECT * FROM admin");
     <div class="sidebar">
         <div class="sidebar-links">
             <a href="admin-home.php"><span>⌂</span> Admin Home</a>
-            <a href="admin-dashboard.php" class="active"><span>📊</span> Dashboard</a>
+            <a href="admin-dashboard.php" class="active"><span>⚙️</span> Dashboard</a>
             <a href="admin-places.php"><span>⌘</span> Manage Places</a>
-            <a href="admin-restaurants.php"><span>♨️</span> Manage Restaurants</a>
-            <a href="admin-cafes.php"><span>☕</span> Manage Cafes</a>
-            <a href="admin-hotels.php"><span>⌂</span> Manage Hotels</a>
-            <a href="admin-markets.php"><span>♧</span> Manage Markets</a>
-            <a href="admin-business-owners.php"><span>🏢</span> Business Owners</a>
-            <a href="admin-tourists.php"><span>🧳</span> Tourists</a>
-            <a href="admin-settings.php"><span>⚙️</span> Settings</a>
+            <a href="admin-business-owners.php"><span>♙</span> Business Owners</a>
+            <a href="admin-tourists.php"><span>♧</span> Tourists</a>
             <a href="logout.php"><span>🚪</span> Logout</a>
         </div>
     </div>
 
-    <div class="main-content">
+    <div>
         <h1>Admin Dashboard</h1>
         
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Site Visits</h3>
-                <p><?php echo $total_visits; ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Guest Visits</h3>
-                <p><?php echo $guest_visits; ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Places</h3>
-                <p><?php echo $total_places; ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>Business Owners</h3>
-                <p><?php echo $total_owners; ?></p>
-            </div>
-        </div>
+        <h3>Total Site Visits: <?php echo $total_visits; ?></h3>
+        <h3>Guest Visits: <?php echo $guest_visits; ?></h3>
+        <h3>Total Places: <?php echo $total_places; ?></h3>
+        <h3>Business Owners: <?php echo $total_owners; ?></h3>
+
+        <hr>
 
         <h2>Admin Accounts</h2>
-        <table class="admin-table">
+        <table border="1">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -98,12 +79,7 @@ $admins_result = $conn->query("SELECT * FROM admin");
         </table>
     </div>
 
-    <button
-        class="chat-button"
-        onclick="openAI()"
-        aria-label="Open AI Assistant"
-        title="AI Assistant">
-    </button>
+    <button class="chat-button" onclick="openAI()" aria-label="Open AI Assistant" title="AI Assistant"></button>
 
     <footer class="site-footer">
         <div class="site-footer-main">
@@ -122,12 +98,8 @@ $admins_result = $conn->query("SELECT * FROM admin");
             <div class="site-footer-contact">
                 <h4>Contact Us</h4>
                 <p>05123546798</p>
-                <p>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">◎ Instagram</a>
-                </p>
-                <p>
-                    <a href="https://x.com/" target="_blank" rel="noopener noreferrer">𝕏 X (Twitter)</a>
-                </p>
+                <p><a href="https://www.instagram.com/" target="_blank">◎ Instagram</a></p>
+                <p><a href="https://x.com/" target="_blank">𝕏 X (Twitter)</a></p>
             </div>
         </div>
         <div class="site-footer-bottom">
