@@ -278,7 +278,7 @@ session_start();
                     </div>
                 </div>
 
-                <a href="survey.php" class="home-btn home-btn-primary">
+                <a href="itinerary.php" class="home-btn home-btn-primary">
                     Plan Your Trip →
                 </a>
             </div>
