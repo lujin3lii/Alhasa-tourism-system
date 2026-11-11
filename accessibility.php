@@ -212,6 +212,7 @@ while ($row = $resSaved->fetch_assoc()) {
                         <?php while ($row = $optionsResult->fetch_assoc()): ?>
                             <?php $isChecked = in_array($row['Accessibility_ID'], $savedOptions) ? 'checked' : ''; ?>
                             <label class="acc-card">
+                                <!-- تم اعتماد المسار المباشر من قاعدة البيانات هنا -->
                                 <img src="<?= htmlspecialchars($row['Image']) ?>" alt="<?= htmlspecialchars($row['Accessibility_Name']) ?>">
                                 <h3><?= htmlspecialchars($row['Accessibility_Name']) ?></h3>
                                 <input type="checkbox" 
