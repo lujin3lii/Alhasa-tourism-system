@@ -1,21 +1,406 @@
 <?php
-require_once 'db.php'; require_once 'trip-common.php';
-if(!isset($_SESSION['tourist_id'])){header('Location: role-selection.html');exit;}
-$questions=[];$res=$conn->query("SELECT Question_ID,Question_Text,Question_Type,Is_Required,Display_Order FROM survey_questions WHERE Display_Order BETWEEN 1 AND 8 ORDER BY Display_Order");
-if(!$res){die('Unable to load survey questions. Check survey_questions.');} while($r=$res->fetch_assoc()){$questions[]=$r;}
-$optionsByQuestion=[];$or=$conn->query("SELECT Option_ID,Question_ID,Option_Text,Display_Order FROM survey_options ORDER BY Question_ID,Display_Order");
-if(!$or){die('Unable to load survey options. Check survey_options.');}while($o=$or->fetch_assoc()){$optionsByQuestion[(int)$o['Question_ID']][]=$o;}
-$missing=[];foreach($questions as $q){if(empty($optionsByQuestion[(int)$q['Question_ID']]))$missing[]=(int)$q['Display_Order'];}
-trip_header('Create My Own Trip','itinerary'); ?>
-<section class="about-hero"><span class="about-label">CREATE YOUR OWN TRIP</span><h1>Tell Us About Your Visit</h1><p>Your answers will help us prepare a suggested itinerary for Al-Ahsa.</p></section>
-<section class="about-content-section"><div class="about-intro-card">
-<?php if(count($questions)<8): ?><div class="trip-empty">The database needs all eight trip-preference questions (Display_Order 1–8). Currently found: <?=count($questions)?>.</div>
-<?php else: ?><form action="generate-itinerary.php" method="POST">
-<?php foreach($questions as $q): $qid=(int)$q['Question_ID']; $opts=$optionsByQuestion[$qid]??[]; ?>
-<div class="trip-question"><span class="about-label">QUESTION <?= (int)$q['Display_Order'] ?> OF 8</span><h2><?=trip_e($q['Question_Text'])?></h2>
-<?php if($opts): ?><div class="trip-question-options"><?php foreach($opts as $op): ?><label class="trip-option"><input type="radio" name="answers[<?=$qid?>]" value="<?=(int)$op['Option_ID']?>" <?=((int)$q['Is_Required']===1?'required':'')?>><span><?=trip_e($op['Option_Text'])?></span></label><?php endforeach;?></div>
-<?php else: ?><div class="trip-empty">Options for this question have not been added yet. Add its choices to survey_options to enable this question.</div><?php endif;?></div>
-<?php endforeach; ?>
-<?php if(!$missing): ?><div class="trip-actions center"><a href="itinerary.php" class="trip-action secondary">← Back</a><button type="submit" class="trip-action">Generate My Trip <span>→</span></button></div><?php else: ?><p class="trip-empty">Missing options for question(s): <?=trip_e(implode(', ',$missing))?>. Add these options in the database before generating a trip.</p><div class="trip-actions center"><a href="itinerary.php" class="trip-action secondary">← Back to Planning</a></div><?php endif; ?>
-</form><?php endif;?></div></section>
-<?php trip_footer(); ?>
+require_once __DIR__ . '/trip-common.php';
+trip_require_tourist();
+
+/* Display errors returned from generate-itinerary.php */
+$tripError = $_SESSION['trip_error'] ?? '';
+unset($_SESSION['trip_error']);
+
+if ($tripError === '' && isset($_GET['error'])) {
+    $tripError = (string)$_GET['error'];
+}
+
+$questions = [];
+$optionsByQuestion = [];
+
+/* Load questions from database */
+$sql = "
+    SELECT Question_ID, Question_Text, Question_Type,
+           Is_Required, Display_Order
+    FROM survey_questions
+    ORDER BY Display_Order ASC
+";
+
+$result = $conn->query($sql);
+
+if (!$result) {
+    die("Survey questions error: " . $conn->error);
+}
+
+while ($row = $result->fetch_assoc()) {
+    $questions[] = $row;
+}
+
+/* Load options from database */
+$sql = "
+    SELECT Option_ID, Question_ID, Option_Text,
+           Parent_Option_ID, Display_Order
+    FROM survey_options
+    ORDER BY Display_Order ASC
+";
+
+$result = $conn->query($sql);
+
+if (!$result) {
+    die("Survey options error: " . $conn->error);
+}
+
+while ($row = $result->fetch_assoc()) {
+    $questionId = (int)$row['Question_ID'];
+    $parentId = (int)($row['Parent_Option_ID'] ?? 0);
+
+    $optionsByQuestion[$questionId][$parentId][] = $row;
+}
+
+/* Render options and nested options */
+if (!function_exists('renderSurveyOptions')) {
+    function renderSurveyOptions($questionId, $parentId, $options, $inputType) {
+
+        if (empty($options[$parentId])) {
+            return;
+        }
+
+        foreach ($options[$parentId] as $option) {
+
+            $optionId = (int)$option['Option_ID'];
+            $hasChildren = !empty($options[$optionId]);
+
+            $inputName = $inputType === 'checkbox'
+                ? "answers[$questionId][]"
+                : "answers[$questionId]";
+
+            ?>
+
+            <label class="choice-tile">
+                <input
+                    type="<?= trip_h($inputType) ?>"
+                    name="<?= trip_h($inputName) ?>"
+                    value="<?= $optionId ?>"
+                    data-option-id="<?= $optionId ?>"
+                >
+
+                <span class="choice-main">
+                    <?= trip_h($option['Option_Text']) ?>
+                </span>
+            </label>
+
+            <?php if ($hasChildren): ?>
+
+                <div class="survey-children"
+                     data-parent-option="<?= $optionId ?>"
+                     hidden>
+
+                    <?php
+                    renderSurveyOptions(
+                        $questionId,
+                        $optionId,
+                        $options,
+                        $inputType
+                    );
+                    ?>
+
+                </div>
+
+            <?php endif; ?>
+
+            <?php
+        }
+    }
+}
+
+trip_page_header('survey');
+?>
+
+<section class="trip-page survey-page">
+
+    <div class="survey-intro">
+
+        <a class="back-link" href="itinerary.php">
+            ← Back to trip planner
+        </a>
+
+        <span class="eyebrow">
+            YOUR PERSONAL TRIP DESIGNER
+        </span>
+
+        <h1>Let's get to know your kind of trip.</h1>
+
+        <p>
+            Answer a few questions. Our AI will use your preferences
+            and the available places in Al-Ahsa to create your itinerary.
+        </p>
+
+        <div class="survey-progress">
+            <span></span>
+        </div>
+
+        <small>
+            One questionnaire · Personalized AI recommendations
+        </small>
+
+    </div>
+
+    <?php if ($tripError !== ''): ?>
+
+        <div class="trip-error" role="alert">
+            <?= trip_h($tripError) ?>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if (empty($questions)): ?>
+
+        <div class="trip-error">
+            No survey questions are available.
+        </div>
+
+    <?php else: ?>
+
+        <form
+            class="trip-form"
+            id="surveyForm"
+            action="generate-itinerary.php"
+            method="POST"
+        >
+
+            <?php foreach ($questions as $index => $question): ?>
+
+                <?php
+
+                $questionId = (int)$question['Question_ID'];
+
+                $questionType = strtolower(
+                    trim($question['Question_Type'] ?? '')
+                );
+
+                /*
+                 * Multiple-choice questions allow several answers.
+                 * All other question types allow one answer only.
+                 */
+                $inputType = (
+                    strpos($questionType, 'multiple') !== false ||
+                    strpos($questionType, 'checkbox') !== false ||
+                    strpos($questionType, 'multi') !== false
+                ) ? 'checkbox' : 'radio';
+
+                $required = (int)$question['Is_Required'] === 1;
+
+                $questionOptions =
+                    $optionsByQuestion[$questionId] ?? [];
+
+                ?>
+
+                <section class="question-card survey-question"
+                         data-required="<?= $required ? '1' : '0' ?>"
+                         data-question-type="<?= trip_h($inputType) ?>">
+
+                    <div class="question-title">
+
+                        <span>
+                            <?= str_pad($index + 1, 2, '0', STR_PAD_LEFT) ?>
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                <?= trip_h($question['Question_Text']) ?>
+
+                                <?php if ($required): ?>
+                                    <span class="survey-required">*</span>
+                                <?php endif; ?>
+
+                            </h2>
+
+                            <p>
+                                <?= $inputType === 'checkbox'
+                                    ? 'Select all options that apply.'
+                                    : 'Choose one option only.' ?>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <?php if (empty($questionOptions[0])): ?>
+
+                        <p>No options available for this question.</p>
+
+                    <?php else: ?>
+
+                        <div class="choice-grid">
+
+                            <?php
+                            renderSurveyOptions(
+                                $questionId,
+                                0,
+                                $questionOptions,
+                                $inputType
+                            );
+                            ?>
+
+                        </div>
+
+                    <?php endif; ?>
+
+                </section>
+
+            <?php endforeach; ?>
+
+            <div class="form-actions">
+
+                <a class="trip-secondary-btn" href="itinerary.php">
+                    Back
+                </a>
+
+                <button class="trip-primary-btn" type="submit">
+                    Generate My AI Itinerary
+                    <span>✦</span>
+                </button>
+
+            </div>
+
+            <p class="form-footnote">
+                Your itinerary will be generated using the actual
+                published places available in our database.
+            </p>
+
+        </form>
+
+    <?php endif; ?>
+
+</section>
+
+<style>
+.survey-required {
+    color: #b54747;
+}
+
+.survey-question .choice-grid {
+    margin-top: 20px;
+}
+
+.survey-question .choice-tile {
+    cursor: pointer;
+}
+
+.survey-question .choice-tile input {
+    accent-color: #075b45;
+}
+
+.survey-children {
+    grid-column: 1 / -1;
+    margin: 8px 0 12px 22px;
+    padding: 12px 0 12px 18px;
+    border-left: 2px solid #8ab7a0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.survey-children[hidden] {
+    display: none !important;
+}
+
+.survey-validation-error {
+    color: #b54747;
+    margin-top: 12px;
+}
+
+@media (max-width: 650px) {
+    .survey-children {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('surveyForm');
+
+    if (!form) return;
+
+    /* Show or hide child options according to parent selection. */
+    function updateChildOptions() {
+
+        form.querySelectorAll('.survey-children').forEach(function (group) {
+
+            const parentId = group.dataset.parentOption;
+
+            const parentInput = form.querySelector(
+                'input[data-option-id="' + parentId + '"]'
+            );
+
+            const selected = parentInput && parentInput.checked;
+
+            group.hidden = !selected;
+
+            if (!selected) {
+
+                group.querySelectorAll('input').forEach(function (input) {
+                    input.checked = false;
+                });
+
+            }
+
+        });
+
+    }
+
+    /* Update nested options whenever an answer changes. */
+    form.addEventListener('change', function () {
+        updateChildOptions();
+    });
+
+    /* Validate required questions before submitting. */
+    form.addEventListener('submit', function (event) {
+
+        updateChildOptions();
+
+        form.querySelectorAll('.survey-validation-error')
+            .forEach(function (item) {
+                item.remove();
+            });
+
+        let firstMissing = null;
+
+        form.querySelectorAll(
+            '.survey-question[data-required="1"]'
+        ).forEach(function (question) {
+
+            const checkedInput = question.querySelector(
+                'input:checked'
+            );
+
+            if (!checkedInput && !firstMissing) {
+                firstMissing = question;
+            }
+
+        });
+
+        if (firstMissing) {
+
+            event.preventDefault();
+
+            const error = document.createElement('p');
+
+            error.className = 'survey-validation-error';
+            error.textContent = 'Please answer this required question.';
+
+            firstMissing.appendChild(error);
+
+            firstMissing.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+        }
+
+    });
+
+    updateChildOptions();
+
+});
+</script>
+
+<?php trip_page_footer(); ?>
