@@ -633,7 +633,6 @@ function getLocationDisplay($location) {
     </button>
 
     <!-- Shared JavaScript -->
-    <script src="script.js"></script>
-
+<script src="script.js?v=2"></script>
 </body>
 </html>

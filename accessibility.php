@@ -341,8 +341,7 @@ if (isset($_SESSION['tourist_id'])) {
     </button>
 
     <!-- Shared JavaScript -->
-    <script src="script.js"></script>
-
+<script src="script.js?v=2"></script>
     <!-- Footer -->
     <footer class="site-footer">
 

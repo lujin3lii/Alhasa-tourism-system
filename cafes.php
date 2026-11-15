@@ -305,7 +305,7 @@ function e($value) {
     </button>
 
     <!-- Shared JavaScript File -->
-    <script src="script.js"></script>
+<script src="script.js?v=2"></script>
 
     <!-- Footer -->
     <footer class="site-footer">

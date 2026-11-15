@@ -365,8 +365,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="business-registration-page">
 
     <div class="back-home-container">
-        <a href="business-owner-index.php" class="back-home-link">
-            &larr; Back to Home
+        <a href="role-selection.html" class="back-home-link">
+            &larr; Back to select role
         </a>
     </div>
 
