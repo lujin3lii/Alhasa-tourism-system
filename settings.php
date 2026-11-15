@@ -128,12 +128,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
         }
 
         .settings-page > h1 {
-            color: #386D73;
+            color: #075b45;
             margin-bottom: 8px;
         }
 
         .settings-intro {
-            color: #687779;
+            color: #68796e;
             margin-bottom: 30px;
         }
 
@@ -143,12 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             border-radius: 14px;
             padding: 22px;
             margin-bottom: 18px;
-            box-shadow: 0 3px 12px rgba(7, 91, 70, 0.045);
+            box-shadow: 0 3px 12px rgba(7, 91, 69, 0.045);
             transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
         .settings-section:hover {
-            box-shadow: 0 6px 18px rgba(7, 91, 70, 0.08);
+            box-shadow: 0 6px 18px rgba(7, 91, 69, 0.08);
             transform: translateY(-2px);
         }
 
@@ -157,13 +157,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             align-items: center;
             gap: 12px;
             font-size: 19px;
-            color: #386D73;
+            color: #075b45;
             margin-top: 0;
             margin-bottom: 12px;
         }
 
         .settings-section p {
-            color: #687779;
+            color: #68796e;
             margin-bottom: 16px;
         }
 
@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             justify-content: center;
             background: transparent;
             border-radius: 12px;
-            color: #386D73;
+            color: #075b45;
         }
 
         .settings-icon svg {
@@ -206,9 +206,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             justify-content: center;
             gap: 10px;
             padding: 10px 17px;
-            border: 1px solid #386D73 !important;
+            border: 1px solid #075b45 !important;
             border-radius: 8px;
-            background: #386D73 !important;
+            background: #075b45 !important;
             color: #ffffff !important;
             text-decoration: none !important;
             cursor: pointer;
@@ -279,18 +279,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             border: none;
             background: transparent;
             font-size: 26px;
-            color: #687779;
+            color: #68796e;
             cursor: pointer;
         }
 
         .feedback-modal-content h2 {
-            color: #386D73;
+            color: #075b45;
             margin-top: 0;
             padding-right: 25px;
         }
 
         .feedback-modal-content p {
-            color: #687779;
+            color: #68796e;
         }
 
         .feedback-stars {
@@ -322,17 +322,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             width: 100%;
             min-height: 120px;
             padding: 12px;
-            border: 1px solid #e3e9e7;
+            border: 1px solid #d7e1d9;
             border-radius: 9px;
             font: inherit;
             resize: vertical;
             box-sizing: border-box;
+            color: #263b32;
+            outline: none;
+        }
+
+        .feedback-modal-content textarea:focus {
+            border-color: #08775a;
+            box-shadow: 0 0 0 3px rgba(8, 119, 90, 0.12);
         }
 
         .feedback-message {
             margin-top: 12px;
             font-size: 14px;
-            color: #386D73;
+            color: #075b45;
         }
 
         .feedback-message.error {
@@ -340,7 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
         }
 
         .feedback-message.success {
-            color: #386D73;
+            color: #075b45;
         }
 
         @media (max-width: 600px) {
@@ -462,7 +469,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             View and manage your personal account information.
         </p>
 
-        <a href="my-account.html" class="settings-action">
+        <a href="my-account.php" class="settings-action">
 
             <span class="settings-icon">
                 <svg viewBox="0 0 24 24">
@@ -520,7 +527,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
             Learn more about Al-Ahsa Vision Hub and our project.
         </p>
 
-        <a href="About.html" class="settings-action">
+        <a href="About.php" class="settings-action">
             About Al-Ahsa Vision Hub
         </a>
 
@@ -671,7 +678,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
 </button>
 
 <!-- Shared JavaScript -->
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 
 <script>
     // Open feedback popup

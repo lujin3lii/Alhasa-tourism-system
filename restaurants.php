@@ -290,8 +290,7 @@ function e($value) {
             title="AI Assistant">
     </button>
 
-    <script src="script.js"></script>
-
+<script src="script.js?v=2"></script>
     <!-- Footer -->
     <footer class="site-footer">
 

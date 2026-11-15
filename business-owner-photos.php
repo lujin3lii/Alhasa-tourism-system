@@ -1,7 +1,174 @@
 <?php
 session_start();
+require_once __DIR__ . '/db.php';
 
+if (empty($_SESSION['business_owner_id'])) {
+    header('Location: business-owner-login.php');
+    exit;
+}
+
+$ownerId = (int) $_SESSION['business_owner_id'];
 $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
+
+$uploadMessage = '';
+$messageType = 'success';
+
+/* CSRF protection */
+if (empty($_SESSION['photo_upload_token'])) {
+    $_SESSION['photo_upload_token'] = bin2hex(random_bytes(32));
+}
+
+/* Create the photo table if it does not exist */
+$conn->query("
+    CREATE TABLE IF NOT EXISTS business_owner_photos (
+        photo_id INT AUTO_INCREMENT PRIMARY KEY,
+        business_owner_id INT NOT NULL,
+        photo_path VARCHAR(500) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+");
+
+/* Handle photo uploads */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_photos'])) {
+
+    if (
+        empty($_POST['photo_upload_token']) ||
+        !hash_equals($_SESSION['photo_upload_token'], $_POST['photo_upload_token'])
+    ) {
+        $uploadMessage = 'Invalid request. Please refresh the page and try again.';
+        $messageType = 'error';
+
+    } elseif (
+        !isset($_FILES['business_photos']) ||
+        empty($_FILES['business_photos']['name'][0])
+    ) {
+        $uploadMessage = 'Please select at least one photo.';
+        $messageType = 'error';
+
+    } else {
+
+        $uploadDirectory = __DIR__ . '/uploads/business-photos/';
+
+        if (!is_dir($uploadDirectory)) {
+            mkdir($uploadDirectory, 0755, true);
+        }
+
+        $allowedTypes = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp'
+        ];
+
+        $maxFileSize = 5 * 1024 * 1024;
+        $maxFiles = 10;
+
+        $files = $_FILES['business_photos'];
+        $totalFiles = count($files['name']);
+        $uploadedCount = 0;
+        $errors = [];
+
+        if ($totalFiles > $maxFiles) {
+            $errors[] = 'You can upload a maximum of 10 photos at a time.';
+        } else {
+
+            $checkImage = finfo_open(FILEINFO_MIME_TYPE);
+
+            for ($i = 0; $i < $totalFiles; $i++) {
+
+                if ($files['error'][$i] !== UPLOAD_ERR_OK) {
+                    $errors[] = 'One of the photos could not be uploaded.';
+                    continue;
+                }
+
+                if ($files['size'][$i] > $maxFileSize) {
+                    $errors[] = 'Each photo must be 5 MB or smaller.';
+                    continue;
+                }
+
+                $mimeType = finfo_file($checkImage, $files['tmp_name'][$i]);
+
+                if (!isset($allowedTypes[$mimeType])) {
+                    $errors[] = 'Only JPG, PNG, and WEBP images are allowed.';
+                    continue;
+                }
+
+                if (getimagesize($files['tmp_name'][$i]) === false) {
+                    $errors[] = 'An invalid image file was selected.';
+                    continue;
+                }
+
+                $extension = $allowedTypes[$mimeType];
+                $fileName = bin2hex(random_bytes(16)) . '.' . $extension;
+
+                $destination = $uploadDirectory . $fileName;
+                $relativePath = 'uploads/business-photos/' . $fileName;
+
+                if (move_uploaded_file($files['tmp_name'][$i], $destination)) {
+
+                    $stmt = $conn->prepare("
+                        INSERT INTO business_owner_photos
+                        (business_owner_id, photo_path)
+                        VALUES (?, ?)
+                    ");
+
+                    if ($stmt) {
+                        $stmt->bind_param('is', $ownerId, $relativePath);
+
+                        if ($stmt->execute()) {
+                            $uploadedCount++;
+                        } else {
+                            unlink($destination);
+                            $errors[] = 'A photo could not be saved to the database.';
+                        }
+
+                        $stmt->close();
+
+                    } else {
+                        unlink($destination);
+                        $errors[] = 'Could not save photo information.';
+                    }
+
+                } else {
+                    $errors[] = 'Could not save an uploaded photo.';
+                }
+            }
+
+            finfo_close($checkImage);
+        }
+
+        if ($uploadedCount > 0) {
+            $uploadMessage = $uploadedCount . ' photo(s) uploaded successfully.';
+            $messageType = 'success';
+        }
+
+        if (!empty($errors)) {
+            $uploadMessage .= ($uploadMessage ? ' ' : '') . implode(' ', array_unique($errors));
+            $messageType = $uploadedCount > 0 ? 'success' : 'error';
+        }
+    }
+}
+
+/* Fetch this owner's saved photos */
+$photos = [];
+
+$stmt = $conn->prepare("
+    SELECT photo_id, photo_path, created_at
+    FROM business_owner_photos
+    WHERE business_owner_id = ?
+    ORDER BY created_at DESC
+");
+
+if ($stmt) {
+    $stmt->bind_param('i', $ownerId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $photos[] = $row;
+    }
+
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +229,10 @@ $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
         .photo-upload-box p { color: #68796e; font-size: 14px; line-height: 1.8; }
         .photo-preview-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
         .photo-preview { min-height: 130px; display: flex; align-items: center; justify-content: center; padding: 15px; border: 1px solid #e1e9e2; border-radius: 13px; background: #fbfdfb; color: #68796e; text-align: center; overflow-wrap: anywhere; }
-        .photo-preview img { display: block; max-width: 100%; max-height: 200px; margin: 0 auto 8px; border-radius: 9px; }
+        .photo-preview img { display: block; max-width: 100%; max-height: 200px; margin: 0 auto 8px; border-radius: 9px; object-fit: contain; }
+        .upload-message { margin-bottom: 20px; padding: 14px 16px; border-radius: 10px; font-size: 14px; line-height: 1.7; }
+        .upload-message.success { background: #eaf5ec; color: #075b45; border: 1px solid #c9e2ce; }
+        .upload-message.error { background: #fff0f0; color: #a12828; border: 1px solid #efcccc; }
         @media (max-width:600px) {
             .business-page { padding: 120px 15px 35px; }
             .business-heading h1 { font-size: 26px; }
@@ -154,26 +324,67 @@ $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
                 </div>
 
                 <div class="business-card-body">
+
+                    <?php if ($uploadMessage): ?>
+                        <div class="upload-message <?= $messageType ?>">
+                            <?= htmlspecialchars($uploadMessage, ENT_QUOTES, 'UTF-8') ?>
+                        </div>
+                    <?php endif; ?>
+
                     <h3 class="details-heading">Upload Photos</h3>
-                    <div class="photo-upload-box">
-                        <p>Choose clear photos of your restaurant, café, shop, or other business. You can select more than one image.</p>
-                        <div class="business-field">
-                            <label for="business-photos">Select image files</label>
-                            <input type="file" id="business-photos" name="business-photos" accept="image/*" multiple>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="photo_upload_token"
+                               value="<?= htmlspecialchars($_SESSION['photo_upload_token'], ENT_QUOTES, 'UTF-8') ?>">
+
+                        <div class="photo-upload-box">
+                            <p>Choose clear photos of your restaurant, café, shop, or other business. You can select more than one image.</p>
+
+                            <div class="business-field">
+                                <label for="business-photos">Select image files</label>
+                                <input type="file"
+                                       id="business-photos"
+                                       name="business_photos[]"
+                                       accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                       multiple
+                                       required>
+                            </div>
+
+                            <p>Allowed formats: JPG, PNG, WEBP. Maximum size: 5 MB per photo. Maximum 10 photos per upload.</p>
+
+                            <div class="business-actions">
+                                <button type="button" class="business-button" id="preview-photos">▧ Preview Selected Photos</button>
+                                <button type="submit" name="upload_photos" class="business-button">Upload Photos</button>
+                            </div>
                         </div>
-                        <div class="business-actions">
-                            <button type="button" class="business-button" id="preview-photos">▧ Preview Selected Photos</button>
-                        </div>
-                    </div>
+                    </form>
 
                     <h3 class="details-heading" style="margin-top:28px;">Selected Photos</h3>
+
                     <div class="photo-preview-grid" id="photo-preview-grid">
                         <div class="photo-preview">Your selected photo previews will appear here.</div>
                     </div>
 
-                    <div class="business-actions">
-                        <button type="button" class="business-button" onclick="alert('Photo upload storage requires backend integration.')">Upload Photos</button>
+                    <h3 class="details-heading" style="margin-top:35px;">Uploaded Photos</h3>
+
+                    <div class="photo-preview-grid">
+                        <?php if (empty($photos)): ?>
+                            <div class="photo-preview">No photos have been uploaded yet.</div>
+                        <?php else: ?>
+                            <?php foreach ($photos as $photo): ?>
+                                <div class="photo-preview">
+                                    <div>
+                                        <img
+                                            src="<?= htmlspecialchars($photo['photo_path'], ENT_QUOTES, 'UTF-8') ?>"
+                                            alt="Business photo"
+                                            loading="lazy">
+                                        <div>Uploaded photo</div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
+
                 </div>
             </section>
 
@@ -181,7 +392,7 @@ $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
                 <div class="business-note-icon" aria-hidden="true">ⓘ</div>
                 <div>
                     <h3>Photo Tips</h3>
-                    <p>Use bright, clear images that represent your business accurately. Permanent photo uploads require connecting this page to your backend.</p>
+                    <p>Use bright, clear images that represent your business accurately. Uploaded photos are saved to your business owner account.</p>
                 </div>
             </section>
 
@@ -263,7 +474,7 @@ $ownerName = $_SESSION['business_owner_name'] ?? 'My Account';
     </button>
 
     <!-- Main JavaScript -->
-    <script src="script.js"></script>
+<script src="script.js?v=2"></script>
 
 </body>
 </html>
