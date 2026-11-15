@@ -21,10 +21,7 @@ function trip_normalize_digits($value) {
 /* Identify the trip duration from the selected survey option. */
 function trip_get_days($questionText, $optionText) {
     $question = mb_strtolower($questionText, 'UTF-8');
-    $option = mb_strtolower(
-        trip_normalize_digits($optionText),
-        'UTF-8'
-    );
+    $option = mb_strtolower(trip_normalize_digits($optionText), 'UTF-8');
 
     $isDurationQuestion =
         strpos($question, 'duration') !== false ||
@@ -36,26 +33,20 @@ function trip_get_days($questionText, $optionText) {
         mb_strpos($question, 'الإقامة') !== false ||
         mb_strpos($question, 'الاقامة') !== false;
 
-    if (!$isDurationQuestion) {
-        return null;
-    }
+    if (!$isDurationQuestion) return null;
 
     if (
         strpos($option, 'more than a week') !== false ||
         strpos($option, 'more than one week') !== false ||
         mb_strpos($option, 'أكثر من أسبوع') !== false ||
         mb_strpos($option, 'اكثر من اسبوع') !== false
-    ) {
-        return 10;
-    }
+    ) return 10;
 
     if (
         strpos($option, 'week') !== false ||
         mb_strpos($option, 'أسبوع') !== false ||
         mb_strpos($option, 'اسبوع') !== false
-    ) {
-        return 7;
-    }
+    ) return 7;
 
     if (preg_match('/(\d+)\s*[-–]\s*(\d+)/u', $option, $range)) {
         return (int)round(((int)$range[1] + (int)$range[2]) / 2);
@@ -63,32 +54,148 @@ function trip_get_days($questionText, $optionText) {
 
     if (preg_match('/(\d+)/u', $option, $number)) {
         $days = (int)$number[1];
-
-        if ($days >= 1 && $days <= 14) {
-            return $days;
-        }
+        if ($days >= 1 && $days <= 14) return $days;
     }
 
     $arabicNumbers = [
-        'يوم واحد' => 1,
-        'يومين' => 2,
-        'ثلاثة أيام' => 3,
-        'ثلاث ايام' => 3,
-        'أربعة أيام' => 4,
-        'اربعة ايام' => 4,
-        'خمسة أيام' => 5,
-        'خمسة ايام' => 5,
-        'ستة أيام' => 6,
-        'ست ايام' => 6
+        'يوم واحد' => 1, 'يومين' => 2,
+        'ثلاثة أيام' => 3, 'ثلاث ايام' => 3,
+        'أربعة أيام' => 4, 'اربعة ايام' => 4,
+        'خمسة أيام' => 5, 'خمسة ايام' => 5,
+        'ستة أيام' => 6, 'ست ايام' => 6
     ];
 
     foreach ($arabicNumbers as $word => $number) {
-        if (mb_strpos($option, $word) !== false) {
-            return $number;
-        }
+        if (mb_strpos($option, $word) !== false) return $number;
     }
 
     return null;
+}
+
+/* Convert a 12-hour or 24-hour time into minutes after midnight. */
+function trip_time_minutes($time) {
+    $time = trim(strtoupper(str_replace('.', '', $time)));
+
+    if (!preg_match('/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/', $time, $m)) {
+        return null;
+    }
+
+    $hour = (int)$m[1];
+    $minute = (int)$m[2];
+    $ampm = $m[3] ?? '';
+
+    if ($minute > 59) return null;
+
+    if ($ampm !== '') {
+        if ($hour < 1 || $hour > 12) return null;
+        if ($ampm === 'AM') {
+            if ($hour === 12) $hour = 0;
+        } else {
+            if ($hour !== 12) $hour += 12;
+        }
+    } elseif ($hour > 23) {
+        return null;
+    }
+
+    return ($hour * 60) + $minute;
+}
+
+/*
+ * Check whether a place is open during the proposed visit.
+ * Recognized examples:
+ * 12:00 AM - 6:00 AM, 4:00 PM - 12:00 AM
+ * Closed on Friday
+ *
+ * Unknown opening-hours formats are left eligible rather than
+ * incorrectly excluding a place.
+ */
+function trip_place_is_open($openingHours, $date, $start, $end) {
+    $hours = trim((string)$openingHours);
+
+    if ($hours === '') return true;
+
+    $dayName = strtolower(date('l', strtotime($date)));
+
+    $dayNames = [
+        'sunday' => ['sunday', 'الأحد'],
+        'monday' => ['monday', 'الاثنين', 'الإثنين'],
+        'tuesday' => ['tuesday', 'الثلاثاء'],
+        'wednesday' => ['wednesday', 'الأربعاء', 'الاربعاء'],
+        'thursday' => ['thursday', 'الخميس'],
+        'friday' => ['friday', 'الجمعة'],
+        'saturday' => ['saturday', 'السبت']
+    ];
+
+    $todayNames = $dayNames[$dayName] ?? [];
+
+    foreach ($todayNames as $name) {
+        if (preg_match('/closed\s+on\s+' . preg_quote($name, '/') . '/iu', $hours)) {
+            return false;
+        }
+
+        if (preg_match('/' . preg_quote($name, '/') . '\s*:\s*closed/iu', $hours)) {
+            return false;
+        }
+
+        if (preg_match('/' . preg_quote($name, '/') . '\s*-\s*closed/iu', $hours)) {
+            return false;
+        }
+
+        if (preg_match('/' . preg_quote($name, '/') . '\s+مغلق/iu', $hours)) {
+            return false;
+        }
+    }
+
+    $startMinutes = trip_time_minutes($start);
+    $endMinutes = trip_time_minutes($end);
+
+    if ($startMinutes === null || $endMinutes === null) return true;
+
+    preg_match_all(
+        '/(\d{1,2}:\d{2}\s*(?:AM|PM)?)\s*[-–]\s*(\d{1,2}:\d{2}\s*(?:AM|PM)?)/i',
+        $hours,
+        $matches,
+        PREG_SET_ORDER
+    );
+
+    if (!$matches) return true;
+
+    foreach ($matches as $match) {
+        $open = trip_time_minutes($match[1]);
+        $close = trip_time_minutes($match[2]);
+
+        if ($open === null || $close === null) continue;
+
+        /* Midnight closing time. */
+        if ($close === 0 && $open > 0) $close = 1440;
+
+        if ($startMinutes >= $open && $endMinutes <= $close) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* Check if a seasonal place has an event active on the visit date. */
+function trip_place_is_in_season($place, $date) {
+    if (empty($place['seasonal_events'])) return true;
+
+    foreach ($place['seasonal_events'] as $event) {
+        $startDate = $event['start_date'] ?? '';
+        $endDate = $event['end_date'] ?? '';
+
+        if (
+            $startDate !== '' &&
+            $endDate !== '' &&
+            $date >= $startDate &&
+            $date <= $endDate
+        ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* Only accept POST requests. */
@@ -154,7 +261,6 @@ $answersToSave = [];
 $days = null;
 
 foreach ($questions as $questionId => $question) {
-
     $questionText = trim($question['Question_Text']);
     $questionType = strtolower(trim($question['Question_Type']));
 
@@ -166,9 +272,7 @@ foreach ($questions as $questionId => $question) {
     $submitted = $submittedAnswers[$questionId] ?? [];
 
     if ($isMultiple) {
-        if (!is_array($submitted)) {
-            $submitted = [];
-        }
+        if (!is_array($submitted)) $submitted = [];
     } else {
         if (is_array($submitted)) {
             $submitted = array_slice($submitted, 0, 1);
@@ -190,14 +294,11 @@ foreach ($questions as $questionId => $question) {
         trip_fail('Please answer all required survey questions.');
     }
 
-    if (!$submitted) {
-        continue;
-    }
+    if (!$submitted) continue;
 
     $selectedTexts = [];
 
     foreach ($submitted as $selectedId) {
-
         if (!is_scalar($selectedId) || !ctype_digit((string)$selectedId)) {
             trip_fail('Invalid survey answer. Please submit the survey again.');
         }
@@ -212,7 +313,6 @@ foreach ($questions as $questionId => $question) {
         }
 
         $optionText = $options[$optionId]['option_text'];
-
         $selectedTexts[] = $optionText;
 
         $answersToSave[] = [
@@ -222,9 +322,7 @@ foreach ($questions as $questionId => $question) {
 
         $detectedDays = trip_get_days($questionText, $optionText);
 
-        if ($detectedDays !== null) {
-            $days = $detectedDays;
-        }
+        if ($detectedDays !== null) $days = $detectedDays;
     }
 
     $answersForAI[] = [
@@ -249,6 +347,19 @@ $preferences = [
 ];
 
 $_SESSION['trip_survey'] = $preferences;
+
+/*
+ * Use a submitted trip date if one exists.
+ * The current survey does not require a new database question.
+ * If no date is submitted, the trip starts today.
+ */
+$tripStartDate = $_POST['trip_start_date'] ?? date('Y-m-d');
+
+$dateObject = DateTime::createFromFormat('Y-m-d', $tripStartDate);
+
+if (!$dateObject || $dateObject->format('Y-m-d') !== $tripStartDate) {
+    $tripStartDate = date('Y-m-d');
+}
 
 /* Load real published places only. */
 $sql = "
@@ -276,7 +387,8 @@ while ($row = $result->fetch_assoc()) {
         'description' => $row['Short_Description'] ?: $row['Description'],
         'location' => $row['Location'],
         'opening_hours' => $row['Opening_Hours'],
-        'website' => $row['Website']
+        'website' => $row['Website'],
+        'seasonal_events' => []
     ];
 }
 
@@ -284,67 +396,97 @@ if (!$places) {
     trip_fail('There are no published places yet. Publish places in the Places table and try again.');
 }
 
+/* Load seasonal event dates using the existing seasonal_events table. */
+$seasonalResult = $conn->query("
+    SELECT Place_ID, Start_Date, End_Date
+    FROM seasonal_events
+");
+
+if (!$seasonalResult) {
+    trip_fail('Could not load seasonal event dates: ' . $conn->error);
+}
+
+$seasonalMap = [];
+
+while ($event = $seasonalResult->fetch_assoc()) {
+    $eventPlaceId = (int)$event['Place_ID'];
+
+    $seasonalMap[$eventPlaceId][] = [
+        'start_date' => $event['Start_Date'],
+        'end_date' => $event['End_Date']
+    ];
+}
+
+foreach ($places as &$place) {
+    if (isset($seasonalMap[$place['place_id']])) {
+        $place['seasonal_events'] = $seasonalMap[$place['place_id']];
+    }
+}
+unset($place);
+
+/* Build the actual date for each itinerary day. */
+$dayDates = [];
+
+for ($day = 1; $day <= $days; $day++) {
+    $dayDates[$day] = date(
+        'Y-m-d',
+        strtotime('+' . ($day - 1) . ' days', strtotime($tripStartDate))
+    );
+}
+
+/* Build fallback candidates based on survey preferences. */
+$rankedPlaces = $places;
+
+$keywords = [];
+
+foreach ($answersForAI as $answer) {
+    foreach ($answer['answers'] as $text) {
+        $words = preg_split('/[\s،,؛;]+/u', (string)$text);
+
+        foreach ($words as $word) {
+            $word = trim($word);
+
+            if (mb_strlen($word, 'UTF-8') >= 3) {
+                $keywords[] = mb_strtolower($word, 'UTF-8');
+            }
+        }
+    }
+}
+
+foreach ($rankedPlaces as &$place) {
+    $placeText = mb_strtolower(
+        $place['name'] . ' ' .
+        $place['type'] . ' ' .
+        $place['description'] . ' ' .
+        $place['location'],
+        'UTF-8'
+    );
+
+    $score = 0;
+
+    foreach ($keywords as $keyword) {
+        if (mb_strpos($placeText, $keyword) !== false) $score++;
+    }
+
+    $place['_score'] = $score;
+}
+unset($place);
+
+usort($rankedPlaces, function ($a, $b) {
+    return $b['_score'] <=> $a['_score'];
+});
+
 /*
  * Local fallback:
- * Create an itinerary from published database places
- * when Gemini is unavailable.
+ * Spread different place types across each day.
+ * Only select places that are in season and open at the proposed time.
  */
-$createFallbackPlan = function () use ($places, $days, $answersForAI) {
-
-    $keywords = [];
-
-    foreach ($answersForAI as $answer) {
-        foreach ($answer['answers'] as $text) {
-
-            $words = preg_split('/[\s،,؛;]+/u', (string)$text);
-
-            foreach ($words as $word) {
-                $word = trim($word);
-
-                if (mb_strlen($word, 'UTF-8') >= 3) {
-                    $keywords[] = mb_strtolower($word, 'UTF-8');
-                }
-            }
-        }
-    }
-
-    $rankedPlaces = $places;
-
-    foreach ($rankedPlaces as &$place) {
-
-        $placeText = mb_strtolower(
-            $place['name'] . ' ' .
-            $place['type'] . ' ' .
-            $place['description'] . ' ' .
-            $place['location'],
-            'UTF-8'
-        );
-
-        $score = 0;
-
-        foreach ($keywords as $keyword) {
-            if (mb_strpos($placeText, $keyword) !== false) {
-                $score++;
-            }
-        }
-
-        $place['_score'] = $score;
-    }
-
-    unset($place);
-
-    usort($rankedPlaces, function ($a, $b) {
-        return $b['_score'] <=> $a['_score'];
-    });
-
+$createFallbackPlan = function () use (
+    $rankedPlaces,
+    $days,
+    $dayDates
+) {
     $dayPlans = [];
-
-    for ($day = 1; $day <= $days; $day++) {
-        $dayPlans[] = [
-            'day_number' => $day,
-            'items' => []
-        ];
-    }
 
     $times = [
         ['09:00', '10:30'],
@@ -352,26 +494,76 @@ $createFallbackPlan = function () use ($places, $days, $answersForAI) {
         ['16:00', '17:30']
     ];
 
-    $selectedPlaces = array_slice($rankedPlaces, 0, $days * 3);
+    $usedPlaces = [];
 
-    foreach ($selectedPlaces as $index => $place) {
-
-        $dayIndex = (int)floor($index / 3);
-        $timeIndex = $index % 3;
-
-        $dayPlans[$dayIndex]['items'][] = [
-            'place_id' => $place['place_id'],
-            'start_time' => $times[$timeIndex][0],
-            'end_time' => $times[$timeIndex][1],
-            'reason_chosen' =>
-                'Selected from published Al-Ahsa places based on your survey preferences.'
+    for ($day = 1; $day <= $days; $day++) {
+        $dayPlans[$day] = [
+            'day_number' => $day,
+            'items' => []
         ];
+
+        $usedTypes = [];
+
+        foreach ($times as $time) {
+            $chosen = null;
+
+            /* Prefer a different place type in the same day. */
+            foreach ([true, false] as $preferDifferentType) {
+                foreach ($rankedPlaces as $place) {
+                    $id = $place['place_id'];
+                    $type = strtolower(trim((string)$place['type']));
+
+                    if (isset($usedPlaces[$id])) continue;
+
+                    if (
+                        $preferDifferentType &&
+                        $type !== '' &&
+                        isset($usedTypes[$type])
+                    ) {
+                        continue;
+                    }
+
+                    if (!trip_place_is_in_season($place, $dayDates[$day])) {
+                        continue;
+                    }
+
+                    if (!trip_place_is_open(
+                        $place['opening_hours'],
+                        $dayDates[$day],
+                        $time[0],
+                        $time[1]
+                    )) {
+                        continue;
+                    }
+
+                    $chosen = $place;
+                    break 2;
+                }
+            }
+
+            if ($chosen === null) continue;
+
+            $id = $chosen['place_id'];
+            $type = strtolower(trim((string)$chosen['type']));
+
+            $dayPlans[$day]['items'][] = [
+                'place_id' => $id,
+                'start_time' => $time[0],
+                'end_time' => $time[1],
+                'reason_chosen' =>
+                    'Selected based on your survey preferences, opening hours and seasonal availability.'
+            ];
+
+            $usedPlaces[$id] = true;
+
+            if ($type !== '') $usedTypes[$type] = true;
+        }
     }
 
     return [
         'title' => 'Your Personalized Al-Ahsa Trip',
-        'intro' => 'A trip planned using your survey answers and available published places.',
-        'days' => $dayPlans
+        'intro' => 'A trip planned using your survey answers, available published places and their opening times.',
+        'days' => array_values($dayPlans)
     ];
 };
 
@@ -387,7 +579,6 @@ $geminiReady =
     defined('GEMINI_API_URL');
 
 if ($geminiReady) {
-
     $prompt = "
 You are an expert Al-Ahsa tourism trip planner.
 
@@ -400,8 +591,21 @@ Rules:
 - Do not repeat places.
 - Respect the survey answers.
 - Use 24-hour HH:MM times.
+- Respect the opening_hours of each place.
+- Do not schedule a place outside its opening hours.
+- Seasonal places may ONLY be scheduled on dates inside their supplied seasonal event Start_Date and End_Date.
+- Do not schedule seasonal events before they start or after they end.
+- Each day should have a logical mix of different place types when possible.
+- Do not put all cafes, all restaurants, or all activities on one day when other types are available.
+- Arrange visits in a sensible order: morning, midday and afternoon/evening.
+- If a place is not suitable for a particular day, choose another suitable place.
 - Return valid JSON only.
 - Keep the response concise.
+
+Trip start date: {$tripStartDate}
+
+Trip day dates:
+" . json_encode($dayDates, JSON_UNESCAPED_UNICODE) . "
 
 Required JSON:
 {
@@ -460,11 +664,9 @@ Published places:
     $requestBody = json_encode($payload, JSON_UNESCAPED_UNICODE);
 
     if ($requestBody !== false) {
-
         $ch = curl_init($apiUrl);
 
         if ($ch !== false) {
-
             curl_setopt_array($ch, [
                 CURLOPT_POST => true,
                 CURLOPT_RETURNTRANSFER => true,
@@ -483,7 +685,6 @@ Published places:
             curl_close($ch);
 
             if ($raw !== false && $httpCode >= 200 && $httpCode < 300) {
-
                 $api = json_decode($raw, true);
                 $outputText = '';
 
@@ -528,7 +729,6 @@ $hasValidPlanPlace = false;
 
 foreach ($plan['days'] as $day) {
     foreach (($day['items'] ?? []) as $item) {
-
         $placeId = (int)($item['place_id'] ?? 0);
 
         if (isset($placeMap[$placeId])) {
@@ -542,21 +742,34 @@ if (!$hasValidPlanPlace) {
     $plan = $createFallbackPlan();
 }
 
+/*
+ * Clean the Gemini plan:
+ * - Reject invalid IDs and duplicate places.
+ * - Reject places outside their seasonal dates.
+ * - Reject places closed at the proposed visit time.
+ * - Avoid repeating the same type during a day when alternatives exist.
+ */
 $cleanDays = [];
 $used = [];
 
 foreach ($plan['days'] as $day) {
-
     $dayNumber = (int)($day['day_number'] ?? 0);
 
-    if ($dayNumber < 1 || $dayNumber > $days) {
-        continue;
-    }
+    if ($dayNumber < 1 || $dayNumber > $days) continue;
 
     $cleanItems = [];
+    $usedTypesToday = [];
 
-    foreach (($day['items'] ?? []) as $item) {
+    $items = $day['items'] ?? [];
 
+    usort($items, function ($a, $b) {
+        return strcmp(
+            (string)($a['start_time'] ?? '09:00'),
+            (string)($b['start_time'] ?? '09:00')
+        );
+    });
+
+    foreach ($items as $item) {
         $placeId = (int)($item['place_id'] ?? 0);
 
         if (
@@ -581,6 +794,27 @@ foreach ($plan['days'] as $day) {
             $end = date('H:i', strtotime($start . ' +1 hour'));
         }
 
+        $place = $placeMap[$placeId];
+
+        if (!trip_place_is_in_season($place, $dayDates[$dayNumber])) {
+            continue;
+        }
+
+        if (!trip_place_is_open(
+            $place['opening_hours'],
+            $dayDates[$dayNumber],
+            $start,
+            $end
+        )) {
+            continue;
+        }
+
+        $type = strtolower(trim((string)$place['type']));
+
+        /*
+         * Prefer variety. If another place of a different type is
+         * available, the fallback step below can fill the slot.
+         */
         $cleanItems[] = [
             'place_id' => $placeId,
             'start_time' => $start,
@@ -593,6 +827,8 @@ foreach ($plan['days'] as $day) {
         ];
 
         $used[$placeId] = true;
+
+        if ($type !== '') $usedTypesToday[$type] = true;
     }
 
     if ($cleanItems) {
@@ -600,17 +836,125 @@ foreach ($plan['days'] as $day) {
     }
 }
 
+/*
+ * Fill missing days or rejected visits using suitable places.
+ * This also helps balance place types across the day.
+ */
+$standardTimes = [
+    ['09:00', '10:30'],
+    ['11:00', '12:30'],
+    ['16:00', '17:30']
+];
+
+for ($dayNumber = 1; $dayNumber <= $days; $dayNumber++) {
+    if (!isset($cleanDays[$dayNumber])) {
+        $cleanDays[$dayNumber] = [];
+    }
+
+    $existingCount = count($cleanDays[$dayNumber]);
+
+    if ($existingCount >= 3) continue;
+
+    $usedTypesToday = [];
+
+    foreach ($cleanDays[$dayNumber] as $existingItem) {
+        $existingPlace = $placeMap[$existingItem['place_id']] ?? null;
+
+        if ($existingPlace) {
+            $existingType = strtolower(trim((string)$existingPlace['type']));
+            if ($existingType !== '') $usedTypesToday[$existingType] = true;
+        }
+    }
+
+    foreach ($standardTimes as $timeSlot) {
+        if (count($cleanDays[$dayNumber]) >= 3) break;
+
+        $slotAlreadyUsed = false;
+
+        foreach ($cleanDays[$dayNumber] as $existingItem) {
+            if ($existingItem['start_time'] === $timeSlot[0]) {
+                $slotAlreadyUsed = true;
+                break;
+            }
+        }
+
+        if ($slotAlreadyUsed) continue;
+
+        $chosen = null;
+
+        foreach ([true, false] as $preferDifferentType) {
+            foreach ($rankedPlaces as $candidate) {
+                $candidateId = $candidate['place_id'];
+                $candidateType = strtolower(trim((string)$candidate['type']));
+
+                if (isset($used[$candidateId])) continue;
+
+                if (
+                    $preferDifferentType &&
+                    $candidateType !== '' &&
+                    isset($usedTypesToday[$candidateType])
+                ) {
+                    continue;
+                }
+
+                if (!trip_place_is_in_season($candidate, $dayDates[$dayNumber])) {
+                    continue;
+                }
+
+                if (!trip_place_is_open(
+                    $candidate['opening_hours'],
+                    $dayDates[$dayNumber],
+                    $timeSlot[0],
+                    $timeSlot[1]
+                )) {
+                    continue;
+                }
+
+                $chosen = $candidate;
+                break 2;
+            }
+        }
+
+        if ($chosen === null) continue;
+
+        $candidateId = $chosen['place_id'];
+        $candidateType = strtolower(trim((string)$chosen['type']));
+
+        $cleanDays[$dayNumber][] = [
+            'place_id' => $candidateId,
+            'start_time' => $timeSlot[0],
+            'end_time' => $timeSlot[1],
+            'reason_chosen' =>
+                'Added based on your survey preferences, opening hours and seasonal availability.'
+        ];
+
+        $used[$candidateId] = true;
+
+        if ($candidateType !== '') {
+            $usedTypesToday[$candidateType] = true;
+        }
+    }
+
+    usort($cleanDays[$dayNumber], function ($a, $b) {
+        return strcmp($a['start_time'], $b['start_time']);
+    });
+}
+
 ksort($cleanDays);
 
+/* Remove empty days from the saved itinerary. */
+$cleanDays = array_filter($cleanDays, function ($items) {
+    return !empty($items);
+});
+
 if (!$cleanDays) {
-    trip_fail('No suitable published places could be added to this itinerary. Please publish more places and try again.');
+    trip_fail('No suitable published places could be added to this itinerary. Please check the opening hours and seasonal event dates, then try again.');
 }
 
 /* Save survey, survey answers, itinerary and itinerary items. */
 $conn->begin_transaction();
 
 try {
-
     $touristId = (int)$_SESSION['tourist_id'];
 
     /* Save survey. */
@@ -643,7 +987,6 @@ try {
     }
 
     foreach ($answersToSave as $answer) {
-
         $questionId = $answer['question_id'];
         $optionId = $answer['option_id'];
 
@@ -700,11 +1043,9 @@ try {
     }
 
     foreach ($cleanDays as $dayNumber => $items) {
-
         $sequence = 0;
 
         foreach ($items as $item) {
-
             $sequence++;
 
             $placeId = $item['place_id'];
@@ -748,7 +1089,6 @@ try {
     exit;
 
 } catch (Throwable $e) {
-
     $conn->rollback();
 
     trip_fail(

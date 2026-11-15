@@ -97,37 +97,223 @@ function suggested_get_places($conn)
 }
 
 /*
- * Select places according to the selected trip theme.
- * Matching places appear first.
- * Other published places fill any remaining slots.
+ * Fetch seasonal event dates.
  */
-function suggested_select_places($allPlaces, $keywords, $limit)
+function suggested_get_seasonal_events($conn)
 {
+    $events = [];
+
+    $result = $conn->query("
+        SELECT Place_ID, Start_Date, End_Date
+        FROM seasonal_events
+    ");
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $events[(int)$row['Place_ID']][] = $row;
+        }
+    }
+
+    return $events;
+}
+
+/*
+ * Check whether a place is available during the trip date.
+ */
+function suggested_is_in_season($placeId, $date, $seasonalEvents)
+{
+    if (empty($seasonalEvents[$placeId])) {
+        return true;
+    }
+
+    foreach ($seasonalEvents[$placeId] as $event) {
+
+        $startDate = $event['Start_Date'] ?? '';
+        $endDate = $event['End_Date'] ?? '';
+
+        if (
+            $startDate !== '' &&
+            $endDate !== '' &&
+            $date >= $startDate &&
+            $date <= $endDate
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*
+ * Convert a time such as 04:00 PM or 16:00 into minutes.
+ */
+function suggested_time_minutes($time)
+{
+    $time = trim($time);
+
+    if (!preg_match(
+        '/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i',
+        $time,
+        $matches
+    )) {
+        return null;
+    }
+
+    $hour = (int)$matches[1];
+    $minute = (int)$matches[2];
+    $period = strtoupper($matches[3] ?? '');
+
+    if ($hour > 23 || $minute > 59) {
+        return null;
+    }
+
+    if ($period === 'PM' && $hour < 12) {
+        $hour += 12;
+    } elseif ($period === 'AM' && $hour === 12) {
+        $hour = 0;
+    }
+
+    return ($hour * 60) + $minute;
+}
+
+/*
+ * Check whether a place is open during the proposed visit time.
+ */
+function suggested_is_open_at($openingHours, $date, $startTime, $endTime)
+{
+    $openingHours = trim((string)$openingHours);
+
+    if ($openingHours === '') {
+        return true;
+    }
+
+    $weekday = strtolower(date('l', strtotime($date)));
+
+    $arabicWeekdays = [
+        'sunday' => 'الأحد',
+        'monday' => 'الإثنين',
+        'tuesday' => 'الثلاثاء',
+        'wednesday' => 'الأربعاء',
+        'thursday' => 'الخميس',
+        'friday' => 'الجمعة',
+        'saturday' => 'السبت'
+    ];
+
+    $weekdayName = $arabicWeekdays[$weekday] ?? '';
+
+    $closedPatterns = [
+        '/closed\s+(?:on\s+)?' . preg_quote($weekday, '/') . '/i',
+        '/مغلق(?:ة)?\s+(?:يوم\s+)?' . preg_quote($weekdayName, '/') . '/u'
+    ];
+
+    foreach ($closedPatterns as $pattern) {
+        if (preg_match($pattern, $openingHours)) {
+            return false;
+        }
+    }
+
+    if (
+        preg_match('/closed\s+every\s+day/i', $openingHours) ||
+        preg_match('/مغلق(?:ة)?\s+يومي[اً]/u', $openingHours)
+    ) {
+        return false;
+    }
+
+    preg_match_all(
+        '/(\d{1,2}:\d{2}\s*(?:AM|PM)?)\s*[-–]\s*(\d{1,2}:\d{2}\s*(?:AM|PM)?)/i',
+        $openingHours,
+        $matches,
+        PREG_SET_ORDER
+    );
+
+    if (empty($matches)) {
+        return true;
+    }
+
+    $visitStart = suggested_time_minutes($startTime);
+    $visitEnd = suggested_time_minutes($endTime);
+
+    if ($visitStart === null || $visitEnd === null) {
+        return true;
+    }
+
+    foreach ($matches as $range) {
+
+        $open = suggested_time_minutes($range[1]);
+        $close = suggested_time_minutes($range[2]);
+
+        if ($open === null || $close === null) {
+            continue;
+        }
+
+        if ($close <= $open) {
+            $close += 1440;
+        }
+
+        if ($visitEnd <= $visitStart) {
+            $visitEnd += 1440;
+        }
+
+        if (
+            $visitStart >= $open &&
+            $visitEnd <= $close
+        ) {
+            return true;
+        }
+
+        if (
+            $visitStart + 1440 >= $open &&
+            $visitEnd + 1440 <= $close
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*
+ * Get a simple keyword score for each place.
+ */
+function suggested_place_score($place, $keywords)
+{
+    $searchText = implode(' ', [
+        $place['Name'] ?? '',
+        $place['Place_Type'] ?? '',
+        $place['Short_Description'] ?? '',
+        $place['Description'] ?? ''
+    ]);
+
+    $score = 0;
+
+    foreach ($keywords as $keyword) {
+        if (
+            $keyword !== '' &&
+            mb_stripos($searchText, $keyword) !== false
+        ) {
+            $score++;
+        }
+    }
+
+    return $score;
+}
+
+/*
+ * Build a varied daily plan.
+ */
+function suggested_build_plan(
+    $allPlaces,
+    $keywords,
+    $numberOfDays,
+    $seasonalEvents
+) {
     $ranked = [];
 
     foreach ($allPlaces as $place) {
 
-        $searchText = implode(' ', [
-            $place['Name'] ?? '',
-            $place['Place_Type'] ?? '',
-            $place['Short_Description'] ?? '',
-            $place['Description'] ?? ''
-        ]);
-
-        $score = 0;
-
-        foreach ($keywords as $keyword) {
-            if (
-                $keyword !== '' &&
-                mb_stripos($searchText, $keyword) !== false
-            ) {
-                $score++;
-            }
-        }
-
         $ranked[] = [
             'place' => $place,
-            'score' => $score
+            'score' => suggested_place_score($place, $keywords)
         ];
     }
 
@@ -135,18 +321,91 @@ function suggested_select_places($allPlaces, $keywords, $limit)
         return $b['score'] <=> $a['score'];
     });
 
-    $selected = [];
+    $times = [
+        ['09:00:00', '10:30:00'],
+        ['11:00:00', '12:30:00'],
+        ['16:00:00', '17:30:00']
+    ];
 
-    foreach ($ranked as $item) {
+    $plan = [];
+    $usedPlaces = [];
 
-        if (count($selected) >= $limit) {
-            break;
+    for ($dayNumber = 1; $dayNumber <= $numberOfDays; $dayNumber++) {
+
+        $dayDate = date(
+            'Y-m-d',
+            strtotime('+' . ($dayNumber - 1) . ' days')
+        );
+
+        $usedTypes = [];
+
+        for ($slot = 0; $slot < 3; $slot++) {
+
+            $startTime = $times[$slot][0];
+            $endTime = $times[$slot][1];
+
+            $selected = null;
+
+            for ($pass = 0; $pass < 2 && !$selected; $pass++) {
+
+                foreach ($ranked as $rankedPlace) {
+
+                    $place = $rankedPlace['place'];
+
+                    $placeId = (int)$place['Place_ID'];
+
+                    if (isset($usedPlaces[$placeId])) {
+                        continue;
+                    }
+
+                    if (!suggested_is_in_season(
+                        $placeId,
+                        $dayDate,
+                        $seasonalEvents
+                    )) {
+                        continue;
+                    }
+
+                    if (!suggested_is_open_at(
+                        $place['Opening_Hours'] ?? '',
+                        $dayDate,
+                        $startTime,
+                        $endTime
+                    )) {
+                        continue;
+                    }
+
+                    $type = strtolower(trim($place['Place_Type'] ?? ''));
+
+                    if ($pass === 0 && isset($usedTypes[$type])) {
+                        continue;
+                    }
+
+                    $selected = $place;
+                    break;
+                }
+            }
+
+            if ($selected) {
+
+                $placeId = (int)$selected['Place_ID'];
+
+                $usedPlaces[$placeId] = true;
+
+                $type = strtolower(trim($selected['Place_Type'] ?? ''));
+
+                $usedTypes[$type] = true;
+
+                $plan[$dayNumber][] = [
+                    'place' => $selected,
+                    'start_time' => $startTime,
+                    'end_time' => $endTime
+                ];
+            }
         }
-
-        $selected[] = $item['place'];
     }
 
-    return $selected;
+    return $plan;
 }
 
 /*
@@ -173,17 +432,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trip = $suggestedTrips[$postedKey];
 
         $allPlaces = suggested_get_places($conn);
+        $seasonalEvents = suggested_get_seasonal_events($conn);
 
-        // 3 places per day.
-        $placesToSave = suggested_select_places(
+        $plan = suggested_build_plan(
             $allPlaces,
             $trip['keywords'],
-            $trip['days'] * 3
+            $trip['days'],
+            $seasonalEvents
         );
 
-        if (empty($placesToSave)) {
+        $placesCount = 0;
 
-            $errorMessage = 'There are currently no published places available. Please try again later.';
+        foreach ($plan as $dayItems) {
+            $placesCount += count($dayItems);
+        }
+
+        if ($placesCount === 0) {
+
+            $errorMessage = 'There are currently no suitable published places available for this trip. Please try again later.';
 
         } else {
 
@@ -257,38 +523,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw new Exception('Could not prepare itinerary items.');
                 }
 
-                $times = [
-                    ['09:00:00', '10:30:00'],
-                    ['11:00:00', '12:30:00'],
-                    ['16:00:00', '17:30:00']
-                ];
+                foreach ($plan as $dayNumber => $dayItems) {
 
-                foreach ($placesToSave as $index => $place) {
+                    foreach ($dayItems as $index => $item) {
 
-                    $dayNumber = (int)floor($index / 3) + 1;
+                        $place = $item['place'];
 
-                    $sequenceNumber = ($index % 3) + 1;
+                        $placeId = (int)$place['Place_ID'];
 
-                    $placeId = (int)$place['Place_ID'];
+                        $startTime = $item['start_time'];
+                        $endTime = $item['end_time'];
 
-                    $startTime = $times[$index % 3][0];
+                        $sequenceNumber = $index + 1;
 
-                    $endTime = $times[$index % 3][1];
+                        $reason = $trip['reason'];
 
-                    $reason = $trip['reason'];
+                        $itemStmt->bind_param(
+                            "iiissis",
+                            $itineraryId,
+                            $dayNumber,
+                            $placeId,
+                            $startTime,
+                            $endTime,
+                            $sequenceNumber,
+                            $reason
+                        );
 
-                    $itemStmt->bind_param(
-                        "iiissis",
-                        $itineraryId,
-                        $dayNumber,
-                        $placeId,
-                        $startTime,
-                        $endTime,
-                        $sequenceNumber,
-                        $reason
-                    );
-
-                    $itemStmt->execute();
+                        $itemStmt->execute();
+                    }
                 }
 
                 $itemStmt->close();
@@ -331,6 +593,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  * Load published places for displaying trip details.
  */
 $allPlaces = suggested_get_places($conn);
+$seasonalEvents = suggested_get_seasonal_events($conn);
+
+/*
+ * Build the selected trip preview.
+ */
+$plan = [];
+$placesByDay = [];
+$tripPlaces = [];
+
+if ($selectedTrip) {
+
+    $plan = suggested_build_plan(
+        $allPlaces,
+        $selectedTrip['keywords'],
+        $selectedTrip['days'],
+        $seasonalEvents
+    );
+
+    foreach ($plan as $dayNumber => $dayItems) {
+        foreach ($dayItems as $item) {
+            $placesByDay[$dayNumber][] = $item;
+            $tripPlaces[] = $item['place'];
+        }
+    }
+}
 
 trip_page_header('suggested-trips');
 ?>
@@ -338,25 +625,6 @@ trip_page_header('suggested-trips');
 <section class="trip-page">
 
     <?php if ($selectedTrip): ?>
-
-        <?php
-
-        $tripPlaces = suggested_select_places(
-            $allPlaces,
-            $selectedTrip['keywords'],
-            $selectedTrip['days'] * 3
-        );
-
-        $placesByDay = [];
-
-        foreach ($tripPlaces as $index => $place) {
-
-            $day = (int)floor($index / 3) + 1;
-
-            $placesByDay[$day][] = $place;
-        }
-
-        ?>
 
         <div class="trip-section-heading">
 
@@ -396,9 +664,11 @@ trip_page_header('suggested-trips');
 
             <div class="empty-plan">
 
-                <h3>No published places available yet</h3>
+                <h3>No suitable published places available</h3>
 
-                <p>Please check again later.</p>
+                <p>
+                    Please check again later.
+                </p>
 
             </div>
 
@@ -416,17 +686,23 @@ trip_page_header('suggested-trips');
 
                 <div class="trip-steps">
 
-                    <?php foreach ($dayPlaces as $index => $place): ?>
+                    <?php foreach ($dayPlaces as $index => $item): ?>
+
+                        <?php $place = $item['place']; ?>
 
                         <?php
 
-                        $timeLabels = [
-                            '09:00 AM – 10:30 AM',
-                            '11:00 AM – 12:30 PM',
-                            '04:00 PM – 05:30 PM'
-                        ];
+                        $startTime = date(
+                            'h:i A',
+                            strtotime($item['start_time'])
+                        );
 
-                        $timeIndex = $index % 3;
+                        $endTime = date(
+                            'h:i A',
+                            strtotime($item['end_time'])
+                        );
+
+                        $timeLabel = $startTime . ' – ' . $endTime;
 
                         ?>
 
@@ -455,7 +731,7 @@ trip_page_header('suggested-trips');
 
                             <p>
                                 <?= htmlspecialchars(
-                                    $timeLabels[$timeIndex],
+                                    $timeLabel,
                                     ENT_QUOTES,
                                     'UTF-8'
                                 ) ?>
@@ -542,14 +818,18 @@ trip_page_header('suggested-trips');
 
             <?php endforeach; ?>
 
-            <div class="result-actions">
+        <?php endif; ?>
 
-                <a
-                    class="trip-primary-btn"
-                    href="suggested-trips.php"
-                >
-                    ← Back to Suggested Trips
-                </a>
+        <div class="result-actions">
+
+            <a
+                class="trip-primary-btn"
+                href="suggested-trips.php"
+            >
+                ← Back to Suggested Trips
+            </a>
+
+            <?php if (!empty($tripPlaces)): ?>
 
                 <form
                     method="POST"
@@ -575,9 +855,9 @@ trip_page_header('suggested-trips');
 
                 </form>
 
-            </div>
+            <?php endif; ?>
 
-        <?php endif; ?>
+        </div>
 
     <?php else: ?>
 
