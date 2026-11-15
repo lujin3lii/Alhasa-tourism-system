@@ -295,7 +295,7 @@ session_start();
                     and make your business easier to find.
                 </p>
 
-                <a href="business-owner-registration.html" class="home-btn home-btn-light">
+                <a href="business-owner-register.php" class="home-btn home-btn-light">
                     Join Our Community →
                 </a>
             </div>
@@ -313,7 +313,7 @@ session_start();
                 </p>
             </div>
 
-            <a href="About.html" class="home-btn home-btn-primary">
+            <a href="About.php" class="home-btn home-btn-primary">
                 About Us →
             </a>
         </section>
