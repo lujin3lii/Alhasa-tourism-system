@@ -154,9 +154,7 @@ session_start();
                     </div>
                 </div>
 
-                <a href="About.html" class="home-text-link">
-                    Learn More About Us →
-                </a>
+               
             </div>
 
             <div class="home-intro-image">
