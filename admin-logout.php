@@ -15,7 +15,7 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 /* Redirect to Admin Login */
-header("Location: admin-login.php");
+header("Location: index.php");
 exit;
 
 ?>
