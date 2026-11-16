@@ -56,6 +56,7 @@ function e($value) {
             <a href="index.php"><span>⌂</span> Home</a>
             <a href="explore-al-ahsa.php"><span>⌖</span> Explore Al-Ahsa</a>
             <a href="places.php"><span>⌘</span> Tourist Places</a>
+            <a href="seasons.php"><span>⌘</span> Seasons</a>
             <a href="restaurants.php"><span>♨</span> Restaurants</a>
             <a href="cafes.php"><span>☕</span> Cafes</a>
             <a href="markets.php"><span>♧</span> Markets</a>

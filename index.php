@@ -293,7 +293,7 @@ session_start();
                     and make your business easier to find.
                 </p>
 
-                <a href="business-owner-register.php" class="home-btn home-btn-light">
+                <a href="business-owner-login.php" class="home-btn home-btn-light">
                     Join Our Community →
                 </a>
             </div>

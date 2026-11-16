@@ -9,6 +9,10 @@ if (empty($_SESSION['trip_delete_token'])) {
     $_SESSION['trip_delete_token'] = bin2hex(random_bytes(32));
 }
 
+if (empty($_SESSION['trip_review_token'])) {
+    $_SESSION['trip_review_token'] = bin2hex(random_bytes(32));
+}
+
 $itineraryId = isset($_GET['id'])
     ? (int)$_GET['id']
     : (int)($_SESSION['latest_itinerary_id'] ?? 0);
@@ -39,6 +43,105 @@ $stmt->close();
 if (!$itinerary) {
     header('Location: my-trips.php');
     exit;
+}
+
+/* Review messages */
+$reviewMessage = '';
+$reviewMessageType = '';
+
+$reviewFormRating = 0;
+$reviewFormComment = '';
+
+/* Save or update trip review using the existing itinerary_reviews table */
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    ($_POST['action'] ?? '') === 'save_trip_review'
+) {
+    $postedItineraryId = (int)($_POST['itinerary_id'] ?? 0);
+    $rating = (int)($_POST['rating'] ?? 0);
+    $comment = trim($_POST['comment'] ?? '');
+    $token = $_POST['review_token'] ?? '';
+
+    $reviewFormRating = $rating;
+    $reviewFormComment = $comment;
+
+    if (
+        $postedItineraryId !== $itineraryId ||
+        !hash_equals($_SESSION['trip_review_token'], $token)
+    ) {
+        $reviewMessage = 'Invalid request. Please try again.';
+        $reviewMessageType = 'error';
+
+    } elseif ($rating < 1 || $rating > 5) {
+        $reviewMessage = 'Please select a rating from 1 to 5 stars.';
+        $reviewMessageType = 'error';
+
+    } elseif (mb_strlen($comment) > 2000) {
+        $reviewMessage = 'Your comment must not exceed 2000 characters.';
+        $reviewMessageType = 'error';
+
+    } else {
+
+        $stmt = $conn->prepare("
+            INSERT INTO itinerary_reviews
+                (Tourist_ID, Itinerary_ID, Rating, Comment)
+            VALUES (?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+                Rating = VALUES(Rating),
+                Comment = VALUES(Comment)
+        ");
+
+        if ($stmt) {
+            $stmt->bind_param(
+                'iiis',
+                $touristId,
+                $itineraryId,
+                $rating,
+                $comment
+            );
+
+            if ($stmt->execute()) {
+                $stmt->close();
+
+                header(
+                    'Location: my-itinerary.php?id=' .
+                    $itineraryId .
+                    '&review=success'
+                );
+                exit;
+            }
+
+            $stmt->close();
+        }
+
+        $reviewMessage = 'Could not save your review. Please try again.';
+        $reviewMessageType = 'error';
+    }
+}
+
+/* Load existing review for this itinerary and tourist */
+$existingReview = null;
+
+$stmt = $conn->prepare("
+    SELECT Rating, Comment
+    FROM itinerary_reviews
+    WHERE Itinerary_ID = ? AND Tourist_ID = ?
+    LIMIT 1
+");
+
+if ($stmt) {
+    $stmt->bind_param('ii', $itineraryId, $touristId);
+    $stmt->execute();
+    $existingReview = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+}
+
+/* Keep existing review values unless the form has errors */
+if ($reviewMessageType !== 'error') {
+    if ($existingReview) {
+        $reviewFormRating = (int)$existingReview['Rating'];
+        $reviewFormComment = $existingReview['Comment'] ?? '';
+    }
 }
 
 /* Load itinerary places */
@@ -205,6 +308,179 @@ trip_page_header('my-itinerary');
 
 .trip-modal-confirm:hover {
     background: #a33e3c;
+}
+
+/* Trip review button */
+.trip-review-open-btn {
+    border: 1px solid #087f83;
+    background: #087f83;
+    color: #ffffff;
+    padding: 12px 19px;
+    border-radius: 9px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.trip-review-open-btn:hover {
+    background: #075b70;
+}
+
+/* Trip review modal */
+.trip-review-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(25, 38, 35, 0.60);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.trip-review-overlay.active {
+    display: flex;
+}
+
+.trip-review-modal {
+    width: 100%;
+    max-width: 460px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 25px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    animation: tripModalIn 0.2s ease;
+}
+
+.trip-review-close {
+    position: absolute;
+    top: 13px;
+    right: 16px;
+    border: none;
+    background: transparent;
+    color: #687779;
+    font-size: 25px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.trip-review-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: #fff8e8;
+    color: #D6A43B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.trip-review-modal h3 {
+    color: #26383b;
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+.trip-review-modal > p {
+    color: #687779;
+    line-height: 1.7;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.trip-review-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 7px;
+    margin: 20px 0 24px;
+}
+
+.trip-review-rating input {
+    display: none;
+}
+
+.trip-review-rating label {
+    font-size: 38px;
+    color: #d9d9d9;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.trip-review-rating label:hover,
+.trip-review-rating label:hover ~ label,
+.trip-review-rating input:checked ~ label {
+    color: #D6A43B;
+}
+
+.trip-review-textarea {
+    width: 100%;
+    min-height: 115px;
+    padding: 14px;
+    border: 1px solid #e3e9e7;
+    border-radius: 10px;
+    resize: vertical;
+    font: inherit;
+    font-size: 14px;
+    color: #26383b;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.trip-review-textarea:focus {
+    border-color: #087f83;
+}
+
+.trip-review-submit {
+    width: 100%;
+    margin-top: 18px;
+    border: none;
+    background: #087f83;
+    color: #ffffff;
+    padding: 13px 25px;
+    border-radius: 9px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.trip-review-submit:hover {
+    background: #075b70;
+}
+
+.trip-review-message {
+    padding: 12px 15px;
+    border-radius: 9px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.trip-review-message.error {
+    background: #fff1f0;
+    color: #b94a48;
+}
+
+.trip-review-saved {
+    color: #087f83;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+    .trip-review-modal {
+        padding: 28px 18px;
+    }
+
+    .trip-review-rating label {
+        font-size: 34px;
+    }
 }
 </style>
 
@@ -375,6 +651,25 @@ trip_page_header('my-itinerary');
 
     <?php endif; ?>
 
+    <!-- Trip review button -->
+    <div style="text-align:center; margin-top:30px;">
+
+        <button
+            type="button"
+            class="trip-review-open-btn"
+            onclick="openTripReviewModal()"
+        >
+            <?= $existingReview ? '✎ Edit Your Review' : '☆ Rate This Trip' ?>
+        </button>
+
+        <?php if ($existingReview): ?>
+            <div class="trip-review-saved">
+                You have already reviewed this trip.
+            </div>
+        <?php endif; ?>
+
+    </div>
+
     <div class="result-actions">
 
         <a class="trip-secondary-btn" href="my-trips.php">
@@ -400,6 +695,111 @@ trip_page_header('my-itinerary');
     </div>
 
 </section>
+
+<!-- Trip review modal -->
+<div
+    class="trip-review-overlay"
+    id="tripReviewOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tripReviewTitle"
+    onclick="closeTripReviewModal(event)"
+>
+
+    <div class="trip-review-modal">
+
+        <button
+            type="button"
+            class="trip-review-close"
+            onclick="closeTripReviewModal()"
+            aria-label="Close"
+        >
+            &times;
+        </button>
+
+        <div class="trip-review-icon">★</div>
+
+        <h3 id="tripReviewTitle">
+            <?= $existingReview ? 'Edit Your Review' : 'Rate Your Trip' ?>
+        </h3>
+
+        <p>
+            How was your Al-Ahsa journey?
+            Share your experience with us.
+        </p>
+
+        <?php if ($reviewMessageType === 'error'): ?>
+
+            <div class="trip-review-message error">
+                <?= trip_h($reviewMessage) ?>
+            </div>
+
+        <?php endif; ?>
+
+        <form method="POST" action="my-itinerary.php?id=<?= (int)$itineraryId ?>">
+
+            <input
+                type="hidden"
+                name="action"
+                value="save_trip_review"
+            >
+
+            <input
+                type="hidden"
+                name="itinerary_id"
+                value="<?= (int)$itineraryId ?>"
+            >
+
+            <input
+                type="hidden"
+                name="review_token"
+                value="<?= htmlspecialchars(
+                    $_SESSION['trip_review_token'],
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>"
+            >
+
+            <div class="trip-review-rating">
+
+                <?php for ($star = 5; $star >= 1; $star--): ?>
+
+                    <input
+                        type="radio"
+                        id="trip-star-<?= $star ?>"
+                        name="rating"
+                        value="<?= $star ?>"
+                        <?= $reviewFormRating === $star ? 'checked' : '' ?>
+                        required
+                    >
+
+                    <label for="trip-star-<?= $star ?>" title="<?= $star ?> stars">
+                        ★
+                    </label>
+
+                <?php endfor; ?>
+
+            </div>
+
+            <textarea
+                class="trip-review-textarea"
+                name="comment"
+                maxlength="2000"
+                placeholder="Write your experience about this trip..."
+            ><?= trip_h($reviewFormComment) ?></textarea>
+
+            <button
+                type="submit"
+                class="trip-review-submit"
+            >
+                <?= $existingReview ? 'Update Review' : 'Submit Review' ?>
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
 
 <!-- Delete confirmation modal -->
 <div
@@ -496,11 +896,71 @@ function closeTripDeleteModal(event) {
     document.body.style.overflow = '';
 }
 
+function openTripReviewModal() {
+    document
+        .getElementById('tripReviewOverlay')
+        .classList.add('active');
+
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTripReviewModal(event) {
+    if (
+        event &&
+        event.target !== document.getElementById('tripReviewOverlay')
+    ) {
+        return;
+    }
+
+    document
+        .getElementById('tripReviewOverlay')
+        .classList.remove('active');
+
+    document.body.style.overflow = '';
+}
+
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeTripDeleteModal();
+        closeTripReviewModal();
     }
 });
+
+/* Reopen review modal if validation or saving failed */
+<?php if ($reviewMessageType === 'error'): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    openTripReviewModal();
+});
+<?php endif; ?>
 </script>
+
+<?php if (isset($_GET['review']) && $_GET['review'] === 'success'): ?>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const message = document.createElement('div');
+
+        message.className = 'trip-review-message';
+        message.textContent = 'Your trip review has been saved successfully.';
+        message.style.position = 'fixed';
+        message.style.top = '25px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.zIndex = '100001';
+        message.style.width = 'max-content';
+        message.style.maxWidth = '90%';
+        message.style.background = '#edf7f0';
+        message.style.color = '#287344';
+        message.style.boxShadow = '0 5px 20px rgba(0,0,0,0.12)';
+
+        document.body.appendChild(message);
+
+        setTimeout(function() {
+            message.remove();
+        }, 3500);
+    });
+    </script>
+
+<?php endif; ?>
 
 <?php trip_page_footer(); ?>

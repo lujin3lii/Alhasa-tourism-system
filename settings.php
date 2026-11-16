@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
 
                 $feedbackMessage = 'Thank you! Your feedback has been submitted successfully.';
                 $feedbackMessageType = 'success';
+                $showFeedbackModal = false;
 
             } else {
 
@@ -691,8 +692,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback_submit'])) {
         document.getElementById("feedbackModal").classList.remove("show");
     }
 
-    // Open popup automatically after submitting feedback
-    <?php if ($showFeedbackModal): ?>
+    // Keep popup open only if there is an error
+    <?php if ($showFeedbackModal && $feedbackMessageType === 'error'): ?>
         openFeedback();
     <?php endif; ?>
 
