@@ -473,6 +473,317 @@ trip_page_header('my-itinerary');
     margin-top: 12px;
 }
 
+/* Main action buttons */
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.primary-actions {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.primary-actions > a {
+    flex: 1;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.primary-actions .trip-secondary-btn {
+    border: 1px solid #087f83;
+    background: #ffffff;
+    color: #087f83;
+}
+
+.primary-actions .trip-primary-btn {
+    border: 1px solid #087f83;
+    background: #087f83;
+    color: #ffffff;
+}
+
+.primary-actions .trip-secondary-btn:hover {
+    background: #edf7f5;
+}
+
+.primary-actions .trip-primary-btn:hover {
+    background: #075b70;
+}
+
+/* Small icon actions */
+.icon-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+}
+
+.icon-action-btn {
+    width: 43px;
+    height: 43px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 21px;
+    transition: 0.2s ease;
+}
+
+.icon-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.trip-download-btn {
+    border: 1px solid #087f83;
+    color: #087f83;
+}
+
+.trip-download-btn:hover {
+    background: #edf7f5;
+}
+
+.trip-review-open-btn {
+    border: 1px solid #e5c56c;
+    color: #D6A43B;
+    background: #fffaf0;
+}
+
+.trip-review-open-btn:hover {
+    background: #fff3d7;
+}
+
+.trip-delete-btn {
+    border: 1px solid #c96b68;
+    color: #b94a48;
+    background: #fff7f6;
+}
+
+.trip-delete-btn:hover {
+    background: #fff0ef;
+}
+
+/* Print / PDF design */
+@page {
+    size: A4;
+    margin: 13mm;
+}
+
+@media print {
+
+    html,
+    body {
+        background: #ffffff !important;
+        color: #26383b !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    .trip-page,
+    .trip-page * {
+        visibility: visible !important;
+    }
+
+    .trip-page {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 12px !important;
+        background: linear-gradient(
+            135deg,
+            #f0f7f4 0%,
+            #e5f2ef 50%,
+            #edf5f5 100%
+        ) !important;
+        box-shadow: none !important;
+        border-radius: 12px !important;
+    }
+
+    .back-link,
+    .result-actions,
+    .trip-review-open-btn,
+    .trip-review-saved,
+    .trip-trust,
+    .trip-delete-overlay,
+    .trip-review-overlay {
+        display: none !important;
+    }
+
+    .result-heading {
+        text-align: center !important;
+        margin-bottom: 20px !important;
+        padding: 18px 12px !important;
+        border-bottom: 2px solid #087f83 !important;
+        background: linear-gradient(
+            120deg,
+            #e4f1ed,
+            #edf6f4
+        ) !important;
+        border-radius: 10px !important;
+    }
+
+    .result-heading h1 {
+        color: #075b70 !important;
+        font-size: 25px !important;
+        margin-top: 10px !important;
+    }
+
+    .result-heading p {
+        color: #687779 !important;
+        font-size: 12px !important;
+    }
+
+    .result-meta {
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        font-size: 11px !important;
+    }
+
+    .day-card {
+        margin: 0 0 12px !important;
+        padding: 15px !important;
+        border: 1px solid #cfe2dc !important;
+        border-radius: 12px !important;
+        background: linear-gradient(
+            135deg,
+            #f5faf8 0%,
+            #eaf4f1 100%
+        ) !important;
+        box-shadow: none !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+    }
+
+    /* Start each new day on a separate page */
+    .day-card + .day-card {
+        break-before: page !important;
+        page-break-before: always !important;
+    }
+
+    .day-heading {
+        border-bottom: 1px solid #cfe2dc !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .day-heading h2 {
+        color: #075b70 !important;
+        font-size: 21px !important;
+    }
+
+    .timeline {
+        gap: 10px !important;
+    }
+
+    .timeline-item {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Keep place image beside its information */
+    .place-result-card {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        padding: 10px !important;
+        border: 1px solid #dce9e4 !important;
+        border-radius: 10px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    .place-result-card img {
+        display: block !important;
+        flex: 0 0 115px !important;
+        width: 115px !important;
+        min-width: 115px !important;
+        max-width: 115px !important;
+        height: 90px !important;
+        max-height: 90px !important;
+        object-fit: cover !important;
+        border-radius: 7px !important;
+    }
+
+    .place-placeholder {
+        flex: 0 0 115px !important;
+        width: 115px !important;
+        height: 90px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 7px !important;
+        background: #eaf4f1 !important;
+    }
+
+    .place-result-content {
+        flex: 1 !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+    }
+
+    .place-result-content h3 {
+        color: #075b70 !important;
+        font-size: 15px !important;
+        margin: 4px 0 6px !important;
+    }
+
+    .place-result-content p {
+        font-size: 11px !important;
+        line-height: 1.5 !important;
+        margin: 4px 0 !important;
+    }
+
+    .place-result-content small {
+        font-size: 10px !important;
+    }
+
+    .ai-reason {
+        background: #eaf4f1 !important;
+        border-radius: 7px !important;
+        padding: 8px !important;
+        margin-top: 7px !important;
+        font-size: 10px !important;
+    }
+
+    .place-website {
+        color: #087f83 !important;
+        font-size: 10px !important;
+    }
+
+    .empty-plan {
+        display: block !important;
+    }
+}
+
 @media (max-width: 600px) {
     .trip-review-modal {
         padding: 28px 18px;
@@ -481,16 +792,26 @@ trip_page_header('my-itinerary');
     .trip-review-rating label {
         font-size: 34px;
     }
+
+    .primary-actions {
+        gap: 9px;
+    }
+
+    .primary-actions > a {
+        min-height: 46px;
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+
+    .icon-actions {
+        gap: 12px;
+    }
 }
 </style>
 
 <section class="trip-page result-page">
 
     <div class="result-heading">
-
-        <a class="back-link" href="itinerary.php">
-            ← Trip Options
-        </a>
 
         <span class="eyebrow">YOUR PERSONALIZED JOURNEY</span>
 
@@ -651,48 +972,63 @@ trip_page_header('my-itinerary');
 
     <?php endif; ?>
 
-    <!-- Trip review button -->
-    <div style="text-align:center; margin-top:30px;">
-
-        <button
-            type="button"
-            class="trip-review-open-btn"
-            onclick="openTripReviewModal()"
-        >
-            <?= $existingReview ? '✎ Edit Your Review' : '☆ Rate This Trip' ?>
-        </button>
-
-        <?php if ($existingReview): ?>
-            <div class="trip-review-saved">
-                You have already reviewed this trip.
-            </div>
-        <?php endif; ?>
-
-    </div>
-
+    <!-- Main action buttons -->
     <div class="result-actions">
 
-        <a class="trip-secondary-btn" href="my-trips.php">
-            My Trips
-        </a>
+        <div class="primary-actions">
 
-        <a class="trip-secondary-btn" href="itinerary.php">
-            Trip Options
-        </a>
+            <a class="trip-secondary-btn" href="my-trips.php">
+                My Trips
+            </a>
 
-        <a class="trip-primary-btn" href="survey.php">
-            Create Another Trip <span>→</span>
-        </a>
+            <a class="trip-primary-btn" href="survey.php">
+                Create Trip <span>→</span>
+            </a>
 
-        <button
-            type="button"
-            class="trip-delete-btn"
-            onclick="openTripDeleteModal()"
-        >
-            Delete This Trip
-        </button>
+        </div>
+
+        <!-- Icon actions -->
+        <div class="icon-actions">
+
+            <button
+                type="button"
+                class="icon-action-btn trip-download-btn"
+                onclick="downloadTripPDF()"
+                title="Download PDF"
+                aria-label="Download PDF"
+            >
+                ↓
+            </button>
+
+            <button
+                type="button"
+                class="icon-action-btn trip-review-open-btn"
+                onclick="openTripReviewModal()"
+                title="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
+                aria-label="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
+            >
+                ★
+            </button>
+
+            <button
+                type="button"
+                class="icon-action-btn trip-delete-btn"
+                onclick="openTripDeleteModal()"
+                title="Delete This Trip"
+                aria-label="Delete This Trip"
+            >
+                🗑
+            </button>
+
+        </div>
 
     </div>
+
+    <?php if ($existingReview): ?>
+        <div class="trip-review-saved" style="text-align:center;">
+            You have already reviewed this trip.
+        </div>
+    <?php endif; ?>
 
 </section>
 
@@ -917,6 +1253,23 @@ function closeTripReviewModal(event) {
         .classList.remove('active');
 
     document.body.style.overflow = '';
+}
+
+/* Download itinerary as PDF using the browser print dialog */
+function downloadTripPDF() {
+    const originalTitle = document.title;
+
+    document.title = <?= json_encode(
+        $title . ' - Al-Ahsa Trip',
+        JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+    ) ?>;
+
+    window.print();
+
+    window.addEventListener('afterprint', function restoreTitle() {
+        document.title = originalTitle;
+        window.removeEventListener('afterprint', restoreTitle);
+    }, { once: true });
 }
 
 document.addEventListener('keydown', function(event) {

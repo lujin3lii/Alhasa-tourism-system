@@ -220,12 +220,22 @@ trip_page_header('my-trips');
     align-items: stretch;
 }
 
+/* Trip cards */
 .trip-step {
     position: relative;
+    display: flex;
+    flex-direction: column;
     border-radius: 15px;
-    padding: 24px;
+    padding: 25px;
+    min-height: 290px;
     height: 100%;
     box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trip-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(38, 56, 59, 0.09);
 }
 
 /* Trip number */
@@ -233,141 +243,44 @@ trip_page_header('my-trips');
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    align-self: flex-start;
     min-width: 38px;
     height: 38px;
     padding: 0 8px;
     border-radius: 10px;
     font-weight: 700;
     font-size: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
-/* Trip actions */
-.trip-delete-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 18px;
-    align-items: center;
+/* Trip icon */
+.trip-step .step-icon {
+    margin-bottom: 10px;
 }
 
-.trip-delete-actions .trip-primary-btn {
-    flex: 1;
-    text-align: center;
+/* Trip information */
+.trip-step h3 {
+    margin-bottom: 10px;
 }
 
-.trip-delete-btn {
-    border: 1px solid #c96b68;
-    color: #b94a48;
-    background: transparent;
-    padding: 11px 18px;
-    border-radius: 9px;
-    cursor: pointer;
-    font: inherit;
-    font-size: 14px;
-    transition: 0.2s ease;
-}
-
-.trip-delete-btn:hover {
-    background: #fff1f0;
-}
-
-/* Delete confirmation */
-.trip-delete-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(25, 38, 35, 0.58);
-    z-index: 99999;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.trip-delete-overlay.active {
-    display: flex;
-}
-
-.trip-delete-modal {
-    width: 100%;
-    max-width: 420px;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 30px 25px;
-    text-align: center;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-    animation: tripModalIn 0.2s ease;
-}
-
-@keyframes tripModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.trip-delete-icon {
-    width: 58px;
-    height: 58px;
-    margin: 0 auto 17px;
-    border-radius: 50%;
-    background: #fff0ef;
-    color: #b94a48;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-}
-
-.trip-delete-modal h3 {
-    color: #26383b;
-    margin: 0 0 12px;
-    font-size: 21px;
-}
-
-.trip-delete-modal p {
-    color: #687779;
+.trip-step p {
     line-height: 1.7;
-    font-size: 14px;
-    margin-bottom: 24px;
 }
 
-.trip-delete-modal-actions {
+/* View Trip button */
+.trip-view-action {
+    margin-top: auto;
+    padding-top: 18px;
     display: flex;
-    gap: 12px;
 }
 
-.trip-modal-cancel,
-.trip-modal-confirm {
-    flex: 1;
-    padding: 12px 15px;
-    border-radius: 9px;
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+.trip-view-action .trip-primary-btn {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.trip-modal-cancel {
-    border: 1px solid #e3e9e7;
-    background: #f7f8f5;
-    color: #26383b;
-}
-
-.trip-modal-confirm {
-    border: none;
-    background: #b94a48;
-    color: #ffffff;
-}
-
-.trip-modal-confirm:hover {
-    background: #a33e3c;
-}
-
+/* Delete message */
 .trip-delete-message {
     padding: 13px 17px;
     margin-bottom: 22px;
@@ -385,19 +298,8 @@ trip_page_header('my-trips');
     }
 
     .trip-step {
-        padding: 20px;
-    }
-
-    .trip-delete-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .trip-delete-actions .trip-primary-btn,
-    .trip-delete-btn {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
+        padding: 21px;
+        min-height: 0;
     }
 }
 </style>
@@ -494,7 +396,7 @@ trip_page_header('my-trips');
                         </p>
                     <?php endif; ?>
 
-                    <div class="trip-delete-actions">
+                    <div class="trip-view-action">
 
                         <a
                             class="trip-primary-btn"
@@ -502,14 +404,6 @@ trip_page_header('my-trips');
                         >
                             View Trip <span>→</span>
                         </a>
-
-                        <button
-                            type="button"
-                            class="trip-delete-btn"
-                            onclick="openTripDeleteModal(<?= (int)$trip['itinerary_id'] ?>)"
-                        >
-                            Delete Trip
-                        </button>
 
                     </div>
 
@@ -528,105 +422,5 @@ trip_page_header('my-trips');
     </div>
 
 </section>
-
-<!-- Delete confirmation modal -->
-<div
-    class="trip-delete-overlay"
-    id="tripDeleteOverlay"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="tripDeleteTitle"
-    onclick="closeTripDeleteModal(event)"
->
-    <div class="trip-delete-modal">
-
-        <div class="trip-delete-icon">🗑</div>
-
-        <h3 id="tripDeleteTitle">Delete This Trip?</h3>
-
-        <p>
-            Are you sure you want to delete this trip?
-            Only this trip and its saved itinerary details will be deleted.
-            Your places and other project data will not be intentionally deleted.
-            This action cannot be undone.
-        </p>
-
-        <form method="POST" action="my-trips.php">
-
-            <input type="hidden" name="action" value="delete_trip">
-
-            <input
-                type="hidden"
-                name="itinerary_id"
-                id="deleteTripId"
-                value=""
-            >
-
-            <input
-                type="hidden"
-                name="csrf_token"
-                value="<?= htmlspecialchars(
-                    $_SESSION['trip_delete_token'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>"
-            >
-
-            <div class="trip-delete-modal-actions">
-
-                <button
-                    type="button"
-                    class="trip-modal-cancel"
-                    onclick="closeTripDeleteModal()"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    type="submit"
-                    class="trip-modal-confirm"
-                >
-                    Delete
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-</div>
-
-<script>
-function openTripDeleteModal(tripId) {
-    document.getElementById('deleteTripId').value = tripId;
-
-    document
-        .getElementById('tripDeleteOverlay')
-        .classList.add('active');
-
-    document.body.style.overflow = 'hidden';
-}
-
-function closeTripDeleteModal(event) {
-    if (
-        event &&
-        event.target !== document.getElementById('tripDeleteOverlay')
-    ) {
-        return;
-    }
-
-    document
-        .getElementById('tripDeleteOverlay')
-        .classList.remove('active');
-
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeTripDeleteModal();
-    }
-});
-</script> 
 
 <?php trip_page_footer(); ?>
