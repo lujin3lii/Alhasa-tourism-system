@@ -990,35 +990,73 @@ trip_page_header('my-itinerary');
         <!-- Icon actions -->
         <div class="icon-actions">
 
-            <button
-                type="button"
-                class="icon-action-btn trip-download-btn"
-                onclick="downloadTripPDF()"
-                title="Download PDF"
-                aria-label="Download PDF"
-            >
-                ↓
-            </button>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
 
-            <button
-                type="button"
-                class="icon-action-btn trip-review-open-btn"
-                onclick="openTripReviewModal()"
-                title="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
-                aria-label="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
-            >
-                ★
-            </button>
+                <button
+                    type="button"
+                    class="icon-action-btn trip-download-btn"
+                    onclick="downloadTripPDF()"
+                    title="Download PDF"
+                    aria-label="Download PDF"
+                >
+                    <svg
+                        width="25"
+                        height="25"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M12 3v12"></path>
+                        <path d="m7 10 5 5 5-5"></path>
+                        <path d="M5 17v3h14v-3"></path>
+                    </svg>
+                </button>
 
-            <button
-                type="button"
-                class="icon-action-btn trip-delete-btn"
-                onclick="openTripDeleteModal()"
-                title="Delete This Trip"
-                aria-label="Delete This Trip"
-            >
-                🗑
-            </button>
+                <span style="font-size: 12px; color: #687779; text-align: center; white-space: nowrap;">
+                    Download PDF
+                </span>
+
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+
+                <button
+                    type="button"
+                    class="icon-action-btn trip-review-open-btn"
+                    onclick="openTripReviewModal()"
+                    title="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
+                    aria-label="<?= $existingReview ? 'Edit Your Review' : 'Rate This Trip' ?>"
+                >
+                    ★
+                </button>
+
+                <span style="font-size: 12px; color: #687779; text-align: center; white-space: nowrap;">
+                    Rate Trip
+                </span>
+
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+
+                <button
+                    type="button"
+                    class="icon-action-btn trip-delete-btn"
+                    onclick="openTripDeleteModal()"
+                    title="Delete This Trip"
+                    aria-label="Delete This Trip"
+                >
+                    🗑
+                </button>
+
+                <span style="font-size: 12px; color: #687779; text-align: center; white-space: nowrap;">
+                    Delete Trip
+                </span>
+
+            </div>
 
         </div>
 
