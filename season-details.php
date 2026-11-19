@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include 'db.php';
@@ -33,6 +34,7 @@ $placeId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 $place = null;
 $reviews = [];
+$categories = [];
 $averageRating = null;
 $errorMessage = '';
 $actionMessage = '';
@@ -70,6 +72,29 @@ if (!$placeId || $placeId < 1) {
 
     if (!$place) {
         $errorMessage = 'This event is not available.';
+    }
+}
+
+/* Load event categories */
+if ($place) {
+    $categoryStmt = $conn->prepare(
+        "SELECT Category
+         FROM Place_Categories
+         WHERE Place_ID = ?
+         ORDER BY Category_ID ASC"
+    );
+
+    if ($categoryStmt) {
+        $categoryStmt->bind_param("i", $placeId);
+        $categoryStmt->execute();
+
+        $categoryResult = $categoryStmt->get_result();
+
+        while ($category = $categoryResult->fetch_assoc()) {
+            $categories[] = $category['Category'];
+        }
+
+        $categoryStmt->close();
     }
 }
 
@@ -258,6 +283,11 @@ $image = $place
     ? trim((string)getPlaceValue($place, ['Image', 'Image_Path']))
     : '';
 
+/* Read video path */
+$video = $place
+    ? trim((string)getPlaceValue($place, ['Video_URL']))
+    : '';
+
 $location = $place
     ? trim((string)getPlaceValue(
         $place,
@@ -304,6 +334,26 @@ if (
     <title><?= e($name ?: 'Season Details') ?> | Al-Ahsa Vision Hub</title>
 
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Place Categories Styling -->
+    <style>
+        .details-category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .details-category-tag {
+            display: inline-block;
+            padding: 7px 16px;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
@@ -403,11 +453,28 @@ if (
 
                 <article class="details-container">
 
-                    <?php if ($image !== ''): ?>
+                    <!-- Event Video or Image -->
+                    <?php if ($video !== ''): ?>
+
+                        <video
+                            class="details-image"
+                            controls
+                            playsinline
+                            preload="metadata">
+
+                            <source src="<?= e($video) ?>" type="video/mp4">
+
+                            Your browser does not support HTML video.
+
+                        </video>
+
+                    <?php elseif ($image !== ''): ?>
+
                         <img
                             src="<?= e($image) ?>"
                             alt="<?= e($name) ?>"
                             class="details-image">
+
                     <?php endif; ?>
 
                     <div class="details-content">
@@ -439,6 +506,23 @@ if (
                             <p class="action-message" role="status">
                                 <?= e($actionMessage) ?>
                             </p>
+                        <?php endif; ?>
+
+                        <!-- Event Categories -->
+                        <?php if (!empty($categories)): ?>
+
+                            <div class="details-category-tags">
+
+                                <?php foreach ($categories as $category): ?>
+
+                                    <span class="details-category-tag">
+                                        <?= e($category) ?>
+                                    </span>
+
+                                <?php endforeach; ?>
+
+                            </div>
+
                         <?php endif; ?>
 
                         <!-- Event Description -->
@@ -691,7 +775,8 @@ if (
     </button>
 
     <!-- Shared JavaScript -->
-<script src="script.js?v=2"></script>
+    <script src="script.js?v=2"></script>
+
     <!-- Footer -->
     <footer class="site-footer">
 
